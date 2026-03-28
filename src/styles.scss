@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+@forward 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Caramel&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Style+Script&display=swap');
+
+$primary-color: #4e2e13;
+$secondary-color: #826a3c;
+
+.font-caramel {
+  font-family: 'Caramel', cursive;
+}
+
+.font-merriweather {
+  font-family: 'Merriweather', serif;
+}
+
+.font-style-script {
+  font-family: 'Style Script', cursive;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+
+.text-secondary {
+  color: $secondary-color;
+}
