@@ -1,12 +1,16 @@
-  <header class="flex items-center justify-between w-[100vw] py-1 px-5 backdrop-blur-[1px] fixed bg-white/90 z-10 h-header md:px-[8vw]">
-    <!-- Logo -->
-    <div class="flex flex-col items-center justify-center">
+<header
+  class="flex items-center justify-between w-[100vw] py-1 px-5 backdrop-blur-[1px] fixed bg-white/90 z-10 h-header md:px-[8vw]"
+>
+  <!-- Logo -->
+  <div class="flex flex-col items-center justify-center">
+    <button (click)="navigateToHome()">
       <h1 class="font-caramel text-primary font-semibold text-4xl">DNA</h1>
       <div class="flex gap-1">
         <span class="font-caramel"> da </span>
         <h2 class="font-merriweather text-secondary">Empresária</h2>
       </div>
-    </div>
-    <!-- Navigation -->
-     <app-text-button textColor="text-secondary" text="Minha Jornada"></app-text-button>
-  </header>
+    </button>
+  </div>
+  <!-- Navigation -->
+  <app-text-button textColor="text-secondary" text="Minha Jornada" (action)="navigateToUserLogin()"></app-text-button>
+</header>
