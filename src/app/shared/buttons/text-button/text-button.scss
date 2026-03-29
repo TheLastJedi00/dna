@@ -1,0 +1,18 @@
+.button {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    border-bottom: 2px solid currentColor;
+}
+
+.button:active {
+    opacity: 0.8;
+    background-color: rgba(0, 0, 0, 0.1);
+}
