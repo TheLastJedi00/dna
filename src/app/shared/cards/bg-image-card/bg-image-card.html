@@ -1,0 +1,10 @@
+<div
+  class="card rounded-4xl flex flex-col justify-end overflow-hidden"
+  [style.background-image]="bgImageProperty()"
+  [style.min-height]="minHeight()"
+>
+  <div [style.min-height]="textDivHeight()" class="flex flex-col gap-3 backdrop-blur-[2px] bg-white/70 w-full p-2 text-center">
+    <h3 class="text-xl font-semibold text-primary">{{ title() }}</h3>
+    <p>{{ description() }}</p>
+  </div>
+</div>
