@@ -50,3 +50,34 @@ $secondary-color: #826a3c;
 .h-header {
   height: 70px;
 }
+
+.input-primary-light {
+  background-color: color.scale($primary-color, $lightness: 85%);
+  color: $primary-color;
+  padding: 0.75rem 1rem;
+  border-radius: 2.5em;
+  transition: all 0.3s;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 2px 1px $primary-color;
+  }
+
+  &:disabled {
+    background-color: color.scale($primary-color, $lightness: 95%);
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: $secondary-color;
+    transition: all 0.3s;
+
+    &:focus {
+      color: transparent;
+    }
+  }
+}
+
+.gradient-primary-to-secondary {
+  background: linear-gradient(45deg, $primary-color, $secondary-color);
+}

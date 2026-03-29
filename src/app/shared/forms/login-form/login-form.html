@@ -1,0 +1,22 @@
+<form class="flex flex-col p-4 gap-4 shadow-xl rounded-xl bg-white">
+  <app-logo></app-logo>
+  <input
+    required
+    [disabled]="disableEmailInput()"
+    type="email"
+    placeholder="Email"
+    class="input-primary-light"
+  />
+  <input
+    required
+    [disabled]="disablePasswordInput()"
+    type="password"
+    placeholder="Senha"
+    class="input-primary-light"
+  />
+  <app-flat-button
+    text="Entrar"
+    classes="bg-primary w-full text-white"
+    [disabled]="disableButton()"
+  ></app-flat-button>
+</form>
