@@ -1,6 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FlatButton } from '../../buttons/flat-button/flat-button';
-import { Logo } from "../../logo/logo";
+import { Logo } from '../../logo/logo';
 
 @Component({
   selector: 'app-login-form',
@@ -12,4 +12,8 @@ export class LoginForm {
   disableButton = input<boolean>(false);
   disableEmailInput = input<boolean>(false);
   disablePasswordInput = input<boolean>(false);
+  navigateToRegister = output<void>();
+  onLogin() {
+    this.navigateToRegister.emit();
+  }
 }

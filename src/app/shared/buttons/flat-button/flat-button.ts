@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -11,4 +11,9 @@ export class FlatButton {
   text = input<string>('Flat Button');
   classes = input<string>('');
   disabled = input<boolean>(false);
+  action = output<void>();
+
+  onClick(){
+    this.action.emit();
+  }
 }

@@ -1,6 +1,7 @@
 <button
   [ngClass]="classes()"
   [disabled]="disabled()"
+  (click)="onClick()"
 >
   {{ text() }}
 </button>
