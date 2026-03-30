@@ -78,6 +78,6 @@ $secondary-color: #826a3c;
   }
 }
 
-.gradient-primary-to-secondary {
-  background: linear-gradient(45deg, $primary-color, $secondary-color);
+.gradient-primary-to-secondary-85 {
+  background: linear-gradient(45deg, color.scale($primary-color, $lightness: 85%), color.scale($secondary-color, $lightness: 85%));
 }
