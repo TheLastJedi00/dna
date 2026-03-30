@@ -1,17 +1,35 @@
-<main>
-  <section class="flex container mx-auto main-padding">
+<main class="gradient-primary-to-secondary-85">
+  <section class="flex container mx-auto main-padding justify-between bg-white/50">
     <div>
-      <h1>Olá, Bárbara</h1>
-      <span>BEM-VINDA DE VOLTA</span>
+      <h1 class="font-style-script italic text-4xl text-primary"><span class="text-xl text-black/85">Olá,</span> Bárbara</h1>
+      <span class="text-sm text-black/50">BEM-VINDA DE VOLTA</span>
     </div>
-    <h2>DNA</h2>
+    <h2 class="text-primary font-caramel text-5xl">DNA</h2>
   </section>
-  <section>
+  <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-2">
     <app-dashboard-button
-      [imgSrc]="'assets/images/dna-icon.png'"
+      imgSrc="https://i.imgur.com/U4xU7Hj.png"
       title="Desenho Humano"
       subtitle="Sua Estratégia Natural"
       description="Descubra como sua energia opera e como tomar decisões alinhadas com sua essência."
+    ></app-dashboard-button>
+    <app-dashboard-button
+      imgSrc="https://i.imgur.com/hYZJdpD.png"
+      title="Numerologia"
+      subtitle="A vibração do seu destino"
+      description="Entenda os ciclos numéricos que regem sua vida e os propósitos por trás do seu nome."
+    ></app-dashboard-button>
+    <app-dashboard-button
+      imgSrc="https://i.imgur.com/Wh3IKVb.png"
+      title="Astrologia"
+      subtitle="O mapa do seu sucesso"
+      description="Explore a influência dos astros em sua jornada empreendedora e talentos inatos."
+    ></app-dashboard-button>
+    <app-dashboard-button
+      imgSrc="https://i.imgur.com/ji8gc9V.png"
+      title="Plano Perfeito"
+      subtitle="Sua rota de mentoria"
+      description="A união de todos os conceitos em um guia prático para escalar seu negócio com alma."
     ></app-dashboard-button>
   </section>
 </main>
