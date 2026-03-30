@@ -7,6 +7,16 @@
 $primary-color: #4e2e13;
 $secondary-color: #826a3c;
 
+.main-padding {
+  padding: 2rem 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .main-padding {
+    padding: 2rem 15vw;
+  }
+}
+
 .font-caramel {
   font-family: 'Caramel', cursive;
 }
@@ -79,5 +89,9 @@ $secondary-color: #826a3c;
 }
 
 .gradient-primary-to-secondary-85 {
-  background: linear-gradient(45deg, color.scale($primary-color, $lightness: 85%), color.scale($secondary-color, $lightness: 85%));
+  background: linear-gradient(
+    45deg,
+    color.scale($primary-color, $lightness: 85%),
+    color.scale($secondary-color, $lightness: 85%)
+  );
 }
