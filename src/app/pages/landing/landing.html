@@ -22,6 +22,7 @@
       <app-elevated-button
         text="Iniciar Minha Jornada"
         buttonClass="bg-primary text-white"
+        (action)="navigateToUserLogin()"
       ></app-elevated-button>
     </div>
     <div
@@ -99,6 +100,7 @@
     <app-elevated-button
       text="Acessar Minha Jornada"
       buttonClass="bg-secondary text-white text-lg"
+      (action)="navigateToUserLogin()"
     ></app-elevated-button>
   </section>
 </main>

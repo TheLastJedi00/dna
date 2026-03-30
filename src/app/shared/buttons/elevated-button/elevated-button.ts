@@ -11,4 +11,8 @@ export class ElevatedButton {
   text = input<string>();
   buttonClass = input<string>();
   action = output<void>();
+
+  onActivated() {
+    this.action.emit();
+  }
 }
