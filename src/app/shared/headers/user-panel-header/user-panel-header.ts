@@ -1,0 +1,12 @@
+import { Component } from '@angular/core';
+import { Logo } from "../../logo/logo";
+
+@Component({
+  selector: 'app-user-panel-header',
+  imports: [Logo],
+  templateUrl: './user-panel-header.html',
+  styleUrl: './user-panel-header.scss',
+})
+export class UserPanelHeader {
+
+}
