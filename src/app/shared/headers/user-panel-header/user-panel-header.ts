@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { Logo } from "../../logo/logo";
 import { UserHeaderMenu } from '../../menus/user-header-menu/user-header-menu';
 
@@ -9,5 +9,9 @@ import { UserHeaderMenu } from '../../menus/user-header-menu/user-header-menu';
   styleUrl: './user-panel-header.scss',
 })
 export class UserPanelHeader {
+  logout = output<void>();
 
+  onLogout() {
+    this.logout.emit();
+  }
 }
