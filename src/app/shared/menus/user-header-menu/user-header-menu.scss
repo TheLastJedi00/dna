@@ -2,4 +2,17 @@ hr {
     width: 30px;
     height: 3px;
     margin: 3px 0;
+    transition: all 0.3s ease;
+}
+
+.top-hr-closed {
+    transform: rotate(45deg) translate(5px, 8px);
+}
+
+.mid-hr-closed {
+    opacity: 0;
+}
+
+.bottom-hr-closed {
+    transform: rotate(-45deg) translate(5px, -8px);
 }
