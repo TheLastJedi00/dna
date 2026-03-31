@@ -1,5 +1,32 @@
 <button (click)="toggleMenu()" class="flex flex-col items-center justify-center p-2">
-  <hr class="bg-primary" [ngClass]="toggle ? 'top-hr-closed' : ''"/>
-  <hr class="bg-primary" [ngClass]="toggle ? 'mid-hr-closed ' : ''"/>
-  <hr class="bg-primary" [ngClass]="toggle ? 'bottom-hr-closed' : ''"/>
+  <hr class="bg-primary" [ngClass]="toggle ? 'top-hr-closed' : ''" />
+  <hr class="bg-primary" [ngClass]="toggle ? 'mid-hr-closed ' : ''" />
+  <hr class="bg-primary" [ngClass]="toggle ? 'bottom-hr-closed' : ''" />
 </button>
+@if (toggle) {
+  <aside
+    class="flex items-start justify-end fixed inset-0 h-screen w-screen mt-header z-50 backdrop-blur-[2px] bg-black/20"
+    animate.enter="backdrop-blur-aside"
+    animate.leave="backdrop-blur-aside-out"
+    (click)="toggle = false"
+  >
+    @if (toggle) {
+      <div
+        class="aside-menu-minimize p-5 bg-white h-full w-[70%] scale-100 opacity-100 origin-top-right"
+        animate.enter="aside-menu-expand"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="text-center shadow-lg rounded-xl p-2 mb-5 gradient-primary-to-secondary-85">
+            <span class="text-center font-merriweather text-sm w-full text-black/70">DNA Empresária de:</span>
+          <h1 class="text-primary font-style-script text-6xl text-center my-4">Bárbara Farias</h1>
+        </div>
+        <div class="flex flex-col text-left">
+          <app-text-button textColor="text-secondary" text="Desenho Humano"></app-text-button>
+          <app-text-button textColor="text-secondary" text="Numerologia"></app-text-button>
+          <app-text-button textColor="text-secondary" text="Astrologia"></app-text-button>
+          <app-text-button textColor="text-secondary" text="Plano Perfeito"></app-text-button>
+        </div>
+      </div>
+    }
+  </aside>
+}
