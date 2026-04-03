@@ -18,6 +18,6 @@ export class UserPanelHeader {
   }
 
   returnToHome(){
-    this.router.navigate(['user-dashboard'])
+    this.router.navigate(['/user-dashboard'])
   }
 }

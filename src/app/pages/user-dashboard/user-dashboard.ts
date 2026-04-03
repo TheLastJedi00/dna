@@ -15,4 +15,8 @@ export class UserDashboard {
   onLogout() {
     this.router.navigate(['/login']);
   }
+
+  navigateToHumanDesign(){
+    this.router.navigate(['/human-design']);
+  }
 }
