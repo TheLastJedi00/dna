@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-dashboard',
-  imports: [DashboardButton, UserPanelHeader],
+  imports: [DashboardButton, UserPanelHeader ],
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.scss',
 })
