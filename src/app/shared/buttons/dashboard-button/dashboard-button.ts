@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-button',
@@ -11,4 +11,9 @@ export class DashboardButton {
   title = input<string>('title');
   subtitle = input<string>('subtitle');
   description = input<string>('description');
+  action = output<void>();
+
+  onClick(){
+    this.action.emit();
+  }
 }
