@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DnaDataCard } from './dna-data-card';
+import { Users } from './users';
 
-describe('DnaDataCard', () => {
-  let component: DnaDataCard;
-  let fixture: ComponentFixture<DnaDataCard>;
+describe('Users', () => {
+  let component: Users;
+  let fixture: ComponentFixture<Users>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DnaDataCard]
+      imports: [Users]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DnaDataCard);
+    fixture = TestBed.createComponent(Users);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

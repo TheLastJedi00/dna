@@ -1,4 +1,4 @@
-<app-user-panel-header></app-user-panel-header>
+<app-user-panel-header (logout)="logout()"></app-user-panel-header>
 <main class="pt-header gradient-primary-to-secondary-85">
   <section class="container mx-auto main-padding bg-white">
     <div class="flex items-end justify-left gap-6">
@@ -14,47 +14,110 @@
         </h1>
       </div>
     </div>
+    <div class="mt-5 flex flex-col gap-2 text-black/70">
+      <h2 class="text-xl text-secondary font-merriweather font-thin">O que é o Desenho Humano?</h2>
+      <p>
+        O Desenho Humano é conhecido como a Ciência da Diferenciação, canalizada pelo
+        <b>Ra Uru Hu</b>, que foi o mensageiro deste Sistema e que, desde esse momento, dedicou a
+        sua vida à disseminação desta Ciência da Diferenciação por todo o mundo.
+      </p>
+      <p>
+        O Desenho Humano é um sistema abrangente e integrativo que combina elementos de várias
+        disciplinas antigas e modernas para ajudar os indivíduos a entender sua personalidade única,
+        seu processo de tomada de decisão e seu propósito de vida.
+      </p>
+      <p>
+        É uma ferramenta de autoconhecimento que se baseia em filosofias milenares como o
+        <b>I-Ching</b>, o sistema de <b>Chakras</b>, a <b>Cabala</b> e a <b>Astrologia</b>, e em
+        ciências contemporâneas como a <b>Física Quântica</b> ou a <b>Genética</b>.
+      </p>
+      <p>
+        Assim, através do Desenho Humano, você tem um mapa abrangente do seu próprio projeto
+        energético como um indivíduo.
+      </p>
+      <p>
+        Para esse mapa que é gerado através da sua data, horário e local de nascimento, chamamos de
+        <b>Corpo Gráfico</b> que, em si, é um mapa preciso que te dá acesso a como você é projetada
+        geneticamente para interagir com o mundo, tanto de forma Consciente
+        <b>(Personalidade)</b> como Inconsciente <b>(Desenho/Alma)</b>.
+      </p>
+      <p>
+        Esse gráfico revela quem você realmente é, como ser você mesma e como trabalhar com sucesso
+        num mundo dirigido pelo tempo relógio e sempre mutável.
+      </p>
+      <p>
+        Com ele você tem as ferramentas para uma vida consciente, criativa e autorresponsável,
+        eliminando resistências e medos, se alinhando com pessoas que realmente façam sentindo para
+        a sua jornada.
+      </p>
+    </div>
   </section>
-  <!-- Introdução -->
-  <section class="flex flex-col gap-3 main-padding container bg-white mx-auto text-black/70">
-    <h2 class="text-xl text-secondary font-merriweather font-thin">O que é o Desenho Humano?</h2>
-    <p>
-      O Desenho Humano é conhecido como a Ciência da Diferenciação, canalizada pelo
-      <b>Ra Uru Hu</b>, que foi o mensageiro deste Sistema e que, desde esse momento, dedicou a sua
-      vida à disseminação desta Ciência da Diferenciação por todo o mundo.
-    </p>
-    <p>
-      O Desenho Humano é um sistema abrangente e integrativo que combina elementos de várias
-      disciplinas antigas e modernas para ajudar os indivíduos a entender sua personalidade única,
-      seu processo de tomada de decisão e seu propósito de vida.
-    </p>
-    <p>
-      É uma ferramenta de autoconhecimento que se baseia em filosofias milenares como o
-      <b>I-Ching</b>, o sistema de <b>Chakras</b>, a <b>Cabala</b> e a <b>Astrologia</b>, e em
-      ciências contemporâneas como a <b>Física Quântica</b> ou a <b>Genética</b>.
-    </p>
-    <p>
-      Assim, através do Desenho Humano, você tem um mapa abrangente do seu próprio projeto
-      energético como um indivíduo.
-    </p>
-    <p>
-      Para esse mapa que é gerado através da sua data, horário e local de nascimento, chamamos de
-      <b>Corpo Gráfico</b> que, em si, é um mapa preciso que te dá acesso a como você é projetada
-      geneticamente para interagir com o mundo, tanto de forma Consciente <b>(Personalidade)</b> como
-      Inconsciente <b>(Desenho/Alma)</b>.
-    </p>
-    <p>
-      Esse gráfico revela quem você realmente é, como ser você mesma e como trabalhar com sucesso
-      num mundo dirigido pelo tempo relógio e sempre mutável.
-    </p>
-    <p>
-      Com ele você tem as ferramentas para uma vida consciente, criativa e autorresponsável,
-      eliminando resistências e medos, se alinhando com pessoas que realmente façam sentindo para a
-      sua jornada.
-    </p>
-    <p>Vamos analisar o seu Mapa?</p>
-  </section>
-  <section>
-    <app-dna-data-card></app-dna-data-card>
+  <section class="container mx-auto main-padding bg-white">
+    <h1 class="text-center font-merriweather text-primary text-xl mb-4">Vamos analisar o seu Mapa?</h1>
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
+      <button class="dna-data-button">
+        <div>
+          <app-heart></app-heart>
+          <b>Tipo Áurico</b>
+        </div>
+        {{ humanDesignData.tipo_aurico }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+          <app-shield></app-shield>
+          <b>Aura</b>
+        </div>
+        {{ humanDesignData.aura }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+          <app-bolt></app-bolt>
+          <b>Energia</b>
+        </div>
+        {{ humanDesignData.energia }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+          <app-chat-bubble></app-chat-bubble>
+          <b>Palavra</b>
+        </div>
+        {{ humanDesignData.palavra_chave }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+          <app-chart-pie></app-chart-pie>
+          <b>Estratégia</b>
+        </div>
+        {{ humanDesignData.estrategia }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+          <app-pencil></app-pencil>
+          <b>Assinatura</b>
+        </div>
+        {{ humanDesignData.assinatura }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+         <app-users></app-users>
+          <b>Tema do Não Ser</b>
+        </div>
+        {{ humanDesignData.tema_do_nao_ser }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+         <app-flag></app-flag>
+          <b>Autoridade</b>
+        </div>
+        {{ humanDesignData.autoridade }}
+      </button>
+      <button class="dna-data-button">
+        <div>
+         <app-user-circle></app-user-circle>
+          <b>Perfil</b>
+        </div>
+        {{ humanDesignData.perfil }}
+      </button>
+    </div>
   </section>
 </main>
