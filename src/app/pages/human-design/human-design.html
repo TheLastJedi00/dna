@@ -53,71 +53,63 @@
     </div>
   </section>
   <section class="container mx-auto main-padding bg-white">
-    <h1 class="text-center font-merriweather text-primary text-xl mb-4">Vamos analisar o seu Mapa?</h1>
+    <h1 class="text-center font-merriweather text-primary text-xl mb-4">
+      Vamos analisar o seu Mapa?
+    </h1>
     <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
-      <button class="dna-data-button">
-        <div>
-          <app-heart></app-heart>
-          <b>Tipo Áurico</b>
-        </div>
-        {{ humanDesignData.tipo_aurico }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-          <app-shield></app-shield>
-          <b>Aura</b>
-        </div>
-        {{ humanDesignData.aura }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-          <app-bolt></app-bolt>
-          <b>Energia</b>
-        </div>
-        {{ humanDesignData.energia }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-          <app-chat-bubble></app-chat-bubble>
-          <b>Palavra</b>
-        </div>
-        {{ humanDesignData.palavra_chave }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-          <app-chart-pie></app-chart-pie>
-          <b>Estratégia</b>
-        </div>
-        {{ humanDesignData.estrategia }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-          <app-pencil></app-pencil>
-          <b>Assinatura</b>
-        </div>
-        {{ humanDesignData.assinatura }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-         <app-users></app-users>
-          <b>Tema do Não Ser</b>
-        </div>
-        {{ humanDesignData.tema_do_nao_ser }}
-      </button>
-      <button class="dna-data-button">
-        <div>
-         <app-flag></app-flag>
-          <b>Autoridade</b>
-        </div>
-        {{ humanDesignData.autoridade }}
-      </button>
+      <app-dh-data-button
+        icon="heart"
+        title="Tipo Áurico"
+        [data]="humanDesignData.tipo_aurico"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="shield"
+        title="Aura"
+        [data]="humanDesignData.aura"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="bolt"
+        title="Energia"
+        [data]="humanDesignData.energia"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="chat-bubble"
+        title="Palavra"
+        [data]="humanDesignData.palavra_chave"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="chart-pie"
+        title="Estratégia"
+        [data]="humanDesignData.estrategia"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="pencil"
+        title="Assinatura"
+        [data]="humanDesignData.assinatura"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="users"
+        title="Tema do Não Ser"
+        [data]="humanDesignData.tema_do_nao_ser"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="flag"
+        title="Autoridade"
+        [data]="humanDesignData.autoridade"
+      ></app-dh-data-button>
+      <app-dh-data-button
+        icon="user-circle"
+        title="Perfil"
+        [data]="humanDesignData.perfil"
+      ></app-dh-data-button>
+      <!--
       <button class="dna-data-button">
         <div>
          <app-user-circle></app-user-circle>
           <b>Perfil</b>
         </div>
         {{ humanDesignData.perfil }}
-      </button>
+      </button> -->
     </div>
   </section>
 </main>

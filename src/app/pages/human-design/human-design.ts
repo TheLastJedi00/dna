@@ -1,18 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
-import { Heart } from "../../shared/icons/heart/heart";
-import { Shield } from "../../shared/icons/shield/shield";
-import { Bolt } from "../../shared/icons/bolt/bolt";
-import { ChatBubble } from "../../shared/icons/chat-bubble/chat-bubble";
-import { ChartPie } from "../../shared/icons/chart-pie/chart-pie";
-import { Pencil } from "../../shared/icons/pencil/pencil";
-import { Users } from "../../shared/icons/users/users";
-import { Flag } from "../../shared/icons/flag/flag";
-import { UserCircle } from "../../shared/icons/user-circle/user-circle";
 import { Router } from '@angular/router';
+import { DhDataButton } from '../../shared/buttons/dh-data-button/dh-data-button';
 @Component({
   selector: 'app-human-design',
-  imports: [UserPanelHeader, Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle],
+  imports: [UserPanelHeader, DhDataButton],
   templateUrl: './human-design.html',
   styleUrl: './human-design.scss',
 })
