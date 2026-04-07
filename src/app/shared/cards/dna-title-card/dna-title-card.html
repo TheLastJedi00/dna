@@ -1,0 +1,13 @@
+<div class="flex items-end justify-left gap-6">
+  <img
+    class="rounded-full h-[100px] w-[100px]"
+    [src]="imgSrc()"
+    [alt]="imgAlt()"
+  />
+  <div class="flex flex-col gap-1 mb-1">
+    <p class="uppercase text-secondary text-sm">{{ subTitle() }}</p>
+    <h1 class="text text-3xl md:text-6xl text-primary font-merriweather font-thin">
+      {{ title() }}
+    </h1>
+  </div>
+</div>

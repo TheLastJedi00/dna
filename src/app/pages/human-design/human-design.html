@@ -1,56 +1,16 @@
 <app-user-panel-header (logout)="logout()"></app-user-panel-header>
 <main class="pt-header gradient-primary-to-secondary-85">
   <section class="container mx-auto main-padding bg-white">
-    <div class="flex items-end justify-left gap-6">
-      <img
-        class="rounded-full h-[100px] w-[100px]"
-        src="https://i.imgur.com/U4xU7Hj.png"
-        alt="Desenho Humano"
-      />
-      <div class="flex flex-col gap-1 mb-1">
-        <p class="uppercase text-secondary text-sm">Sua estratégia natural</p>
-        <h1 class="text text-3xl md:text-6xl text-primary font-merriweather font-thin">
-          Desenho Humano
-        </h1>
-      </div>
-    </div>
-    <div class="mt-5 flex flex-col gap-2 text-black/70">
-      <h2 class="text-xl text-secondary font-merriweather font-thin">O que é o Desenho Humano?</h2>
-      <p>
-        O Desenho Humano é conhecido como a Ciência da Diferenciação, canalizada pelo
-        <b>Ra Uru Hu</b>, que foi o mensageiro deste Sistema e que, desde esse momento, dedicou a
-        sua vida à disseminação desta Ciência da Diferenciação por todo o mundo.
-      </p>
-      <p>
-        O Desenho Humano é um sistema abrangente e integrativo que combina elementos de várias
-        disciplinas antigas e modernas para ajudar os indivíduos a entender sua personalidade única,
-        seu processo de tomada de decisão e seu propósito de vida.
-      </p>
-      <p>
-        É uma ferramenta de autoconhecimento que se baseia em filosofias milenares como o
-        <b>I-Ching</b>, o sistema de <b>Chakras</b>, a <b>Cabala</b> e a <b>Astrologia</b>, e em
-        ciências contemporâneas como a <b>Física Quântica</b> ou a <b>Genética</b>.
-      </p>
-      <p>
-        Assim, através do Desenho Humano, você tem um mapa abrangente do seu próprio projeto
-        energético como um indivíduo.
-      </p>
-      <p>
-        Para esse mapa que é gerado através da sua data, horário e local de nascimento, chamamos de
-        <b>Corpo Gráfico</b> que, em si, é um mapa preciso que te dá acesso a como você é projetada
-        geneticamente para interagir com o mundo, tanto de forma Consciente
-        <b>(Personalidade)</b> como Inconsciente <b>(Desenho/Alma)</b>.
-      </p>
-      <p>
-        Esse gráfico revela quem você realmente é, como ser você mesma e como trabalhar com sucesso
-        num mundo dirigido pelo tempo relógio e sempre mutável.
-      </p>
-      <p>
-        Com ele você tem as ferramentas para uma vida consciente, criativa e autorresponsável,
-        eliminando resistências e medos, se alinhando com pessoas que realmente façam sentindo para
-        a sua jornada.
-      </p>
-    </div>
+    <app-dna-title-card
+      title="Desenho Humano"
+      subTitle="Sua estratégia natural"
+      imgSrc="https://i.imgur.com/U4xU7Hj.png"
+      imgAlt="Desenho Humano"
+    ></app-dna-title-card>
+    <app-dna-description-card
+      title="O que é o Desenho Humano?"
+      [innerHtml]="descriptionHtml()"
+    ></app-dna-description-card>
   </section>
   <section class="container mx-auto main-padding bg-white">
     <h1 class="text-center font-merriweather text-primary text-xl mb-4">
