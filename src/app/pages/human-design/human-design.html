@@ -102,14 +102,29 @@
         title="Perfil"
         [data]="humanDesignData.perfil"
       ></app-dh-data-button>
-      <!--
-      <button class="dna-data-button">
-        <div>
-         <app-user-circle></app-user-circle>
-          <b>Perfil</b>
-        </div>
-        {{ humanDesignData.perfil }}
-      </button> -->
     </div>
+    <button class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mt-3 centros-button">
+      <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
+      <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3 ">
+        <app-dh-data-button
+          [disabled]="true"
+          icon="magnifying-glass"
+          title="Definidos"
+          [data]="listToString(humanDesignData.centros_energeticos.definidos)"
+        ></app-dh-data-button>
+        <app-dh-data-button
+          [disabled]="true"
+          icon="magnifying-glass"
+          title="Indefinidos"
+          [data]="listToString(humanDesignData.centros_energeticos.indefinidos)"
+        ></app-dh-data-button>
+        <app-dh-data-button
+          [disabled]="true"
+          icon="magnifying-glass"
+          title="Abertos"
+          [data]="listToString(humanDesignData.centros_energeticos.abertos)"
+        ></app-dh-data-button>
+      </div>
+    </button>
   </section>
 </main>

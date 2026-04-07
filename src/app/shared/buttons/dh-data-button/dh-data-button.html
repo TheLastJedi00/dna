@@ -1,7 +1,12 @@
-<button class="dna-data-button">
-  <div class="text-secondary">
-    <app-icons-switch [icon]="icon()"></app-icons-switch>
-    <b>{{ title() }}</b>
+<button class="dna-data-button text-primary" [disabled]="disabled()">
+  <div class="global-div">
+    <div class="title-div text-secondary">
+      <app-icons-switch [icon]="icon()"></app-icons-switch>
+      <b>{{ title() }}</b>
+    </div>
+    {{ data() }}
   </div>
-  {{ data() }}
+  <div class="flex items-center h-full chevron-div">
+    <app-chevron-right></app-chevron-right>
+  </div>
 </button>

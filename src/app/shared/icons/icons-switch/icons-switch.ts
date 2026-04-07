@@ -8,10 +8,11 @@ import { Pencil } from '../pencil/pencil';
 import { Users } from '../users/users';
 import { Flag } from '../flag/flag';
 import { UserCircle } from '../user-circle/user-circle';
+import { MagnifyingGlass } from "../magnifying-glass/magnifying-glass";
 
 @Component({
   selector: 'app-icons-switch',
-  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle],
+  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass],
   templateUrl: './icons-switch.html',
   styleUrl: './icons-switch.scss',
 })

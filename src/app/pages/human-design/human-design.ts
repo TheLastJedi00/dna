@@ -54,8 +54,22 @@ export class HumanDesign {
     },
   };
 
-  logout(){
+  logout() {
     this.router.navigate(['login']);
   }
 
+  listToString(list: string[]) {
+    let centrosDefinidosString: string = '';
+    let counter = 0;
+    list.forEach((c) => {
+      if (counter < list.length - 1) {
+        centrosDefinidosString += `${c}, `;
+      } else {
+        centrosDefinidosString += `${c}`;
+      }
+      counter += 1;
+    });
+    centrosDefinidosString = centrosDefinidosString;
+    return centrosDefinidosString;
+  }
 }
