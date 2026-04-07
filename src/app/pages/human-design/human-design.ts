@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { Router } from '@angular/router';
 import { DhDataButton } from '../../shared/buttons/dh-data-button/dh-data-button';
+import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 @Component({
   selector: 'app-human-design',
-  imports: [UserPanelHeader, DhDataButton],
+  imports: [UserPanelHeader, DhDataButton, UserPanelFooter],
   templateUrl: './human-design.html',
   styleUrl: './human-design.scss',
 })

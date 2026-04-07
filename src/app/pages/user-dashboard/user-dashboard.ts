@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { DashboardButton } from "../../shared/buttons/dashboard-button/dashboard-button";
 import { UserPanelHeader } from "../../shared/headers/user-panel-header/user-panel-header";
 import { Router } from '@angular/router';
+import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-panel-footer";
 
 @Component({
   selector: 'app-user-dashboard',
-  imports: [DashboardButton, UserPanelHeader ],
+  imports: [DashboardButton, UserPanelHeader, UserPanelFooter],
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.scss',
 })
