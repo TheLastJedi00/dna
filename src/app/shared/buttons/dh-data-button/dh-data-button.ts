@@ -10,7 +10,8 @@ import { ChevronRight } from "../../icons/chevron-right/chevron-right";
 })
 export class DhDataButton {
   title = input('Título');
-  data = input('Dados');
+  data = input<string | null>(null);
+  dataArray = input<string[]>([]);
   icon = input('heart');
   disabled = input(false)
 }

@@ -103,28 +103,59 @@
         [data]="humanDesignData.perfil"
       ></app-dh-data-button>
     </div>
-    <button class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mt-3 centros-button">
+    <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mt-3 mb-2">
       <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
-      <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3 ">
+      <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3">
         <app-dh-data-button
-          [disabled]="true"
           icon="magnifying-glass"
           title="Definidos"
           [data]="listToString(humanDesignData.centros_energeticos.definidos)"
         ></app-dh-data-button>
         <app-dh-data-button
-          [disabled]="true"
           icon="magnifying-glass"
           title="Indefinidos"
           [data]="listToString(humanDesignData.centros_energeticos.indefinidos)"
         ></app-dh-data-button>
         <app-dh-data-button
-          [disabled]="true"
           icon="magnifying-glass"
           title="Abertos"
           [data]="listToString(humanDesignData.centros_energeticos.abertos)"
         ></app-dh-data-button>
       </div>
-    </button>
+    </div>
+    <!-- Grid -->
+    <div class="grid md:grid-cols-[3fr_2fr] gap-2">
+      <div class="grid grid-cols-1 gap-2">
+        <!-- Canais -->
+        <app-dh-data-button
+          icon="arrows-right-left"
+          title="Canais"
+          [dataArray]="canaisToStringArray(humanDesignData.canais)"
+        ></app-dh-data-button>
+        <!-- Cruz Encarnação -->
+        <app-dh-data-button
+          icon="arrows-pointing-out"
+          title="Cruz da Encarnação"
+          [dataArray]="encarnacaoToStringArray(humanDesignData.encarnacao)"
+        >
+        </app-dh-data-button>
+      </div>
+      <!-- Ativações -->
+      <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl">
+        <b class="text-primary font-merriweather font-normal text-xl">Portões</b>
+        <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-1 gap-2 mt-3">
+          <app-dh-data-button
+            icon="lock-open"
+            title="Personalidade"
+            [dataArray]="portoesToStringArray(humanDesignData.ativacoes.personalidade)"
+          ></app-dh-data-button>
+          <app-dh-data-button
+            icon="lock-closed"
+            title="Desenho"
+            [dataArray]="portoesToStringArray(humanDesignData.ativacoes.desenho)"
+          ></app-dh-data-button>
+        </div>
+      </div>
+    </div>
   </section>
 </main>

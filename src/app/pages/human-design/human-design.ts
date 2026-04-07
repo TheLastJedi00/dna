@@ -48,7 +48,8 @@ export class HumanDesign {
       },
     },
     encarnacao: {
-      cruz: 'Ângulo Direito Cruz da Explicação 3',
+      angulo: 'Direito',
+      cruz: 'Cruz da Explicação 3',
       portoes: '4/49 | 23/43',
       quarto_de_cruz: '3 - Dualidade',
     },
@@ -71,5 +72,33 @@ export class HumanDesign {
     });
     centrosDefinidosString = centrosDefinidosString;
     return centrosDefinidosString;
+  }
+
+  canaisToStringArray(list: any[]){
+    let stringList: string[] = []
+    list.forEach((c) => {
+      let string = `${c.id}: ${c.nome}`
+      stringList.push(string);
+    })
+    return stringList;
+  }
+
+  portoesToStringArray(portao: any){
+    let stringList: string[] = []
+    let sol = `Sol: ${portao.sol}`
+    let terra = `Terra: ${portao.terra}`
+    let lua = `Lua: ${portao.lua}`
+    stringList.push(sol, terra, lua)
+    return stringList;
+  }
+
+  encarnacaoToStringArray(encarnacao: any){
+    let stringList: string[] = [];
+    let angulo = `Ângulo: ${encarnacao.angulo}`
+    let cruz = `${encarnacao.cruz}`
+    let portoes = `(${encarnacao.portoes})`
+    let quarto = `Quarto de Cruz: ${encarnacao.quarto_de_cruz}`;
+    stringList.push(angulo, cruz, portoes, quarto)
+    return stringList;
   }
 }

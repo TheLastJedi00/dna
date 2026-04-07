@@ -9,10 +9,14 @@ import { Users } from '../users/users';
 import { Flag } from '../flag/flag';
 import { UserCircle } from '../user-circle/user-circle';
 import { MagnifyingGlass } from "../magnifying-glass/magnifying-glass";
+import { ArrowsRightLeft } from "../arrows-right-left/arrows-right-left";
+import { LockClosed } from "../lock-closed/lock-closed";
+import { LockOpen } from "../lock-open/lock-open";
+import { ArrowsPointingOut } from "../arrows-pointing-out/arrows-pointing-out";
 
 @Component({
   selector: 'app-icons-switch',
-  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass],
+  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut],
   templateUrl: './icons-switch.html',
   styleUrl: './icons-switch.scss',
 })
