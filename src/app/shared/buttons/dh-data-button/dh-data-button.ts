@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { IconsSwitch } from '../../icons/icons-switch/icons-switch';
 import { ChevronRight } from "../../icons/chevron-right/chevron-right";
 
@@ -14,4 +14,9 @@ export class DhDataButton {
   dataArray = input<string[]>([]);
   icon = input('heart');
   disabled = input(false)
+  click = output<void>();
+
+  onClick(){
+    this.click.emit()
+  }
 }
