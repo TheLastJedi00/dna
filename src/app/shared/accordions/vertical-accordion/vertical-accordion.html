@@ -1,0 +1,17 @@
+<section class="border-b border-black/30">
+  <button
+    class="flex justify-between items-center w-full mb-3"
+    [ngClass]="titleClass()"
+    (click)="accordionAction()"
+  >
+    <h4>{{ title() }}</h4>
+    <div [ngClass]="isExpanded() ? 'rolldown' : 'rollup'">
+      <app-icons-switch icon="chevron-down"></app-icons-switch>
+    </div>
+  </button>
+  @if (isExpanded()) {
+    <div animate.enter="expand" animate.leave="collapse">
+      <div [ngClass]="contentClass()" [innerHTML]="cardContent()" class="pb-4"></div>
+    </div>
+  }
+</section>

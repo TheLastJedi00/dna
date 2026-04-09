@@ -13,10 +13,12 @@ import { ArrowsRightLeft } from "../arrows-right-left/arrows-right-left";
 import { LockClosed } from "../lock-closed/lock-closed";
 import { LockOpen } from "../lock-open/lock-open";
 import { ArrowsPointingOut } from "../arrows-pointing-out/arrows-pointing-out";
+import { ArrowLeft } from '../arrow-left/arrow-left';
+import { ChevronDown } from "../chevron-down/chevron-down";
 
 @Component({
   selector: 'app-icons-switch',
-  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut],
+  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown],
   templateUrl: './icons-switch.html',
   styleUrl: './icons-switch.scss',
 })

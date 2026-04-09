@@ -1,56 +1,60 @@
 <section class="container mx-auto main-padding bg-white">
-  @defer(on viewport) {
+  @defer (on viewport) {
     <div animate.enter="fade-in">
       <h1 class="text-center font-merriweather text-primary text-xl mb-4">
         Vamos analisar o seu Mapa?
       </h1>
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
-        <app-dh-data-button
-          (click)="navigateTo('tipo-aurico')"
-          icon="heart"
-          title="Tipo Áurico"
-          [data]="humanDesignData.tipo_aurico"
-        ></app-dh-data-button>
-        <app-dh-data-button
-          icon="shield"
-          title="Aura"
-          [data]="humanDesignData.aura"
-        ></app-dh-data-button>
-        <app-dh-data-button
-          icon="bolt"
-          title="Energia"
-          [data]="humanDesignData.energia"
-        ></app-dh-data-button>
-        <app-dh-data-button
-          icon="chat-bubble"
-          title="Palavra"
-          [data]="humanDesignData.palavra_chave"
-        ></app-dh-data-button>
+      <div class="mt-3 mb-2" [ngClass]="buttonGroupClasses">
+        <b [ngClass]="titleButtonGroupClasses">Tipo Áurico, Estratégia, Assinatura e Não-Ser</b>
+        <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-4">
+          <app-dh-data-button
+            (click)="navigateTo('tipo-aurico')"
+            icon="heart"
+            title="Tipo Áurico"
+            [data]="humanDesignData().tipo_aurico"
+          ></app-dh-data-button>
+          <app-dh-data-button
+            icon="bolt"
+            title="Energia"
+            [data]="humanDesignData().energia"
+          ></app-dh-data-button>
+          <app-dh-data-button
+            icon="pencil"
+            title="Assinatura"
+            [data]="humanDesignData().assinatura"
+          ></app-dh-data-button>
+          <app-dh-data-button
+            icon="users"
+            title="Tema do Não Ser"
+            [data]="humanDesignData().tema_do_nao_ser"
+          ></app-dh-data-button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
         <app-dh-data-button
           icon="chart-pie"
           title="Estratégia"
-          [data]="humanDesignData.estrategia"
+          [data]="humanDesignData().estrategia"
         ></app-dh-data-button>
-        <app-dh-data-button
-          icon="pencil"
-          title="Assinatura"
-          [data]="humanDesignData.assinatura"
-        ></app-dh-data-button>
-        <app-dh-data-button
-          icon="users"
-          title="Tema do Não Ser"
-          [data]="humanDesignData.tema_do_nao_ser"
-        ></app-dh-data-button>
+
         <app-dh-data-button
           icon="flag"
           title="Autoridade"
-          [data]="humanDesignData.autoridade"
+          [data]="humanDesignData().autoridade"
         ></app-dh-data-button>
+        <!-- Canais -->
         <app-dh-data-button
-          icon="user-circle"
-          title="Perfil"
-          [data]="humanDesignData.perfil"
+          icon="arrows-right-left"
+          title="Canais"
+          [dataArray]="canaisToStringArray(humanDesignData().canais)"
         ></app-dh-data-button>
+        <!-- Cruz Encarnação -->
+        <app-dh-data-button
+          icon="arrows-pointing-out"
+          title="Cruz da Encarnação"
+          [dataArray]="encarnacaoToStringArray(humanDesignData().encarnacao)"
+        >
+        </app-dh-data-button>
       </div>
       <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mt-3 mb-2">
         <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
@@ -58,36 +62,38 @@
           <app-dh-data-button
             icon="magnifying-glass"
             title="Definidos"
-            [data]="listToString(humanDesignData.centros_energeticos.definidos)"
+            [data]="listToString(humanDesignData().centros_energeticos.definidos)"
           ></app-dh-data-button>
           <app-dh-data-button
             icon="magnifying-glass"
             title="Indefinidos"
-            [data]="listToString(humanDesignData.centros_energeticos.indefinidos)"
+            [data]="listToString(humanDesignData().centros_energeticos.indefinidos)"
           ></app-dh-data-button>
           <app-dh-data-button
             icon="magnifying-glass"
             title="Abertos"
-            [data]="listToString(humanDesignData.centros_energeticos.abertos)"
+            [data]="listToString(humanDesignData().centros_energeticos.abertos)"
           ></app-dh-data-button>
         </div>
       </div>
       <!-- Grid -->
-      <div class="grid md:grid-cols-[3fr_2fr] gap-2">
+      <div class="grid md:grid-cols-[1fr_1fr] gap-2">
         <div class="grid grid-cols-1 gap-2">
-          <!-- Canais -->
           <app-dh-data-button
-            icon="arrows-right-left"
-            title="Canais"
-            [dataArray]="canaisToStringArray(humanDesignData.canais)"
+            icon="shield"
+            title="Aura"
+            [data]="humanDesignData().aura"
           ></app-dh-data-button>
-          <!-- Cruz Encarnação -->
           <app-dh-data-button
-            icon="arrows-pointing-out"
-            title="Cruz da Encarnação"
-            [dataArray]="encarnacaoToStringArray(humanDesignData.encarnacao)"
-          >
-          </app-dh-data-button>
+            icon="user-circle"
+            title="Perfil"
+            [data]="humanDesignData().perfil"
+          ></app-dh-data-button>
+          <app-dh-data-button
+            icon="chat-bubble"
+            title="Palavra"
+            [data]="humanDesignData().palavra_chave"
+          ></app-dh-data-button>
         </div>
         <!-- Ativações -->
         <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl">
@@ -96,18 +102,18 @@
             <app-dh-data-button
               icon="lock-open"
               title="Personalidade"
-              [dataArray]="portoesToStringArray(humanDesignData.ativacoes.personalidade)"
+              [dataArray]="portoesToStringArray(humanDesignData().ativacoes.personalidade)"
             ></app-dh-data-button>
             <app-dh-data-button
               icon="lock-closed"
               title="Desenho"
-              [dataArray]="portoesToStringArray(humanDesignData.ativacoes.desenho)"
+              [dataArray]="portoesToStringArray(humanDesignData().ativacoes.desenho)"
             ></app-dh-data-button>
           </div>
         </div>
       </div>
     </div>
   } @placeholder {
-    <div class="h-[1080px] w-full"></div>
+    <div class="h-[800px]"></div>
   }
 </section>

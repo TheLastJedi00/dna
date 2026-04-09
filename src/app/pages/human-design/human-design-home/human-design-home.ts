@@ -1,17 +1,22 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DhDataButton } from '../../../shared/buttons/dh-data-button/dh-data-button';
 import { Router } from '@angular/router';
+import { NgClass } from "@angular/common";
 
 @Component({
   selector: 'app-human-design-home',
-  imports: [DhDataButton],
+  imports: [DhDataButton, NgClass],
   templateUrl: './human-design-home.html',
   styleUrl: './human-design-home.scss',
 })
 export class HumanDesignHome {
+  isAlive = signal(false);
   router = inject(Router);
+  buttonGroupClasses = "p-3 text-center gradient-primary-to-secondary-85 rounded-xl"
+  titleButtonGroupClasses = "text-primary font-merriweather font-normal text-xl"
+  gridButtonGroupClasses = "grid grid-cols-1 auto-rows-fr gap-2 mt-3"
 
-  humanDesignData = {
+  humanDesignData = signal({
     tipo_aurico: 'Projetora',
     aura: 'Focalizada e Absorvente',
     energia: 'Não Energético',
@@ -54,10 +59,22 @@ export class HumanDesignHome {
       portoes: '4/49 | 23/43',
       quarto_de_cruz: '3 - Dualidade',
     },
-  };
+  });
 
   navigateTo(path: string) {
     this.router.navigate([`human-design/${path}`]);
+  }
+
+  tipoAuricoData() {
+    let data = this.humanDesignData()
+    let stringList: string[] = []
+    stringList.push(
+      `Tipo Áurico: ${data.tipo_aurico}`,
+      `Estratégia: ${data.estrategia}`,
+      `Assinatura: ${data.assinatura}`,
+      `Tema do Não-Ser: ${data.tema_do_nao_ser}`
+    )
+    return stringList
   }
 
   listToString(list: string[]) {
