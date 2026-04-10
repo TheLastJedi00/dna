@@ -14,16 +14,19 @@
             [data]="humanDesignData().tipo_aurico"
           ></app-dh-data-button>
           <app-dh-data-button
-            icon="bolt"
-            title="Energia"
-            [data]="humanDesignData().energia"
+            (click)="navigateTo('tipo-aurico')"
+            icon="chart-pie"
+            title="Estratégia"
+            [data]="humanDesignData().estrategia"
           ></app-dh-data-button>
           <app-dh-data-button
+            (click)="navigateTo('tipo-aurico')"
             icon="pencil"
             title="Assinatura"
             [data]="humanDesignData().assinatura"
           ></app-dh-data-button>
           <app-dh-data-button
+            (click)="navigateTo('tipo-aurico')"
             icon="users"
             title="Tema do Não Ser"
             [data]="humanDesignData().tema_do_nao_ser"
@@ -32,11 +35,10 @@
       </div>
       <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
         <app-dh-data-button
-          icon="chart-pie"
-          title="Estratégia"
-          [data]="humanDesignData().estrategia"
+          icon="bolt"
+          title="Energia"
+          [data]="humanDesignData().energia"
         ></app-dh-data-button>
-
         <app-dh-data-button
           icon="flag"
           title="Autoridade"

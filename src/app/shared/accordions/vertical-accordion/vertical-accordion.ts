@@ -13,7 +13,8 @@ export class VerticalAccordion {
   cardContent = input("Conteúdo")
   titleClass = input("text-primary")
   contentClass = input("")
-  isExpanded = signal(false)
+  startOpen = input(false)
+  isExpanded = signal(this.startOpen())
 
   accordionAction(){
     this.isExpanded.update(v => !v)

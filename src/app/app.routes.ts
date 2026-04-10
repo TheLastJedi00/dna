@@ -18,7 +18,10 @@ export const routes: Routes = [
       },
       {
         path: 'tipo-aurico', component: HumanDesignTipoAurico
-      }
+      },
+      {
+        path: 'estrategia', component: HumanDesignTipoAurico
+      } 
     ],
   },
 ];

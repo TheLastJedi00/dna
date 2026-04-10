@@ -1,0 +1,8 @@
+<section class="shadow-lg p-4 rounded-xl">
+  <h4 class="text-primary text-xl font-merriweather my-3">{{ title() }}</h4>
+  <ul class="text-black/70 ml-2">
+    @for (item of items(); track $index) {
+      <li class="my-2 list-disc list-inside">{{item}}</li>
+    }
+  </ul>
+</section>
