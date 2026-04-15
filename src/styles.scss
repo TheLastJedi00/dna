@@ -30,6 +30,13 @@ $secondary-color: #826a3c;
   font-family: 'Style Script', cursive;
 }
 
+.text-title {
+  color: $secondary-color;
+  font-family: 'Merriweather', serif;
+  font-weight: 400;
+  font-size: 1.25rem;
+}
+
 .text-primary {
   color: $primary-color;
 }
@@ -99,4 +106,14 @@ $secondary-color: #826a3c;
     color.scale($primary-color, $lightness: 85%),
     color.scale($secondary-color, $lightness: 85%)
   );
+}
+
+.slide-in {
+  animation: slide-in-animation 400ms forwards;
+}
+
+@keyframes slide-in-animation {
+  0% {
+    transform: translateX(100%);
+  }
 }

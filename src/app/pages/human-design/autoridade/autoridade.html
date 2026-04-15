@@ -1,0 +1,16 @@
+<section class="container mx-auto bg-white main-padding">
+  @defer (on viewport) {
+    <div animate.enter="slide-in" class="grid gap-3">
+      <app-dh-intro-card title="Autoridade" [intro]="intro()"></app-dh-intro-card>
+      <app-vertical-accordion
+        title="Quais são os tipos de Autoridade"
+        [cardContent]="tiposAutoridade()"
+        contentClass="text-black/70"
+        titleClass="text-title"
+      ></app-vertical-accordion>
+    </div>
+    <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+  } @placeholder {
+    <div class="h-[800px]"></div>
+  }
+</section>

@@ -33,16 +33,12 @@
           ></app-dh-data-button>
         </div>
       </div>
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <app-dh-data-button
-          icon="bolt"
-          title="Energia"
-          [data]="humanDesignData().energia"
-        ></app-dh-data-button>
+      <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
         <app-dh-data-button
           icon="flag"
           title="Autoridade"
           [data]="humanDesignData().autoridade"
+          (click)="navigateTo('autoridade')"
         ></app-dh-data-button>
         <!-- Canais -->
         <app-dh-data-button

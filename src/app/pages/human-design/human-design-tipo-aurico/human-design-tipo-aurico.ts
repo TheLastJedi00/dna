@@ -1,100 +1,32 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { IconTextButton } from '../../../shared/buttons/icon-text-button/icon-text-button';
 import { Router } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { VerticalAccordion } from '../../../shared/accordions/vertical-accordion/vertical-accordion';
 import { TopicListCard } from '../../../shared/cards/topic-list-card/topic-list-card';
+import { DhIntroCard } from '../../../shared/cards/dh-intro-card/dh-intro-card';
+import { FakeApi } from '../../../core/services/fake-api';
+import { firstValueFrom } from 'rxjs';
+import { ListsCardGrid } from "../../../shared/grid/lists-card-grid/lists-card-grid";
 
 @Component({
   selector: 'app-human-design-tipo-aurico',
-  imports: [IconTextButton, NgClass, VerticalAccordion, TopicListCard],
+  imports: [IconTextButton, VerticalAccordion, TopicListCard, DhIntroCard, ListsCardGrid],
   templateUrl: './human-design-tipo-aurico.html',
   styleUrl: './human-design-tipo-aurico.scss',
 })
-export class HumanDesignTipoAurico {
+export class HumanDesignTipoAurico implements OnInit {
+  async ngOnInit() {
+    const topicLists = await this.api.getAllTopicLists();
+    this.topics.set(topicLists);
+  }
   router = inject(Router);
-  topics = signal([
-    {
-      titulo: 'Lorem Ipsum Dolor',
-      items: [
-        'Consectetur adipiscing',
-        'Eiusmod tempor',
-        'Incididunt ut labore',
-        'Dolore magna aliqua',
-        'Ut enim ad minim',
-        'Quis nostrud exercitation',
-        'Ullamco laboris nisi',
-        'Ut aliquip ex ea',
-        'Commodo consequat',
-        'Duis aute irure',
-      ],
-    },
-    {
-      titulo: 'Sit Amet Consectetur',
-      items: [
-        'Reprehenderit in voluptate',
-        'Velit esse cillum',
-        'Dolore eu fugiat',
-        'Nulla pariatur',
-        'Excepteur sint occaecat',
-        'Cupidatat non proident',
-        'Sunt in culpa qui',
-        'Officia deserunt mollit',
-        'Anim id est laborum',
-        'Perspiciatis unde omnis',
-      ],
-    },
-    {
-      titulo: 'Iste Natus Error',
-      items: [
-        'Voluptatem accusantium',
-        'Doloremque laudantium',
-        'Totam rem aperiam',
-        'Eaque ipsa quae',
-        'Ab illo inventore',
-        'Veritatis et quasi',
-        'Architecto beatae vitae',
-        'Dicta sunt explicabo',
-        'Nemo enim ipsam',
-        'Voluptatem quia voluptas',
-      ],
-    },
-    {
-      titulo: 'Aspernatur Aut Odit',
-      items: [
-        'Aut fugit sed quia',
-        'Magni dolores eos',
-        'Qui ratione voluptatem',
-        'Sequi nesciunt neque',
-        'Porro quisquam est',
-        'Qui dolorem ipsum',
-        'Quia dolor sit amet',
-        'Consectetur adipisci velit',
-        'Sed quia non numquam',
-        'Eius modi tempora',
-      ],
-    },
-    {
-      titulo: 'Incidunt Ut Labore',
-      items: [
-        'Magnam aliquam quaerat',
-        'Voluptatem ut enim',
-        'Ad minima veniam',
-        'Quis nostrum exercitationem',
-        'Ullam corporis suscipit',
-        'Laboriosam nisi ut',
-        'Aliquid ex ea commodi',
-        'Consequatur autem vel',
-        'Iure reprehenderit qui',
-        'In ea voluptate velit',
-      ],
-    },
-  ]);
-  intro = `Dentro do Sistema do Desenho Humano, você tem acesso
+  api = inject(FakeApi);
+  topics = signal<any[] | null>(null);
+  intro = signal(`Dentro do Sistema do Desenho Humano, você tem acesso
 a uma sabedoria energética única que te mostra como flui
 a sua energia, qual o seu papel no mundo, como tomar
 decisões e como se alinha com a sua essência mais
-verdadeira.`;
+verdadeira.`);
   introTipoAurico = `<p>
           É como se fosse o seu "estilo de ser energia" no mundo. Ele representa como a sua aura
           funciona, como você impacta os outros e como os outros te percebem.

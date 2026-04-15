@@ -5,6 +5,7 @@ import { UserDashboard } from './pages/user-dashboard/user-dashboard';
 import { HumanDesign } from './pages/human-design/human-design';
 import { HumanDesignHome } from './pages/human-design/human-design-home/human-design-home';
 import { HumanDesignTipoAurico } from './pages/human-design/human-design-tipo-aurico/human-design-tipo-aurico';
+import { Autoridade } from './pages/human-design/autoridade/autoridade';
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
@@ -20,8 +21,8 @@ export const routes: Routes = [
         path: 'tipo-aurico', component: HumanDesignTipoAurico
       },
       {
-        path: 'estrategia', component: HumanDesignTipoAurico
-      } 
+        path: 'autoridade', component: Autoridade
+      }
     ],
   },
 ];

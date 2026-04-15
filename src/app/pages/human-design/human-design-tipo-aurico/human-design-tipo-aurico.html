@@ -1,46 +1,37 @@
 <section class="container mx-auto main-padding bg-white">
   @defer (on viewport) {
     <div animate.enter="slide-in">
-      <div class="my-3 flex justify-between">
-        <h3 [ngClass]="titleClass">Tipo Áurico, Estratégia, Assinatura e Não-Ser</h3>
-        <app-icon-text-button
-          icon="arrow-left"
-          text="Voltar"
-          (click)="navigateTo('')"
-        ></app-icon-text-button>
-      </div>
-      <p class="text-black/70">{{ intro }}</p>
+      <app-dh-intro-card
+        title="Tipo Áurico, Estratégia, Assinatura e Não-Ser"
+        [singleIntro]="intro()"
+      ></app-dh-intro-card>
       <div class="mt-4 flex flex-col gap-4">
         <app-vertical-accordion
           title="Tipo Áurico"
           contentClass="text-black/70"
           [cardContent]="introTipoAurico"
-          [titleClass]="`${titleClass}`"
+          titleClass="text-title"
         ></app-vertical-accordion>
         <app-vertical-accordion
           title="Estratégia"
           contentClass="text-black/70"
           [cardContent]="introEstrategia"
-          [titleClass]="`${titleClass}`"
+          titleClass="text-title"
         ></app-vertical-accordion>
         <app-vertical-accordion
           title="Assinatura"
           contentClass="text-black/70"
           [cardContent]="introAssinatura"
-          [titleClass]="`${titleClass}`"
+          titleClass="text-title"
         ></app-vertical-accordion>
         <app-vertical-accordion
           title="Tema do Não-Ser"
           contentClass="text-black/70"
           [cardContent]="introNaoSer"
-          [titleClass]="`${titleClass}`"
+          titleClass="text-title"
         ></app-vertical-accordion>
       </div>
-      <div class="mt-4 grid md:grid-cols-2 gap-2">
-        @for (topic of topics(); track $index) {
-          <app-topic-list-card [title]="topic.titulo" [items]="topic.items"></app-topic-list-card>
-        }
-      </div>
+      <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
     </div>
     <div class="w-full flex justify-center mt-2">
       <app-icon-text-button
