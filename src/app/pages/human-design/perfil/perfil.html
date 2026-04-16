@@ -1,0 +1,28 @@
+<section class="mx-auto container bg-white main-padding">
+  @defer (on viewport) {
+    <div animate.enter="slide-in">
+      <app-dh-intro-card title="Perfil"></app-dh-intro-card>
+      <div class="grid gap-3">
+        <div class="grid gap-3">
+          @for (p of paragrafosIntro(); track $index) {
+            <p class="text-black/70">{{ p }}</p>
+          }
+        </div>
+        <app-vertical-accordion
+          title="Tipos possíveis de Perfil:"
+          [cardContent]="tiposPerfis()"
+          contentClass="text-black/70"
+          titleClass="text-title"
+        ></app-vertical-accordion>
+        <p class="text-black/70">
+          O Perfil é como o "caminho da sua atuação no palco da vida" — e quando você vive de acordo
+          com ele, sente-se coerente, leve e potente. Quando ignora ou tenta viver o Perfil de outra
+          pessoa, sente-se deslocada, drenada ou desconectada.
+        </p>
+      </div>
+      <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+    </div>
+  } @placeholder {
+    <div class="h-[800px]"></div>
+  }
+</section>

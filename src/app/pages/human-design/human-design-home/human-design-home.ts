@@ -1,7 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DhDataButton } from '../../../shared/buttons/dh-data-button/dh-data-button';
 import { Router } from '@angular/router';
 import { NgClass } from "@angular/common";
+import { HumanDesignData } from '../../../core/models/dhdata.model';
+import { FakeApi } from '../../../core/services/fake-api';
 
 @Component({
   selector: 'app-human-design-home',
@@ -9,57 +11,20 @@ import { NgClass } from "@angular/common";
   templateUrl: './human-design-home.html',
   styleUrl: './human-design-home.scss',
 })
-export class HumanDesignHome {
+export class HumanDesignHome implements OnInit{
+  ngOnInit(): void {
+   this.humanDesignData.set(this.api.getHumanDesignData())
+  }
+
   isAlive = signal(false);
   router = inject(Router);
+  readonly api = inject(FakeApi)
+
   buttonGroupClasses = "p-3 text-center gradient-primary-to-secondary-85 rounded-xl"
   titleButtonGroupClasses = "text-primary font-merriweather font-normal text-xl"
   gridButtonGroupClasses = "grid grid-cols-1 auto-rows-fr gap-2 mt-3"
 
-  humanDesignData = signal({
-    tipo_aurico: 'Projetora',
-    aura: 'Focalizada e Absorvente',
-    energia: 'Não Energético',
-    palavra_chave: 'Guia',
-    estrategia: 'Aguardar Pelo Convite',
-    assinatura: 'Sucesso',
-    tema_do_nao_ser: 'Amargura',
-    autoridade: 'Autoprojetada',
-    perfil: '2/4',
-    centros_energeticos: {
-      definidos: ['Centro G', 'Garganta', 'Ajna'],
-      indefinidos: ['Cabeça', 'Ego/Coração', 'Plexo Solar', 'Raiz', 'Sacral'],
-      abertos: ['Esplênico'],
-    },
-    canais: [
-      {
-        id: '33-13',
-        nome: 'Canal do Prodígio',
-      },
-      {
-        id: '43-23',
-        nome: 'Canal da Estruturação',
-      },
-    ],
-    ativacoes: {
-      personalidade: {
-        sol: 4,
-        terra: 49,
-        lua: 61,
-      },
-      desenho: {
-        sol: 23,
-        terra: 43,
-        lua: 47,
-      },
-    },
-    encarnacao: {
-      angulo: 'Direito',
-      cruz: 'Cruz da Explicação 3',
-      portoes: '4/49 | 23/43',
-      quarto_de_cruz: '3 - Dualidade',
-    },
-  });
+  humanDesignData = signal<HumanDesignData | null>(null);
 
   navigateTo(path: string) {
     this.router.navigate([`human-design/${path}`]);
@@ -69,10 +34,10 @@ export class HumanDesignHome {
     let data = this.humanDesignData()
     let stringList: string[] = []
     stringList.push(
-      `Tipo Áurico: ${data.tipo_aurico}`,
-      `Estratégia: ${data.estrategia}`,
-      `Assinatura: ${data.assinatura}`,
-      `Tema do Não-Ser: ${data.tema_do_nao_ser}`
+      `Tipo Áurico: ${data?.tipo_aurico}`,
+      `Estratégia: ${data?.estrategia}`,
+      `Assinatura: ${data?.assinatura}`,
+      `Tema do Não-Ser: ${data?.tema_do_nao_ser}`
     )
     return stringList
   }

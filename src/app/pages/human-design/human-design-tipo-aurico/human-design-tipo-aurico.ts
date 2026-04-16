@@ -2,15 +2,13 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { IconTextButton } from '../../../shared/buttons/icon-text-button/icon-text-button';
 import { Router } from '@angular/router';
 import { VerticalAccordion } from '../../../shared/accordions/vertical-accordion/vertical-accordion';
-import { TopicListCard } from '../../../shared/cards/topic-list-card/topic-list-card';
 import { DhIntroCard } from '../../../shared/cards/dh-intro-card/dh-intro-card';
 import { FakeApi } from '../../../core/services/fake-api';
-import { firstValueFrom } from 'rxjs';
 import { ListsCardGrid } from "../../../shared/grid/lists-card-grid/lists-card-grid";
 
 @Component({
   selector: 'app-human-design-tipo-aurico',
-  imports: [IconTextButton, VerticalAccordion, TopicListCard, DhIntroCard, ListsCardGrid],
+  imports: [IconTextButton, VerticalAccordion, DhIntroCard, ListsCardGrid],
   templateUrl: './human-design-tipo-aurico.html',
   styleUrl: './human-design-tipo-aurico.scss',
 })
