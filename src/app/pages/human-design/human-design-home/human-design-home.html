@@ -60,6 +60,7 @@
         ></app-dh-data-button>
         <!-- Cruz Encarnação -->
         <app-dh-data-button
+        (click)="navigateTo('encarnacao')"
           icon="arrows-pointing-out"
           title="Cruz da Encarnação"
           [dataArray]="encarnacaoToStringArray(humanDesignData()!.encarnacao)"
@@ -70,6 +71,7 @@
         <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
         <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3">
           <app-dh-data-button
+          (click)="navigateTo('centros')"
             icon="magnifying-glass"
             title="Definidos"
             [data]="listToString(humanDesignData()!.centros_energeticos.definidos)"

@@ -108,6 +108,10 @@ $secondary-color: #826a3c;
   );
 }
 
+.slide-in-delay {
+  animation: slide-in-animation 400ms forwards 400ms;
+}
+
 .slide-in {
   animation: slide-in-animation 400ms forwards;
 }
@@ -115,5 +119,21 @@ $secondary-color: #826a3c;
 @keyframes slide-in-animation {
   0% {
     transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.slide-out {
+  animation: slide-out-animation 400ms forwards;
+}
+
+@keyframes slide-out-animation {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
   }
 }
