@@ -28,17 +28,17 @@
 
       <div class="flex flex-col justify-center">
         <div class="grid grid-cols-3 text-secondary font-merriweather text-lg">
-          <button (click)="changeCarslits('definidos')">Definidos</button>
-          <button (click)="changeCarslits('indefinidos')">Indefinidos</button>
-          <button (click)="changeCarslits('abertos')">Abertos</button>
+          <button class="slide-button" (click)="changeCardslits('definidos')">Definidos</button>
+          <button class="slide-button" (click)="changeCardslits('indefinidos')">Indefinidos</button>
+          <button class="slide-button" (click)="changeCardslits('abertos')">Abertos</button>
         </div>
         <hr
           class="w-[33.34%] text-secondary transition-all transition-[400ms]"
           [style]="horizontalRuleClass()"
         />
-        @switch (selectedCentros()) {
+        @switch (selectedCentro()) {
           @case ('definidos') {
-            <div animate.enter="slide-in">
+            <div animate.enter="slide-in-mirror">
               <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
             </div>
           }

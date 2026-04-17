@@ -33,7 +33,7 @@ export const routes: Routes = [
         path: 'encarnacao', component: Encarnacao
       },
       {
-        path: 'centros', component: Centros
+        path: 'centros/:centro', component: Centros
       }
     ],
   },

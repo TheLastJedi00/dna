@@ -125,15 +125,15 @@ $secondary-color: #826a3c;
   }
 }
 
-.slide-out {
-  animation: slide-out-animation 400ms forwards;
+.slide-in-mirror {
+  animation: slide-in-mirror 400ms forwards;
 }
 
-@keyframes slide-out-animation {
+@keyframes slide-in-mirror {
   0% {
-    transform: translateX(0%);
+    transform: translateX(-100%);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(0%);
   }
 }
