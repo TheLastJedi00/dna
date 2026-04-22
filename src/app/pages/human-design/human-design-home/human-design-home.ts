@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { NgClass } from "@angular/common";
 import { HumanDesignData } from '../../../core/models/dhdata.model';
 import { FakeApi } from '../../../core/services/fake-api';
-
+import { DhDataCard } from "../../../shared/cards/dh-data-card/dh-data-card";
+import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-card';
 @Component({
   selector: 'app-human-design-home',
-  imports: [DhDataButton, NgClass],
+  imports: [DhDataButton, NgClass, DhDataCard, UserDataCard],
   templateUrl: './human-design-home.html',
   styleUrl: './human-design-home.scss',
 })

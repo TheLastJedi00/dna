@@ -4,9 +4,30 @@
       <h1 class="text-center font-merriweather text-primary text-xl mb-4">
         Vamos analisar o seu Mapa?
       </h1>
+      <div class="grid md:grid-cols-[3fr_2fr_3fr] gap-3">
+        <app-user-data-card></app-user-data-card>
+        <div class="grid gap-2">
+          <app-dh-data-card
+            title="Energia"
+            [data]="humanDesignData()!.energia"
+            icon="bolt"
+          ></app-dh-data-card>
+          <app-dh-data-card
+            title="Palavra"
+            [data]="humanDesignData()!.palavra_chave"
+            icon="chat-bubble"
+          ></app-dh-data-card>
+        </div>
+        <app-dh-data-card
+          title="Canais"
+          [dataArray]="canaisToStringArray(humanDesignData()!.canais)"
+          icon="arrows-right-left"
+        ></app-dh-data-card>
+      </div>
+
       <div class="mt-3 mb-2" [ngClass]="buttonGroupClasses">
         <b [ngClass]="titleButtonGroupClasses">Tipo Áurico, Estratégia, Assinatura e Não-Ser</b>
-        <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-3">
+        <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-4">
           <app-dh-data-button
             (click)="navigateTo('tipo-aurico')"
             icon="heart"
@@ -31,43 +52,9 @@
             title="Tema do Não Ser"
             [data]="humanDesignData()!.tema_do_nao_ser"
           ></app-dh-data-button>
-          <app-dh-data-button
-            [disabled]="true"
-            icon="bolt"
-            title="Energia"
-            [data]="humanDesignData()!.energia"
-          ></app-dh-data-button>
-          <app-dh-data-button
-            [disabled]="true"
-            icon="arrows-right-left"
-            title="Canais"
-            [dataArray]="canaisToStringArray(humanDesignData()!.canais)"
-          ></app-dh-data-button>
         </div>
       </div>
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
-        <app-dh-data-button
-          (click)="navigateTo('perfil')"
-          icon="user-circle"
-          title="Perfil"
-          [data]="humanDesignData()!.perfil"
-        ></app-dh-data-button>
-        <app-dh-data-button
-          icon="flag"
-          title="Autoridade"
-          [data]="humanDesignData()!.autoridade"
-          (click)="navigateTo('autoridade')"
-        ></app-dh-data-button>
-        <!-- Cruz Encarnação -->
-        <app-dh-data-button
-          (click)="navigateTo('encarnacao')"
-          icon="arrows-pointing-out"
-          title="Cruz da Encarnação"
-          [dataArray]="encarnacaoToStringArray(humanDesignData()!.encarnacao)"
-        >
-        </app-dh-data-button>
-      </div>
-      <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mt-3 mb-2">
+      <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mb-2">
         <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
         <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3">
           <app-dh-data-button
@@ -90,24 +77,32 @@
           ></app-dh-data-button>
         </div>
       </div>
-      <!-- Grid -->
-      <div class="grid md:grid-cols-[1fr_1fr] gap-2">
-        <div class="grid grid-cols-1 gap-2">
+      <div class="grid md:grid-cols-[1fr_2fr_3fr] gap-3">
+        <div class="grid gap-3">
           <app-dh-data-button
-            icon="shield"
-            title="Aura"
-            [data]="humanDesignData()!.aura"
+            (click)="navigateTo('perfil')"
+            icon="user-circle"
+            title="Perfil"
+            [data]="humanDesignData()!.perfil"
           ></app-dh-data-button>
           <app-dh-data-button
-            icon="chat-bubble"
-            title="Palavra"
-            [data]="humanDesignData()!.palavra_chave"
+            icon="flag"
+            title="Autoridade"
+            [data]="humanDesignData()!.autoridade"
+            (click)="navigateTo('autoridade')"
           ></app-dh-data-button>
         </div>
-        <!-- Ativações -->
+        <!-- Cruz Encarnação -->
+        <app-dh-data-button
+          (click)="navigateTo('encarnacao')"
+          icon="arrows-pointing-out"
+          title="Cruz da Encarnação"
+          [dataArray]="encarnacaoToStringArray(humanDesignData()!.encarnacao)"
+        >
+        </app-dh-data-button>
         <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl">
           <b class="text-primary font-merriweather font-normal text-xl">Portões</b>
-          <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-1 gap-2 mt-3">
+          <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-2 gap-2 mt-3">
             <app-dh-data-button
               icon="lock-open"
               title="Personalidade"

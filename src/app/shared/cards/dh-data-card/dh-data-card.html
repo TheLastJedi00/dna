@@ -1,0 +1,14 @@
+<div class="grid gap-2 bg-black/5 p-4 rounded-xl text-primary h-full">
+  <div class="flex gap-2">
+    <app-icons-switch [icon]="icon()"></app-icons-switch>
+    <h4>{{ title() }}</h4>
+  </div>
+  @if (data() !== null) {
+    <p class="text-secondary">{{ data() }}</p>
+  }
+  @if (dataArray !== null) {
+    @for (data of dataArray(); track $index) {
+      <p class="text-secondary">{{ data }}</p>
+    }
+  }
+</div>

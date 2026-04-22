@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TopicList } from '../models/topiclist.model';
 import { HumanDesignData } from '../models/dhdata.model';
+import { UserData } from '../models/userdata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -131,5 +132,14 @@ export class FakeApi {
         quarto_de_cruz: '3 - Dualidade',
       },
     };
+  }
+
+  getUserData():UserData {
+    return {
+      fullName: 'Bárbara Farias da Cruz',
+      birthDate: '12/08/2000',
+      birthPlace: 'Belém/PA',
+      birthTime: '18h25'
+    }
   }
 }
