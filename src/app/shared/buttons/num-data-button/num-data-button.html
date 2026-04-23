@@ -1,11 +1,11 @@
-@if (data() !== null) {
-  <button class="grid gap-1 rounded-xl p-3 sm:p-2 data-button aspect-square w-full h-full">
-    <h4 class="text-secondary font-merriweather text-normal sm:text-sm">{{ title() }}</h4>
-    <p class="text-primary text-xl">{{ data() }}</p>
-  </button>
-}
-@if (periods() !== null) {
-  <button class="grid gap-1 rounded-xl p-3 data-button w-full h-full">
+<button class="grid gap-1 rounded-xl p-3 sm:p-2 data-button w-full h-full">
+  @if (data() !== null) {
+    <div class="aspect-square grid">
+      <h4 class="text-secondary font-merriweather text-normal sm:text-sm">{{ title() }}</h4>
+      <p class="text-primary text-xl">{{ data() }}</p>
+    </div>
+  }
+  @if (periods() !== null) {
     <h4 class="text-secondary font-merriweather text-normal">{{ title() }}</h4>
     <div class="grid gap-5" [ngClass]="`md:grid-cols-${cols()}`">
       @for (period of periods(); track $index) {
@@ -19,10 +19,8 @@
         </div>
       }
     </div>
-  </button>
-}
-@if (isAnoPessoal()) {
-  <button class="grid gap-1 rounded-xl p-3 data-button w-full h-full">
+  }
+  @if (isAnoPessoal()) {
     <h4 class="text-secondary font-merriweather text-normal">Ano Pessoal</h4>
     <div class="grid grid-cols-2">
       <div class="text-primary text-left grid">
@@ -36,5 +34,5 @@
         <p [ngClass]="anoPessoalNumberClass">{{ anoPessoalData()!.proximo.numero }}</p>
       </div>
     </div>
-  </button>
-}
+  }
+</button>
