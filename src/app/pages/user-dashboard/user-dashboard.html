@@ -8,13 +8,14 @@
   </section>
   <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-2">
     <app-dashboard-button
-      (action)="navigateToHumanDesign()"
+      (action)="navigateTo('human-design')"
       imgSrc="https://i.imgur.com/U4xU7Hj.png"
       title="Desenho Humano"
       subtitle="Sua Estratégia Natural"
       description="Descubra como sua energia opera e como tomar decisões alinhadas com sua essência."
     ></app-dashboard-button>
     <app-dashboard-button
+    (action)="navigateTo('numerology')"
       imgSrc="https://i.imgur.com/hYZJdpD.png"
       title="Numerologia"
       subtitle="A vibração do seu destino"

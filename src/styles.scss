@@ -49,6 +49,24 @@ $secondary-color: #826a3c;
   background-color: $primary-color;
 }
 
+.data-button {
+  box-shadow: 0px 3px 5px rgba(128, 128, 128, 0.5);
+  transition: all 200ms;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 6px 6px rgba(128, 128, 128, 0.5);
+  }
+  &:active {
+    transform: translateY(3px);
+    box-shadow: 0px 0px 0px rgba(128, 128, 128, 0.5);
+    opacity: 0.5;
+  }
+  &:disabled {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
 .bg-primary-light {
   background-color: color.scale($primary-color, $lightness: 85%);
 }
@@ -135,5 +153,20 @@ $secondary-color: #826a3c;
   }
   100% {
     transform: translateX(0%);
+  }
+}
+
+.fade-in {
+  animation: fade-in-animation 400ms forwards;
+}
+
+@keyframes fade-in-animation {
+  0% {
+    opacity: 0;
+    scale: 0.5;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
   }
 }

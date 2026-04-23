@@ -17,7 +17,7 @@ export class UserDashboard {
     this.router.navigate(['/login']);
   }
 
-  navigateToHumanDesign(){
-    this.router.navigate(['/human-design']);
+  navigateTo(route: string){
+    this.router.navigate([`/${route}`]);
   }
 }

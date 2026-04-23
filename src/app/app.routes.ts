@@ -9,6 +9,8 @@ import { Autoridade } from './pages/human-design/autoridade/autoridade';
 import { Perfil } from './pages/human-design/perfil/perfil';
 import { Encarnacao } from './pages/human-design/encarnacao/encarnacao';
 import { Centros } from './pages/human-design/centros/centros';
+import { Numerology } from './pages/numerology/numerology';
+import { Home } from './pages/numerology/home/home';
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
@@ -18,23 +20,36 @@ export const routes: Routes = [
     component: HumanDesign,
     children: [
       {
-        path: '', component: HumanDesignHome
+        path: '',
+        component: HumanDesignHome,
       },
       {
-        path: 'tipo-aurico', component: HumanDesignTipoAurico
+        path: 'tipo-aurico',
+        component: HumanDesignTipoAurico,
       },
       {
-        path: 'autoridade', component: Autoridade
+        path: 'autoridade',
+        component: Autoridade,
       },
       {
-        path: 'perfil', component: Perfil
+        path: 'perfil',
+        component: Perfil,
       },
       {
-        path: 'encarnacao', component: Encarnacao
+        path: 'encarnacao',
+        component: Encarnacao,
       },
       {
-        path: 'centros/:centro', component: Centros
-      }
+        path: 'centros/:centro',
+        component: Centros,
+      },
+    ],
+  },
+  {
+    path: 'numerology',
+    component: Numerology,
+    children: [
+      {path: '', component: Home}
     ],
   },
 ];

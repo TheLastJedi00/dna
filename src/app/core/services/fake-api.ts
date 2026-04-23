@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TopicList } from '../models/topiclist.model';
 import { HumanDesignData } from '../models/dhdata.model';
 import { UserData } from '../models/userdata.model';
+import { NumerologyData } from '../models/numdata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -134,12 +135,52 @@ export class FakeApi {
     };
   }
 
-  getUserData():UserData {
+  getNumerologyData(): NumerologyData {
+    return {
+      perfil: {
+        motivacao: 6,
+        impressao: 1,
+        expressao: 7,
+        destino: 4,
+        missao: 11,
+        data_natalicia: 12,
+        numero_psiquico: 3,
+        talento_oculto: 4,
+      },
+      ciclos_de_vida: [
+        { inicio: 2000, fim: 2033, numero: 8 },
+        { inicio: 2033, fim: 2060, numero: 3 },
+        { inicio: 2060, fim: '∞', numero: 2 },
+      ],
+      desafios: [
+        { inicio: 2000, fim: 2033, numero: 5 },
+        { inicio: 2033, fim: 2060, numero: 1 },
+        { inicio: 2060, fim: '∞', numero: 4 },
+      ],
+      momentos_decisivos: [
+        { inicio: 2000, fim: 2033, numero: 11 },
+        { inicio: 2033, fim: 2042, numero: 5 },
+        { inicio: 2042, fim: 2051, numero: 7 },
+        { inicio: 2051, fim: '∞', numero: 1 },
+      ],
+      ano_pessoal: {
+        atual: { numero: 2, validade: 'até 11/08/26' },
+        proximo: { numero: 3, validade: 'de 12/08/26 até 11/08/27' },
+      },
+      extras: {
+        tendencias_ocultas: [1, 2],
+        respostas_subconscientes: 7,
+        numeros_favoraveis: [1, 6, 12, 13, 19, 20, 26, 27],
+      },
+    };
+  }
+
+  getUserData(): UserData {
     return {
       fullName: 'Bárbara Farias da Cruz',
       birthDate: '12/08/2000',
       birthPlace: 'Belém/PA',
-      birthTime: '18h25'
-    }
+      birthTime: '18h25',
+    };
   }
 }

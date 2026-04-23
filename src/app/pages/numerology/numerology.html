@@ -1,0 +1,16 @@
+<app-user-panel-header></app-user-panel-header>
+<main class="pt-header gradient-primary-to-secondary-85">
+  <section class="mx-auto container main-padding bg-white">
+    <app-dna-title-card
+      imgSrc="https://i.imgur.com/hYZJdpD.png"
+      imgAlt="Numerologia"
+      title="Numerologia"
+      subTitle="A vibração do seu destino."
+    ></app-dna-title-card>
+    <app-dna-description-card
+      [innerHtml]="intro"
+      title="O que é a Numerologia Cabalística?"
+    ></app-dna-description-card>
+  </section>
+  <router-outlet/>
+</main>
