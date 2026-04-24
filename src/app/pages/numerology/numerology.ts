@@ -3,10 +3,11 @@ import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-pan
 import { DnaTitleCard } from '../../shared/cards/dna-title-card/dna-title-card';
 import { DnaDescriptionCard } from "../../shared/cards/dna-description-card/dna-description-card";
 import { RouterOutlet } from '@angular/router';
+import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-panel-footer";
 
 @Component({
   selector: 'app-numerology',
-  imports: [UserPanelHeader, DnaTitleCard, DnaDescriptionCard, RouterOutlet],
+  imports: [UserPanelHeader, DnaTitleCard, DnaDescriptionCard, RouterOutlet, UserPanelFooter],
   templateUrl: './numerology.html',
   styleUrl: './numerology.scss',
 })
