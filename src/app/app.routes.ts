@@ -40,7 +40,7 @@ export const routes: Routes = [
         component: Encarnacao,
       },
       {
-        path: 'centros',
+        path: 'centros/:centro',
         component: Centros,
       },
     ],

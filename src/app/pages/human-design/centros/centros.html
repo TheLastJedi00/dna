@@ -28,13 +28,13 @@
 
       <div class="flex flex-col justify-center">
         <div class="grid grid-cols-3 text-secondary font-merriweather text-lg">
-          <button class="slide-button" (click)="changeCardslits('definidos')">Definidos</button>
-          <button class="slide-button" (click)="changeCardslits('indefinidos')">Indefinidos</button>
-          <button class="slide-button" (click)="changeCardslits('abertos')">Abertos</button>
+          <button class="slide-button" (click)="this.selectedCentro.set('definidos')">Definidos</button>
+          <button class="slide-button" (click)="this.selectedCentro.set('indefinidos')">Indefinidos</button>
+          <button class="slide-button" (click)="this.selectedCentro.set('abertos')">Abertos</button>
         </div>
         <hr
           class="w-[33.34%] text-secondary transition-all transition-[400ms]"
-          [style]="horizontalRuleClass()"
+          [ngClass]="horizontalRuleClass()"
         />
         <div class="slider" [ngClass]="selectedCentro()">
           <div class="slide" [ngClass]="isHided('definidos')">

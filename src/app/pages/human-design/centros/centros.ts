@@ -13,13 +13,15 @@ import { NgClass } from '@angular/common';
   styleUrl: './centros.scss',
 })
 export class Centros implements OnInit {
+  centro = input<string>();
   ngOnInit(): void {
     this.topicos.set(this.api.getAllTopicLists());
+    this.selectedCentro.set(this.centro()!);
   }
   api = inject(FakeApi);
   topicos = signal<TopicList[] | null>(null);
-  horizontalRuleClass = signal({});
-  selectedCentro = signal<'definidos' | 'indefinidos' | 'abertos'>('definidos');
+
+  selectedCentro = signal<string | null>(null);
   centralCardGridAnimation = signal('slide-in');
   intro = signal([
     'No Desenho Humano, os Centros Energéticos representam áreas específicas do seu campo energético e do seu corpo físico.',
@@ -44,25 +46,28 @@ export class Centros implements OnInit {
     extrema sensibilidade e sabedoria potencial — se você
     aprender a navegar neles com consciência.`);
 
-  changeCardslits(selectedList: 'definidos' | 'indefinidos' | 'abertos') {
+  changeCardslits(selectedList: string) {
     this.selectedCentro.set(selectedList);
-    switch (selectedList) {
-      case 'definidos':
-        this.horizontalRuleClass.set('transform: translateX(0%)');
-        break;
-      case 'indefinidos':
-        this.horizontalRuleClass.set('transform: translateX(100%)');
-        break;
-      case 'abertos':
-        this.horizontalRuleClass.set('transform: translateX(200%)');
-        break;
-    }
   }
 
   isHided(centro: string) {
     if (centro !== this.selectedCentro()) {
       return 'hide';
     }
-    return ''
+    return '';
+  }
+
+  horizontalRuleClass() {
+    if (this.selectedCentro !== null) {
+      switch (this.selectedCentro()) {
+        case 'definidos':
+          return 'hr-left';
+        case 'indefinidos':
+          return 'hr-center';
+        case 'abertos':
+          return 'hr-right';
+      }
+    }
+    return this.centro();
   }
 }

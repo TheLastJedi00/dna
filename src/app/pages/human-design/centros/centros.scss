@@ -36,3 +36,15 @@
 .hide {
   opacity: 0;
 }
+
+.hr-left {
+    transform: translateX(0%);
+}
+
+.hr-center {
+  transform: translateX(100%);
+}
+
+.hr-right {
+  transform: translateX(200%);
+}
