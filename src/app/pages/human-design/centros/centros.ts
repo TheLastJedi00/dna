@@ -16,7 +16,6 @@ export class Centros implements OnInit {
   ngOnInit(): void {
     this.topicos.set(this.api.getAllTopicLists());
   }
-  centro = input<'definidos' | 'indefinidos' | 'abertos'>();
   api = inject(FakeApi);
   topicos = signal<TopicList[] | null>(null);
   horizontalRuleClass = signal({});
