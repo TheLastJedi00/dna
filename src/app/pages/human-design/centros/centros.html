@@ -36,23 +36,17 @@
           class="w-[33.34%] text-secondary transition-all transition-[400ms]"
           [style]="horizontalRuleClass()"
         />
-        @switch (selectedCentro()) {
-          @case ('definidos') {
-            <div animate.enter="slide-in-mirror">
-              <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
-            </div>
-          }
-          @case ('indefinidos') {
-            <div animate.enter="slide-in">
-              <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
-            </div>
-          }
-          @case ('abertos') {
-            <div animate.enter="slide-in">
-              <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
-            </div>
-          }
-        }
+        <div class="slider" [ngClass]="selectedCentro()">
+          <div class="slide" [ngClass]="isHided('definidos')">
+            <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
+          </div>
+          <div class="slide" [ngClass]="isHided('indefinidos')">
+            <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
+          </div>
+          <div class="slide" [ngClass]="isHided('abertos')">
+            <app-lists-card-grid [topics]="topicos()"></app-lists-card-grid>
+          </div>
+        </div>
       </div>
     </div>
   } @placeholder {

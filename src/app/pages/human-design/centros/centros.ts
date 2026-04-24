@@ -4,10 +4,11 @@ import { VerticalAccordion } from '../../../shared/accordions/vertical-accordion
 import { FakeApi } from '../../../core/services/fake-api';
 import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
 import { TopicList } from '../../../core/models/topiclist.model';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-centros',
-  imports: [DhIntroCard, VerticalAccordion, ListsCardGrid],
+  imports: [DhIntroCard, VerticalAccordion, ListsCardGrid, NgClass],
   templateUrl: './centros.html',
   styleUrl: './centros.scss',
 })
@@ -15,16 +16,11 @@ export class Centros implements OnInit {
   ngOnInit(): void {
     this.topicos.set(this.api.getAllTopicLists());
   }
-  constructor(){
-    effect(()=>{
-      this.changeCardslits(this.centro()!)
-    })
-  }
-  centro = input<'definidos' | 'indefinidos' | 'abertos'>()
+  centro = input<'definidos' | 'indefinidos' | 'abertos'>();
   api = inject(FakeApi);
   topicos = signal<TopicList[] | null>(null);
   horizontalRuleClass = signal({});
-  selectedCentro = signal<'definidos' | 'indefinidos' | 'abertos'>("definidos");
+  selectedCentro = signal<'definidos' | 'indefinidos' | 'abertos'>('definidos');
   centralCardGridAnimation = signal('slide-in');
   intro = signal([
     'No Desenho Humano, os Centros Energéticos representam áreas específicas do seu campo energético e do seu corpo físico.',
@@ -60,6 +56,14 @@ export class Centros implements OnInit {
         break;
       case 'abertos':
         this.horizontalRuleClass.set('transform: translateX(200%)');
+        break;
     }
+  }
+
+  isHided(centro: string) {
+    if (centro !== this.selectedCentro()) {
+      return 'hide';
+    }
+    return ''
   }
 }
