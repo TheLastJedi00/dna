@@ -21,7 +21,6 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "vercel.json",
               {
                 "glob": "**/*",
                 "input": "public"
