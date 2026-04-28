@@ -11,10 +11,12 @@ import { Encarnacao } from './pages/human-design/encarnacao/encarnacao';
 import { Centros } from './pages/human-design/centros/centros';
 import { Numerology } from './pages/numerology/numerology';
 import { Home } from './pages/numerology/home/home';
+import { ManagerDashboard } from './pages/manager-dashboard/manager-dashboard';
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
   { path: 'user-dashboard', component: UserDashboard },
+  { path: 'manager-dashboard', component: ManagerDashboard},
   {
     path: 'human-design',
     component: HumanDesign,

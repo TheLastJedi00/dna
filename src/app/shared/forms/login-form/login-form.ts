@@ -12,8 +12,12 @@ export class LoginForm {
   disableButton = input<boolean>(false);
   disableEmailInput = input<boolean>(false);
   disablePasswordInput = input<boolean>(false);
-  navigateToRegister = output<void>();
+  navigateToRegisterUser = output<void>();
+  navigateToRegisterAdmin = output<void>();
   onLogin() {
-    this.navigateToRegister.emit();
+    this.navigateToRegisterUser.emit();
+  }
+  onAdminLogin(){
+    this.navigateToRegisterAdmin.emit();
   }
 }

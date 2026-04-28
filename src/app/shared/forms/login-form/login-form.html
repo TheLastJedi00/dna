@@ -15,9 +15,16 @@
     class="input-primary-light"
   />
   <app-flat-button
-    text="Entrar"
+    text="Login Maestra"
     classes="bg-primary w-full text-white"
     [disabled]="disableButton()"
     (action)="onLogin()"
+  ></app-flat-button>
+  <hr class="text-secondary opacity-50">
+  <app-flat-button
+    text="Login Analista"
+    classes="bg-secondary w-full text-white"
+    [disabled]="disableButton()"
+    (action)="onAdminLogin()"
   ></app-flat-button>
 </form>

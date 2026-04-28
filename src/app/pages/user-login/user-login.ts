@@ -16,4 +16,8 @@ export class UserLogin {
   navigateToUserPanel() {
     this.router.navigate(['/user-dashboard']);
   }
+
+  navigateToAdminPanel() {
+    this.router.navigate(['/manager-dashboard']);
+  }
 }
