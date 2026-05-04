@@ -181,7 +181,7 @@ export class FakeApi {
       birthDate: '12/08/2000',
       birthPlace: 'Belém/PA',
       birthTime: '18h25',
-      role: 'MAESTRA',
+      role: 'MANAGER',
       
     };
   }

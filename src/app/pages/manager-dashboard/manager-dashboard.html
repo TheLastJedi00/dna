@@ -1,2 +1,32 @@
 <app-manager-header (logout)="onLogout()" [role]="user()!.role"></app-manager-header>
-<p>manager-dashboard works!</p>
+<main class="gradient-primary-to-secondary-85 pt-header">
+  <section class="w-screen flex flex-col items-center main-padding justify-center bg-white/50">
+    <h1 class="font-style-script italic text-6xl text-primary">
+      <span class="text-xl text-black/85">Olá,</span> {{ user()!.fullName.split(' ')[0] }}
+    </h1>
+    <span class="text-sm text-black/50">BEM-VINDA DE VOLTA</span>
+  </section>
+  <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-3">
+    <app-dashboard-button
+      imgSrc="https://i.imgur.com/U4xU7Hj.png"
+      title="Gerenciar Maestras"
+      subtitle=""
+      description=""
+    ></app-dashboard-button>
+    <app-dashboard-button
+      imgSrc="https://i.imgur.com/hYZJdpD.png"
+      title="Gerenciar Análises do DNA"
+      subtitle=""
+      description=""
+    ></app-dashboard-button>
+    @if (user()?.role === 'MANAGER') {
+      <app-dashboard-button
+        imgSrc="https://i.imgur.com/Wh3IKVb.png"
+        title="Gerenciar Analistas do DNA"
+        subtitle=""
+        description=""
+      ></app-dashboard-button>
+    }
+  </section>
+</main>
+<app-user-panel-footer></app-user-panel-footer>

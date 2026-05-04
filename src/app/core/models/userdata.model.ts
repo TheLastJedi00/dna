@@ -1,4 +1,4 @@
-export type Role = 'GERENTE'|'MAESTRA'|'ANALISTA'
+export type Role = 'MANAGER'|'ADMIN'|'USER'
 
 export interface UserData {
     fullName: string;

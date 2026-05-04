@@ -3,10 +3,12 @@ import { ManagerHeader } from '../../shared/headers/manager-header/manager-heade
 import { Router } from '@angular/router';
 import { FakeApi } from '../../core/services/fake-api';
 import { UserData } from '../../core/models/userdata.model';
+import { DashboardButton } from "../../shared/buttons/dashboard-button/dashboard-button";
+import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-panel-footer";
 
 @Component({
   selector: 'app-manager-dashboard',
-  imports: [ManagerHeader],
+  imports: [ManagerHeader, DashboardButton, UserPanelFooter],
   templateUrl: './manager-dashboard.html',
   styleUrl: './manager-dashboard.scss',
 })
