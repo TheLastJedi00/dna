@@ -19,6 +19,6 @@ export class ManagerHeader {
   }
 
   returnToHome() {
-    this.router.navigate(['/manager-dashboard']);
+    this.router.navigate(['/dashboard']);
   }
 }

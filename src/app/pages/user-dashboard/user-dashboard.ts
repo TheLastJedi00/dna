@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { DashboardButton } from "../../shared/buttons/dashboard-button/dashboard-button";
 import { UserPanelHeader } from "../../shared/headers/user-panel-header/user-panel-header";
 import { Router } from '@angular/router';
 import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-panel-footer";
+import { PanelCard } from "../../shared/cards/panel-card/panel-card";
 
 @Component({
   selector: 'app-user-dashboard',
-  imports: [DashboardButton, UserPanelHeader, UserPanelFooter],
+  imports: [UserPanelHeader, UserPanelFooter, PanelCard],
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.scss',
 })
@@ -17,7 +17,4 @@ export class UserDashboard {
     this.router.navigate(['/login']);
   }
 
-  navigateTo(route: string){
-    this.router.navigate([`/${route}`]);
-  }
 }

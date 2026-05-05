@@ -1,0 +1,15 @@
+@if (isAdminOrManager()) {
+  <app-manager-header (logout)="onLogout()" [role]="firstRole()"></app-manager-header>
+} @else {
+  <app-user-panel-header (logout)="onLogout()"></app-user-panel-header>
+}
+<main class="gradient-primary-to-secondary-85 pt-header">
+  <section class="w-screen flex flex-col items-center main-padding justify-center bg-white/50">
+    <h1 class="font-style-script italic text-6xl text-primary">
+      <span class="text-xl text-black/85">Olá,</span> {{ userName() }}
+    </h1>
+    <span class="text-sm text-black/50">BEM-VINDA DE VOLTA</span>
+  </section>
+  <app-panel-card></app-panel-card>
+</main>
+<app-user-panel-footer></app-user-panel-footer>
