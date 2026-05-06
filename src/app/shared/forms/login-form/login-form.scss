@@ -1,0 +1,31 @@
+@keyframes loading-enter-animate {
+    0%{
+        opacity: 0;
+    };
+    50%{
+        opacity: 0.2;
+    };
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes loading-out-animate {
+    0%{
+        opacity: 1;
+    };
+    50%{
+        opacity: 0.8;
+    };
+    100%{
+        opacity: 0;
+    }
+}
+
+.loading-enter {
+    animation: loading-enter-animate 300ms ease-in forwards;
+}
+
+.loading-leave {
+    animation: loading-out-animate 300ms ease-in forwards;
+}

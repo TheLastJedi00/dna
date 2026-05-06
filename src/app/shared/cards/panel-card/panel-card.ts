@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DashboardButton } from "../../buttons/dashboard-button/dashboard-button";
+import { DashboardButton } from '../../buttons/dashboard-button/dashboard-button';
 import { navigateTo } from '../../../utils/utilities';
-import { Login } from '../../../core/services/login';
+import { LoginService } from '../../../core/services/login-service';
 import { UserRole } from '../../../types/types';
 
 @Component({
@@ -11,15 +11,14 @@ import { UserRole } from '../../../types/types';
   styleUrl: './panel-card.scss',
 })
 export class PanelCard implements OnInit {
-  private readonly loginService = inject(Login)
-  roles = signal<UserRole[]>([])
+  private readonly loginService = inject(LoginService);
+  roles = signal<UserRole[]>([]);
   navigateTo = navigateTo;
 
   ngOnInit(): void {
-    const role = this.loginService.getUserRole()
-    if(role){
-      this.roles.set(role)
+    const role = this.loginService.getUserRole();
+    if (role) {
+      this.roles.set(role);
     }
   }
-
 }

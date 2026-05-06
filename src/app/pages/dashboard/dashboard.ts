@@ -1,11 +1,14 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { ManagerHeader } from '../../shared/headers/manager-header/manager-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { PanelCard } from '../../shared/cards/panel-card/panel-card';
-import { Login } from '../../core/services/login';
+import { LoginService } from '../../core/services/login-service';
 import { Router } from '@angular/router';
 import { UserRole } from '../../types/types';
+import { UserData } from '../../core/models/userdata.model';
+import { firstValueFrom } from 'rxjs';
+import { UserService } from '../../core/services/user-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,18 +17,20 @@ import { UserRole } from '../../types/types';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-  private readonly loginService = inject(Login);
+  private readonly loginService = inject(LoginService);
+  private readonly userService = inject(UserService)
   private readonly router = inject(Router);
-
+  userId = input();
+  userData = signal<UserData|null>(null)
   roles = signal<UserRole[]>([]);
-  userName = signal('');
-  firstRole = computed(() => this.roles().find(r => r === 'MANAGER' || r === 'ADMIN'));
+  firstRole = computed(() => this.roles().find((r) => r === 'MANAGER' || r === 'ADMIN'));
 
-  ngOnInit(): void {
+  async ngOnInit() {
     const decoded = this.loginService.getDecodedToken();
     if (decoded) {
       this.roles.set(decoded.roles);
-      this.userName.set(decoded.name ?? '');
+      const user = await firstValueFrom(this.userService.getUserById(decoded.id));
+      this.userData.set(user)
     }
   }
 

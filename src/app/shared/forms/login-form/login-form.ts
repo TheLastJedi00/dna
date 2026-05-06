@@ -1,39 +1,45 @@
 import { Component, inject, signal } from '@angular/core';
 import { FlatButton } from '../../buttons/flat-button/flat-button';
 import { Logo } from '../../logo/logo';
-import { Login } from '../../../core/services/login';
+import { LoginService } from '../../../core/services/login-service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Infinity } from '../../loading/infinity/infinity';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FlatButton, Logo, FormsModule],
+  imports: [FlatButton, Logo, FormsModule, Infinity],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
 })
 export class LoginForm {
-  private readonly loginService = inject(Login);
+  private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
 
   email = signal('');
   password = signal('');
-  loading = signal(false);
+  isLoading = signal(false);
   error = signal<string | null>(null);
 
-  onLogin() {
-    this.loading.set(true);
-    this.error.set(null);
+  isValid() {
+    return this.email() === '' || this.password() === '';
+  }
 
-    this.loginService.login(this.email(), this.password()).subscribe({
-      next: (response: any) => {
-        localStorage.setItem('access_token', response.access_token);
-        this.loading.set(false);
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.loading.set(false);
-        this.error.set('E-mail ou senha inválidos.');
-      },
-    });
+  async onLogin() {
+    this.isLoading.set(true);
+    try {
+      await firstValueFrom(this.loginService.login(this.email(), this.password()));
+      const user = this.loginService.getDecodedToken();
+      this.router.navigate([`/dashboard/${user?.id}`]);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        this.error.set(e.error.message);
+      }
+      console.error(e);
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

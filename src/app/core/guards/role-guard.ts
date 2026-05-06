@@ -1,10 +1,10 @@
 import { CanActivateFn } from '@angular/router';
-import { Login } from '../services/login';
+import { LoginService } from '../services/login-service';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 export const roleGuard: CanActivateFn = (route, state) => {
-  const loginService = inject(Login);
+  const loginService = inject(LoginService);
   const router = inject(Router);
   const decoded = loginService.getDecodedToken();
 

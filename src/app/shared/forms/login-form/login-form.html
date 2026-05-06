@@ -1,10 +1,13 @@
-<form class="flex flex-col p-4 gap-4 shadow-xl rounded-xl bg-white/95" (ngSubmit)="onLogin()">
+<form
+  class="flex flex-col p-4 gap-4 shadow-xl rounded-xl bg-white/95 md:min-h-[420px] md:min-w-[350px]"
+  (ngSubmit)="onLogin()"
+>
   <app-logo></app-logo>
   <input
     [ngModel]="email()"
     (ngModelChange)="email.set($event)"
+    required
     name="email"
-    [disabled]="loading()"
     type="email"
     placeholder="Email"
     class="input-primary-light"
@@ -12,19 +15,29 @@
   <input
     [ngModel]="password()"
     (ngModelChange)="password.set($event)"
+    required
     name="password"
-    [disabled]="loading()"
     type="password"
     placeholder="Senha"
     class="input-primary-light"
   />
-  @if (error()) {
-    <span class="text-red-500 text-sm text-center">{{ error() }}</span>
+  @if(error()){
+    <span class="text-center text-[red]">{{error()}}</span>
   }
   <app-flat-button
-    [text]="loading() ? 'Entrando...' : 'Entrar'"
+    text="Entrar"
     classes="bg-primary w-full text-white"
-    [disabled]="loading()"
     (action)="onLogin()"
+    [disabled]="isValid()"
   ></app-flat-button>
 </form>
+
+@if (isLoading()) {
+  <div 
+    class="fixed z-10 top-0 left-0 flex items-center justify-center w-full h-full bg-white/50 backdrop-blur-[2px]"
+    animate.enter="loading-enter"
+    animate.leave="loading-leave"
+  >
+    <app-infinity scale="2"></app-infinity>
+  </div>
+}
