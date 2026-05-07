@@ -12,15 +12,19 @@ import { Centros } from './pages/human-design/centros/centros';
 import { Numerology } from './pages/numerology/numerology';
 import { Home } from './pages/numerology/home/home';
 import { authGuard } from './core/guards/auth-guard';
+import { Managment } from './pages/managment/managment';
+import { roleGuard } from './core/guards/role-guard';
 
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
   { path: 'dashboard/:userId', component: Dashboard, canActivate: [authGuard] },
+  { path: 'managment/:type', component: Managment, canActivate: [authGuard, roleGuard]},
   {
     path: 'human-design',
     component: HumanDesign,
     canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       {
         path: '',

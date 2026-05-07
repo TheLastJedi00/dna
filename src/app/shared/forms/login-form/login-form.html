@@ -33,11 +33,5 @@
 </form>
 
 @if (isLoading()) {
-  <div 
-    class="fixed z-10 top-0 left-0 flex items-center justify-center w-full h-full bg-white/50 backdrop-blur-[2px]"
-    animate.enter="loading-enter"
-    animate.leave="loading-leave"
-  >
-    <app-infinity scale="2"></app-infinity>
-  </div>
+  <app-infinity scale="2"></app-infinity>
 }

@@ -1,5 +1,5 @@
-import { NgStyle } from '@angular/common';
 import { Component, input } from '@angular/core';
+import { NgStyle } from "@angular/common";
 
 @Component({
   selector: 'app-infinity',
@@ -8,5 +8,5 @@ import { Component, input } from '@angular/core';
   styleUrl: './infinity.scss',
 })
 export class Infinity {
-  scale = input('1')
+  scale = input('1');
 }

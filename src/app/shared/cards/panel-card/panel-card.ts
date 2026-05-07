@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DashboardButton } from '../../buttons/dashboard-button/dashboard-button';
-import { navigateTo } from '../../../utils/utilities';
 import { LoginService } from '../../../core/services/login-service';
 import { UserRole } from '../../../types/types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-panel-card',
@@ -13,7 +13,11 @@ import { UserRole } from '../../../types/types';
 export class PanelCard implements OnInit {
   private readonly loginService = inject(LoginService);
   roles = signal<UserRole[]>([]);
-  navigateTo = navigateTo;
+  router = inject(Router)
+
+  navigateTo(url:  string){
+    this.router.navigate([url])
+  }
 
   ngOnInit(): void {
     const role = this.loginService.getUserRole();

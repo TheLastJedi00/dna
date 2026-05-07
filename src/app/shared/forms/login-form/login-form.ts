@@ -10,7 +10,7 @@ import { Infinity } from '../../loading/infinity/infinity';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FlatButton, Logo, FormsModule, Infinity],
+  imports: [FlatButton, Logo, FormsModule, Infinity ],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
 })
