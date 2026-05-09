@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
   { path: 'dashboard/:userId', component: Dashboard, canActivate: [authGuard] },
-  { path: 'managment/:type', component: Managment, canActivate: [authGuard, roleGuard]},
+  { path: 'managment/:type/:userId', component: Managment, canActivate: [authGuard, roleGuard]},
   {
     path: 'human-design',
     component: HumanDesign,

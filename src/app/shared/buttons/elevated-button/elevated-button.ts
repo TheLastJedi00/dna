@@ -8,7 +8,7 @@ import { NgClass } from '@angular/common';
   styleUrl: './elevated-button.scss',
 })
 export class ElevatedButton {
-  text = input<string>();
+  text = input.required<string>();
   buttonClass = input<string>();
   action = output<void>();
 

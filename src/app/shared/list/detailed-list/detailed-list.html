@@ -1,0 +1,13 @@
+<section class="grid md:grid-cols-2 gap-3">
+  @for (user of userList(); track $index) {
+    <app-detailed-item [data]="user"></app-detailed-item>
+  }
+</section>
+@if (isLoading()) {
+  <app-infinity></app-infinity>
+}
+@if (userList()?.length === 0) {
+  <section class="h-[75vh] flex items-center justify-center">
+    <h3 class="font-merriweather text-xl text-secondary">Nenhuma maestra ativa no momento.</h3>
+  </section>
+}

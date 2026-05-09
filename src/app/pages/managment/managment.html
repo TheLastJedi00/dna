@@ -1,6 +1,19 @@
 <app-user-panel-header></app-user-panel-header>
 <main class="pt-header gradient-primary-to-secondary-85">
   <section class="main-padding container mx-auto bg-white">
-    <h1>Teste</h1>
+    <div class="grid gap-3">
+      <div class="flex justify-between items-center">
+        <h1 class="capitalize text-xl font-merriweather text-primary">Gerir de {{ type() }}</h1>
+        <app-icon-text-button
+          icon="arrow-left"
+          text="Voltar"
+          (click)="this.router.navigate([`dashboard/${userId()}`])"
+        ></app-icon-text-button>
+      </div>
+        <app-new-user-form></app-new-user-form>
+    </div>
+    <div>
+      <app-detailed-list [type]="type()"></app-detailed-list>
+    </div>
   </section>
 </main>

@@ -1,0 +1,40 @@
+@if (isOpen()) {
+  <section
+    animate.enter="expand"
+    animate.leave="collapse"
+    (click)="onClose()"
+    class="fixed z-10 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
+  >
+    <div class="p-3 bg-white shadow-xl rounded-xl" (click)="$event.stopPropagation()">
+      <h1 class="text-primary font-merriweather">Nome</h1>
+      <div class="text-black/70 py-3">
+        <p>email</p>
+        <p>birthDate</p>
+        <p>birthTime</p>
+        <p>birthPlace</p>
+        <p>isActive</p>
+        <p>isSupplyCreated</p>
+      </div>
+      <div class="grid py-3 gap-3">
+        <div class="grid grid-cols-2 gap-3">
+          <app-icon-text-button
+            icon="pencil"
+            text="Editar"
+            class="bg-secondary rounded-xl text-white"
+          ></app-icon-text-button>
+          <app-icon-text-button
+            icon="lock-closed"
+            text="Desativar"
+            class="bg-[red] rounded-xl text-white"
+          ></app-icon-text-button>
+        </div>
+        <app-icon-text-button
+          icon="arrow-left"
+          text="Voltar"
+          class="bg-primary rounded-xl text-white w-full text-center"
+          (click)="onClose()"
+        ></app-icon-text-button>
+      </div>
+    </div>
+  </section>
+}

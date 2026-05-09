@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { DashboardButton } from '../../buttons/dashboard-button/dashboard-button';
 import { LoginService } from '../../../core/services/login-service';
 import { UserRole } from '../../../types/types';
@@ -12,12 +12,9 @@ import { Router } from '@angular/router';
 })
 export class PanelCard implements OnInit {
   private readonly loginService = inject(LoginService);
+  userId = input.required<string>()
   roles = signal<UserRole[]>([]);
   router = inject(Router)
-
-  navigateTo(url:  string){
-    this.router.navigate([url])
-  }
 
   ngOnInit(): void {
     const role = this.loginService.getUserRole();

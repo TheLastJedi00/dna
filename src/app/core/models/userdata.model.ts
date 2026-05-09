@@ -5,5 +5,6 @@ export interface UserData {
     birthDate: string;
     birthTime: string;
     birthPlace: string;
+    email?: string;
     role?: Role
 }

@@ -1,0 +1,34 @@
+<app-icon-text-button
+  text="Nova Maestra"
+  class="w-full text-white bg-secondary text-center"
+></app-icon-text-button>
+<form class="grid p-3 rounded-xl shadow-xl gap-3">
+  <h3 class="font-merriweather text-center text-secondary">Adicionar Maestra</h3>
+  <input type="text" placeholder="Nome Completo" />
+  <input type="text" placeholder="Data de Nascimento" />
+  <input type="text" placeholder="Hora do Nascimento" />
+  <div class="grid gap-3">
+    <hr class="opacity-20" />
+    <label for="">Local de Nascimento</label>
+    <div class="grid grid-cols-[3fr_1fr] gap-3">
+      <input type="text" placeholder="Cidade" />
+      <input type="text" placeholder="UF" class="w-[100%]" />
+    </div>
+  </div>
+  <div class="grid gap-3">
+    <hr class="opacity-20" />
+    <label for="">Acessos</label>
+    <input type="text" placeholder="email@email.com" />
+    <input type="password" placeholder="Senha" />
+  </div>
+  <div class="grid gap-3">
+    <hr class="opacity-20" />
+    <label for="">Nível de Acesso</label>
+    <div class="grid grid-cols-3 text-primary">
+      <button type="button">Maestra</button>
+      <button type="button">Analista</button>
+      <button type="button">Gerente</button>
+    </div>
+    <div class="bg-primary h-[2px] w-[33.33%]"></div>
+  </div>
+</form>

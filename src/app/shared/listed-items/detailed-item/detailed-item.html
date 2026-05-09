@@ -1,0 +1,11 @@
+<div class="shadow-lg p-3 rounded-xl">
+  <h3 class="text-lg text-secondary font-semibold my-3">{{ data()?.fullName }}</h3>
+  <app-icon-text-button
+    icon="magnifying-glass"
+    text="Detalhes"
+    class="bg-primary text-white rounded-xl w-full"
+    (click)="openModal()"
+  ></app-icon-text-button>
+</div>
+<app-user-details-modal (close)="closeModal()" [isOpen]="isModalOpen()"></app-user-details-modal>
+

@@ -23,7 +23,7 @@ export class Dashboard implements OnInit {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
   isLoading = signal(false);
-  userId = input();
+  userId = input.required<string>();
   userData = signal<UserData | null>(null);
   roles = signal<UserRole[]>([]);
   firstRole = computed(() => this.roles().find((r) => r === 'MANAGER' || r === 'ADMIN'));

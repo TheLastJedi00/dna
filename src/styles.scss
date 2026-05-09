@@ -170,3 +170,33 @@ $secondary-color: #826a3c;
     scale: 1;
   }
 }
+
+.expand {
+  animation: expand 300ms forwards ease-in;
+}
+
+.collapse {
+  animation: collapse 300ms forwards ease-in;
+}
+
+@keyframes expand {
+  0%{
+    transform: scale(0%);
+    opacity: 0;
+  }
+  100%{
+    transform: scale(100%);
+    opacity: 1;
+  }
+}
+
+@keyframes collapse {
+  0%{
+    transform: scale(100%);
+    opacity: 1;
+  }
+  100%{
+    transform: scale(0%);
+    opacity: 0;
+  }
+}
