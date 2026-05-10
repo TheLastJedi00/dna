@@ -9,10 +9,12 @@ import { NgClass } from "@angular/common"
   styleUrl: './icon-text-button.scss',
 })
 export class IconTextButton {
+  disabled = input(false)
   icon = input("heart")
   text = input("Text")
   click = output<void>()
   class = input<string>('')
+  type = input('button')
 
   onClick(){
     this.click.emit();

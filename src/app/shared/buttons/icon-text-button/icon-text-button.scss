@@ -13,4 +13,7 @@ button {
         opacity: 0.5;
         background-color: rgba(128, 128, 128, 0.3);
     }
+    &:disabled {
+        opacity: 20%;
+    }
 }

@@ -1,4 +1,9 @@
-<button (click)="onClick()" [ngClass]="class()? class() : 'text-secondary' ">
-    <app-icons-switch [icon]="icon()"></app-icons-switch>
-    {{text()}}
+<button
+  [disabled]="disabled()"
+  (click)="onClick()"
+  [ngClass]="class() ? class() : 'text-secondary'"
+  [type]="type()"
+>
+  <app-icons-switch [icon]="icon()"></app-icons-switch>
+  {{ text() }}
 </button>

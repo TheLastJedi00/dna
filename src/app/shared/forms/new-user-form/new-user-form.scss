@@ -11,8 +11,34 @@ input {
   &::placeholder {
     color: rgba(0, 0, 0, 0.7);
   }
+  &:invalid {
+    box-shadow: 0px 0px 3px 1px red;
+  }
+}
+
+.show-pass {
+  opacity: 90%;
+  transition: all 300ms;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    opacity: 20%;
+  }
 }
 
 label {
     color: rgba(0, 0, 0, 0.7);
+}
+
+.toggle-button {
+  padding: 0.5rem 0.75rem;
+  transition: all 300ms;
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+    opacity: 70%;
+  }
+  &:active {
+    opacity: 20%;
+  }
 }

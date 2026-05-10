@@ -22,4 +22,8 @@ export class UserService {
     }
     return this.http.get<UserData[]>(`${this.api}/active/${orderBy}/${direction}`, {params});
   }
+
+  createMaestra(user: UserData){
+    return this.http.post<UserData>(`${this.api}/maestra`, user)
+  }
 }

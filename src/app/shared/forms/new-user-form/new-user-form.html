@@ -1,34 +1,64 @@
 <app-icon-text-button
+  (click)="isFormOpen.set(true)"
+  icon="plus"
   text="Nova Maestra"
   class="w-full text-white bg-secondary text-center"
 ></app-icon-text-button>
-<form class="grid p-3 rounded-xl shadow-xl gap-3">
-  <h3 class="font-merriweather text-center text-secondary">Adicionar Maestra</h3>
-  <input type="text" placeholder="Nome Completo" />
-  <input type="text" placeholder="Data de Nascimento" />
-  <input type="text" placeholder="Hora do Nascimento" />
-  <div class="grid gap-3">
-    <hr class="opacity-20" />
-    <label for="">Local de Nascimento</label>
-    <div class="grid grid-cols-[3fr_1fr] gap-3">
-      <input type="text" placeholder="Cidade" />
-      <input type="text" placeholder="UF" class="w-[100%]" />
-    </div>
+@if (isFormOpen()) {
+  <div
+    (click)="isFormOpen.set(false)"
+    animate.enter="expand"
+    animate.leave="collapse"
+    class="fixed h-screen w-screen flex top-0 left-0 z-10 items-center justify-center bg-white/20 backdrop-blur-[2px]"
+  >
+    <form
+      class="grid p-3 rounded-xl shadow-xl gap-3 bg-white w-[400px] h-min"
+      (click)="$event.stopPropagation()"
+      [formGroup]="createUserForm"
+      (ngSubmit)="createUser()"
+    >
+      <h3 class="font-merriweather text-center text-secondary text-xl">Adicionar Maestra</h3>
+      <input type="text" placeholder="Nome Completo" formControlName="fullName" />
+      <input type="text" placeholder="Data de Nascimento" formControlName="birthDate" />
+      <input type="text" placeholder="Hora do Nascimento" formControlName="birthTime" />
+      <div class="grid gap-3">
+        <hr class="opacity-20" />
+        <label for="">Local de Nascimento</label>
+        <div class="grid grid-cols-[3fr_1fr] gap-3">
+          <input type="text" placeholder="Cidade" formControlName="birthCity" />
+          <input type="text" placeholder="UF" class="w-[100%]" formControlName="birthUf" />
+        </div>
+      </div>
+      <div class="grid gap-3">
+        <hr class="opacity-20" />
+        <label for="">Acessos</label>
+        <input type="text" placeholder="email@email.com" formControlName="email" />
+        <div class="grid w-full">
+          <button
+            class="text-left font-sm mb-2 show-pass text-primary"
+            type="button"
+            (click)="togglePassVisibility()"
+          >
+            Exibir Senha
+          </button>
+          <input [type]="passwordInputType()" placeholder="Senha" formControlName="password" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mt-1">
+        <app-icon-text-button
+        [disabled]="createUserForm.invalid"
+          type="submit"
+          icon="plus"
+          text="Salvar"
+          class="w-full text-white bg-primary rounded-xl"
+        ></app-icon-text-button>
+        <app-icon-text-button
+          (click)="isFormOpen.set(false)"
+          icon="arrow-left"
+          text="Voltar"
+          class="w-full text-primary bg-white rounded-xl"
+        ></app-icon-text-button>
+      </div>
+    </form>
   </div>
-  <div class="grid gap-3">
-    <hr class="opacity-20" />
-    <label for="">Acessos</label>
-    <input type="text" placeholder="email@email.com" />
-    <input type="password" placeholder="Senha" />
-  </div>
-  <div class="grid gap-3">
-    <hr class="opacity-20" />
-    <label for="">Nível de Acesso</label>
-    <div class="grid grid-cols-3 text-primary">
-      <button type="button">Maestra</button>
-      <button type="button">Analista</button>
-      <button type="button">Gerente</button>
-    </div>
-    <div class="bg-primary h-[2px] w-[33.33%]"></div>
-  </div>
-</form>
+}
