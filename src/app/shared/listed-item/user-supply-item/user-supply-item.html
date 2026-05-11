@@ -1,0 +1,12 @@
+<div class="flex justify-between items-center border-b border-black/20 pb-3">
+  <div class="text-black/70 flex gap-4">
+    <p class="font-semibold">{{ index() }}</p>
+    <p>{{ userData().fullName }}</p>
+  </div>
+  <app-icon-text-button
+    (click)="onClick()"
+    icon="plus"
+    text="Análise do DNA"
+    class="text-secondary rounded-xl shadow-sm"
+  ></app-icon-text-button>
+</div>

@@ -39,6 +39,7 @@
       description=""
     ></app-dashboard-button>
     <app-dashboard-button
+    (action)="router.navigate([`dna-managment/${userId()}`])"
       imgSrc="https://i.imgur.com/hYZJdpD.png"
       title="Gerenciar Análises do DNA"
       subtitle=""

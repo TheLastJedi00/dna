@@ -46,14 +46,14 @@ export class Dashboard implements OnInit {
   }
 
   async getCurrentUserData() {
-    this.isLoading.set(true)
+    this.isLoading.set(true);
     try {
       const decoded = this.loginService.getDecodedToken();
       if (!decoded) {
-        throw new HttpErrorResponse({error: {message: 'Credenciais inválidas'}})
+        throw new HttpErrorResponse({ error: { message: 'Credenciais inválidas' } });
       }
       this.roles.set(decoded.roles);
-      const user = await firstValueFrom(this.userService.getUserById(decoded.id));
+      const user = await firstValueFrom(this.userService.findMe(decoded.id));
       this.userData.set(user);
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
@@ -61,7 +61,7 @@ export class Dashboard implements OnInit {
       }
       console.error(e);
     } finally {
-      this.isLoading.set(false)
+      this.isLoading.set(false);
     }
   }
 }

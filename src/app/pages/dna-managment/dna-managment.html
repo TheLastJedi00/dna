@@ -1,1 +1,20 @@
-<p>dna-managment works!</p>
+<app-user-panel-header></app-user-panel-header>
+<main class="pt-header min-h-screen gradient-primary-to-secondary-85">
+  <section class="container mx-auto bg-white main-padding">
+    <div class="flex items-center justify-between">
+      <h1 class="font-merriweather text-xl text-secondary">Gerenciar Análises do DNA</h1>
+      <app-icon-text-button
+        icon="arrow-left"
+        text="Voltar"
+        (click)="router.navigate([`dashboard/${userId()}`])"
+      ></app-icon-text-button>
+    </div>
+  </section>
+  <section class="container mx-auto bg-white main-padding">
+    <div>
+        <h2 class="text-secondary text-xl">Lista de Usuários Ativos</h2>
+    </div>
+    <app-user-supply-list [userSupplyUrl]='`/user-supply/${userId()}`'></app-user-supply-list>
+  </section>
+</main>
+<app-user-panel-footer></app-user-panel-footer>

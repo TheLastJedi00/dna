@@ -1,0 +1,20 @@
+<app-user-panel-header></app-user-panel-header>
+<main class="min-h-screen pt-header gradient-primary-to-secondary-85">
+  <section class="main-padding bg-white container mx-auto grid gap-3">
+    <div class="flex justify-between items-center">
+      <h1 class="font-merriweather text-xl text-secondary">Informações de Usuários</h1>
+      <app-icon-text-button
+        icon="arrow-left"
+        text="Voltar"
+        (click)="router.navigate([`dna-managment/${userId()}`])"
+      ></app-icon-text-button>
+    </div>
+    <div>
+       <h2 class="text-primary text-xl">{{userData()?.fullName}}</h2> 
+    </div>
+  </section>
+</main>
+<app-user-panel-footer></app-user-panel-footer>
+@if (isLoading()) {
+  <app-infinity></app-infinity>
+}

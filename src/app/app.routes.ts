@@ -15,13 +15,23 @@ import { authGuard } from './core/guards/auth-guard';
 import { Managment } from './pages/managment/managment';
 import { roleGuard } from './core/guards/role-guard';
 import { DnaManagment } from './pages/dna-managment/dna-managment';
+import { UserSupplyDetails } from './pages/user-supply-details/user-supply-details';
 
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
   { path: 'dashboard/:userId', component: Dashboard, canActivate: [authGuard] },
-  { path: 'managment/:type/:userId', component: Managment, canActivate: [authGuard, roleGuard]},
-  { path: 'dna-managment/:userId', component: DnaManagment, canActivate: [authGuard, roleGuard]},
+  { path: 'managment/:type/:userId', component: Managment, canActivate: [authGuard, roleGuard] },
+  {
+    path: 'dna-managment/:userId',
+    component: DnaManagment,
+    canActivate: [authGuard, roleGuard],
+  },
+  {
+    path: 'user-supply/:userId/:maestraId',
+    component: UserSupplyDetails,
+    canActivate: [authGuard, roleGuard],
+  },
   {
     path: 'human-design',
     component: HumanDesign,
@@ -57,8 +67,6 @@ export const routes: Routes = [
   {
     path: 'numerology',
     component: Numerology,
-    children: [
-      {path: '', component: Home}
-    ],
+    children: [{ path: '', component: Home }],
   },
 ];

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManagerDashboard } from './manager-dashboard';
+import { UserSupplyList } from './user-supply-list';
 
-describe('ManagerDashboard', () => {
-  let component: ManagerDashboard;
-  let fixture: ComponentFixture<ManagerDashboard>;
+describe('UserSupplyList', () => {
+  let component: UserSupplyList;
+  let fixture: ComponentFixture<UserSupplyList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ManagerDashboard]
+      imports: [UserSupplyList]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ManagerDashboard);
+    fixture = TestBed.createComponent(UserSupplyList);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
