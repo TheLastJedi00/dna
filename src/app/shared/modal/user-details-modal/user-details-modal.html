@@ -6,16 +6,18 @@
     class="fixed z-10 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
   >
     <div class="p-3 bg-white shadow-xl rounded-xl" (click)="$event.stopPropagation()">
-      <h1 class="text-primary font-merriweather">Nome</h1>
+      <h1 class="text-primary font-merriweather">{{ userData().fullName }}</h1>
       <div class="text-black/70 py-3">
-        <p>email</p>
-        <p>birthDate</p>
-        <p>birthTime</p>
-        <p>birthPlace</p>
-        <p>isActive</p>
-        <p>isSupplyCreated</p>
+        <p>{{ userData().birthDate }}</p>
+        <p>{{ userData().birthTime }}</p>
+        <p>{{ userData().birthPlace }}</p>
       </div>
       <div class="grid py-3 gap-3">
+        <app-icon-text-button
+          icon="heart"
+          text="Dados do DNA"
+          class="w-full text-primary shadow-sm rounded-xl"
+        ></app-icon-text-button>
         <div class="grid grid-cols-2 gap-3">
           <app-icon-text-button
             icon="pencil"

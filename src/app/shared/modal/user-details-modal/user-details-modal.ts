@@ -9,7 +9,7 @@ import { IconTextButton } from "../../buttons/icon-text-button/icon-text-button"
   styleUrl: './user-details-modal.scss',
 })
 export class UserDetailsModal {
-  userData = input<UserData|null>(null)
+  userData = input.required<UserData>()
   isOpen = input<boolean>(false)
   close = output()
 

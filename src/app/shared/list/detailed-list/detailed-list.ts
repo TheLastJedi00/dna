@@ -5,10 +5,11 @@ import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../../core/models/userdata.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from "../../loading/infinity/infinity";
+import { NewUserForm } from "../../forms/new-user-form/new-user-form";
 
 @Component({
   selector: 'app-detailed-list',
-  imports: [DetailedItem, Infinity],
+  imports: [DetailedItem, Infinity, NewUserForm],
   templateUrl: './detailed-list.html',
   styleUrl: './detailed-list.scss',
 })

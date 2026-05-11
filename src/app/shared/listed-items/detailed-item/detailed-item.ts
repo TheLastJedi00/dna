@@ -10,7 +10,7 @@ import { UserData } from '../../../core/models/userdata.model';
   styleUrl: './detailed-item.scss',
 })
 export class DetailedItem {
-  data = input<UserData|null>(null);
+  data = input.required<UserData>();
   isModalOpen = signal<boolean>(false);
 
   openModal() {
