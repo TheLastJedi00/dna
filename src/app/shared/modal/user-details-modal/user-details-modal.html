@@ -5,7 +5,10 @@
     (click)="onClose()"
     class="fixed z-10 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
   >
-    <div class="p-3 bg-white shadow-xl rounded-xl" (click)="$event.stopPropagation()">
+    <div
+      class="p-3 bg-white shadow-xl rounded-xl transition-all"
+      (click)="$event.stopPropagation()"
+    >
       <h1 class="text-primary font-merriweather">{{ userData().fullName }}</h1>
       <div class="text-black/70 py-3">
         <p>{{ userData().birthDate }}</p>
