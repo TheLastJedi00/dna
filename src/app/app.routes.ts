@@ -14,12 +14,14 @@ import { Home } from './pages/numerology/home/home';
 import { authGuard } from './core/guards/auth-guard';
 import { Managment } from './pages/managment/managment';
 import { roleGuard } from './core/guards/role-guard';
+import { DnaManagment } from './pages/dna-managment/dna-managment';
 
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'login', component: UserLogin },
   { path: 'dashboard/:userId', component: Dashboard, canActivate: [authGuard] },
   { path: 'managment/:type/:userId', component: Managment, canActivate: [authGuard, roleGuard]},
+  { path: 'dna-managment/:userId', component: DnaManagment, canActivate: [authGuard, roleGuard]},
   {
     path: 'human-design',
     component: HumanDesign,
