@@ -8,10 +8,11 @@ import { UserService } from '../../core/services/user-service';
 import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../core/models/userdata.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DnaDataForm } from "../../shared/forms/dna-data-form/dna-data-form";
 
 @Component({
   selector: 'app-user-supply-details',
-  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity],
+  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, DnaDataForm],
   templateUrl: './user-supply-details.html',
   styleUrl: './user-supply-details.scss',
 })

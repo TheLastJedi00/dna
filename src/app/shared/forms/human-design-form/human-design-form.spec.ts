@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateDnaForm } from './create-dna-form';
+import { HumanDesignForm } from './human-design-form';
 
-describe('CreateDnaForm', () => {
-  let component: CreateDnaForm;
-  let fixture: ComponentFixture<CreateDnaForm>;
+describe('HumanDesignForm', () => {
+  let component: HumanDesignForm;
+  let fixture: ComponentFixture<HumanDesignForm>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateDnaForm]
+      imports: [HumanDesignForm]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CreateDnaForm);
+    fixture = TestBed.createComponent(HumanDesignForm);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
