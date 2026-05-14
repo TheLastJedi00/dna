@@ -16,7 +16,8 @@ export class IconTextButton {
   class = input<string>('')
   type = input('button')
 
-  onClick(){
+  onClick(event: Event){
+    event.stopPropagation()
     this.click.emit();
   }
 }

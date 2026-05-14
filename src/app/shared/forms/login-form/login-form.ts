@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FlatButton } from '../../buttons/flat-button/flat-button';
 import { Logo } from '../../logo/logo';
-import { LoginService } from '../../../core/services/login-service';
+import { LoginService } from '../../../core/services/login.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
@@ -10,7 +10,7 @@ import { Infinity } from '../../loading/infinity/infinity';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FlatButton, Logo, FormsModule, Infinity ],
+  imports: [FlatButton, Logo, FormsModule, Infinity],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
 })

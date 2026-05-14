@@ -13,12 +13,8 @@
       <h2 class="text-primary text-xl">{{ userData()?.fullName }}</h2>
     </div>
   </section>
-  <section>
-    @if (userData()) {
-      <section class="mx-auto bg-white container main-padding">
-        <app-dna-data-form [userData]="userData()!"></app-dna-data-form>
-      </section>
-    }
+  <section class="main-padding bg-white container mx-auto">
+    <app-human-design-form [maestraId]="maestraId()"></app-human-design-form>
   </section>
 </main>
 <app-user-panel-footer></app-user-panel-footer>

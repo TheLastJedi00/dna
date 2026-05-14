@@ -4,17 +4,15 @@ export interface Canal {
 }
 
 export interface CentrosEnergeticos {
-  definidos: string[];
-  indefinidos: string[];
-  abertos: string[];
+  definidos: string[] | string;
+  indefinidos: string[] | string;
+  abertos: string[] | string;
 }
 
 export interface PontosAtivacao {
-  sol: number;
-  terra: number;
-  lua: number;
-  // Caso precise expandir para outros planetas depois
-  [key: string]: number; 
+  sol: string | number;
+  terra: string | number;
+  lua: string | number;
 }
 
 export interface Ativacoes {
@@ -30,6 +28,7 @@ export interface CruzEncarnacao {
 }
 
 export interface HumanDesignData {
+  userId?: string;
   tipo_aurico: string;
   aura: string;
   energia: string;
@@ -40,7 +39,7 @@ export interface HumanDesignData {
   autoridade: string;
   perfil: string;
   centros_energeticos: CentrosEnergeticos;
-  canais: Canal[];
+  canais: string[] | Canal[];
   ativacoes: Ativacoes;
   encarnacao: CruzEncarnacao;
 }

@@ -61,19 +61,19 @@
             (click)="navigateTo('centros/definidos')"
             icon="magnifying-glass"
             title="Definidos"
-            [data]="listToString(humanDesignData()!.centros_energeticos.definidos)"
+            [data]="humanDesignData()!.centros_energeticos.definidos"
           ></app-dh-data-button>
           <app-dh-data-button
             (click)="navigateTo('centros/indefinidos')"
             icon="magnifying-glass"
             title="Indefinidos"
-            [data]="listToString(humanDesignData()!.centros_energeticos.indefinidos)"
+            [data]="humanDesignData()!.centros_energeticos.indefinidos"
           ></app-dh-data-button>
           <app-dh-data-button
             (click)="navigateTo('centros/abertos')"
             icon="magnifying-glass"
             title="Abertos"
-            [data]="listToString(humanDesignData()!.centros_energeticos.abertos)"
+            [data]="humanDesignData()!.centros_energeticos.abertos"
           ></app-dh-data-button>
         </div>
       </div>

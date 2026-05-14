@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './user-details-modal.scss',
 })
 export class UserDetailsModal {
+  managerId = input.required<string>()
   userData = input.required<UserData>()
   isOpen = input<boolean>(false)
   close = output()

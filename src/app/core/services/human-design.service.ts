@@ -14,4 +14,8 @@ export class HumanDesignService {
   getByUserId(userId: string): Observable<HumanDesignData> {
     return this.http.get<HumanDesignData>(`${this.api}/user/${userId}`);
   }
+
+  createHumanDesignByUser(humanDesignData: HumanDesignData): Observable<HumanDesignData> {
+    return this.http.post<HumanDesignData>(`${this.api}`, humanDesignData);
+  }
 }

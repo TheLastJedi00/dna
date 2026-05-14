@@ -4,15 +4,15 @@ import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-pan
 import { IconTextButton } from '../../shared/buttons/icon-text-button/icon-text-button';
 import { Router } from '@angular/router';
 import { Infinity } from '../../shared/loading/infinity/infinity';
-import { UserService } from '../../core/services/user-service';
+import { UserService } from '../../core/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../core/models/userdata.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DnaDataForm } from "../../shared/forms/dna-data-form/dna-data-form";
+import { HumanDesignForm } from '../../shared/forms/human-design-form/human-design-form';
 
 @Component({
   selector: 'app-user-supply-details',
-  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, DnaDataForm],
+  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, HumanDesignForm],
   templateUrl: './user-supply-details.html',
   styleUrl: './user-supply-details.scss',
 })

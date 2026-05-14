@@ -3,7 +3,7 @@
 } @else {
   <app-user-panel-header (logout)="onLogout()"></app-user-panel-header>
 }
-<main class="gradient-primary-to-secondary-85 pt-header">
+<main class="gradient-primary-to-secondary-85 pt-header min-h-[80vh]">
   <section class="w-screen flex flex-col items-center main-padding justify-center bg-white/50">
     <h1 class="font-style-script italic text-6xl text-primary">
       <span class="text-xl text-black/85">Olá,</span> {{ userData()?.fullName }}

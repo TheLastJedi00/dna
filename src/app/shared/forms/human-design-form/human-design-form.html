@@ -1,79 +1,106 @@
-<form action="" class="grid gap-3 max-w-[400px] input:input">
-  <input type="text" placeholder="Tipo Áurico" />
-  <input type="text" placeholder="Aura" />
-  <input type="text" placeholder="Energia" />
-  <input type="text" placeholder="Palavra Chave" />
-  <input type="text" placeholder="Estratégia" />
-  <input type="text" placeholder="Assinatura" />
-  <input type="text" placeholder="Tema do Não-Ser" />
-  <input type="text" placeholder="Autoridade" />
-  <input type="text" placeholder="Perfil" />
-  <p for="">Centros Energéticos</p>
-  <div class="grid pl-5 gap-3">
-    <p for="">Definidos</p>
-    <input type="text" placeholder="Centro Definido" />
-    <app-icon-text-button
-      icon="plus"
-      text="Adicionar Centro"
-      class="text-secondary shadow-sm rounded-xl w-full"
-    ></app-icon-text-button>
+@if (dnaStatus()?.human_design) {
+  <div class="bg-white grid gap-3 dna-data">
+    <h3 class="text-secondary font-merriweather text-xl">Desenho Humano</h3>
+    <p>Aura: {{humanDesignData()?.aura}}</p>
+    <p>Energia: {{humanDesignData()?.energia}}</p>
+    <p>Palavra Chave: {{humanDesignData()?.palavra_chave}}</p>
+    <p>Estratégia: {{humanDesignData()?.estrategia}}</p>
+    <p>Assinatura: {{humanDesignData()?.assinatura}}</p>
+    <p>Tema do Não-Ser: {{humanDesignData()?.tema_do_nao_ser}}</p>
+    <p>Autoridade: {{humanDesignData()?.autoridade}}</p>
+    <p>Perfil: {{humanDesignData()?.perfil}}</p>
+    <p>Centros Definidos: {{humanDesignData()?.centros_energeticos?.definidos}}</p>
+    <p>Centros Indefinidos: {{humanDesignData()?.centros_energeticos?.indefinidos}}</p>
+    <p>Centros Abertos: {{humanDesignData()?.centros_energeticos?.abertos}}</p>
+    <p>Canais: {{humanDesignData()?.canais}}</p>
+    <p>Personalidade Sol: {{humanDesignData()?.ativacoes?.personalidade?.sol}}</p>
+    <p>Personalidade Terra: {{humanDesignData()?.ativacoes?.personalidade?.terra}}</p>
+    <p>Personalidade Lua: {{humanDesignData()?.ativacoes?.personalidade?.lua}}</p>
+    <p>Desenho Sol: {{humanDesignData()?.ativacoes?.desenho?.sol}}</p>
+    <p>Desenho Terra: {{humanDesignData()?.ativacoes?.desenho?.terra}}</p>
+    <p>Desenho Lua: {{humanDesignData()?.ativacoes?.desenho?.lua}}</p>
+    <p>Ângulo: {{humanDesignData()?.encarnacao?.angulo}}</p>
+    <p>Cruz: {{humanDesignData()?.encarnacao?.cruz}}</p>
+    <p>Portões: {{humanDesignData()?.encarnacao?.portoes}}</p>
+    <p>Quarto de Cruz: {{humanDesignData()?.encarnacao?.quarto_de_cruz}}</p>
   </div>
-  <div class="grid pl-5 gap-3">
-    <p for="">Indefinidos</p>
-    <input type="text" placeholder="Centro Indefinido" />
-    <app-icon-text-button
-      icon="plus"
-      text="Adicionar Centro"
-      class="text-secondary shadow-sm rounded-xl w-full"
-    ></app-icon-text-button>
-  </div>
-  <div class="grid pl-5 gap-3">
-    <p for="">Abertos</p>
-    <input type="text" placeholder="Centro Aberto" />
-    <app-icon-text-button
-      icon="plus"
-      text="Adicionar Centro"
-      class="text-secondary shadow-sm rounded-xl w-full"
-    ></app-icon-text-button>
-  </div>
-  <div class="grid gap-3">
+} @else {
+  <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
+    <h3 class="text-secondary font-merriweather text-xl">Desenho Humano</h3>
+    <input formControlName="tipo_aurico" type="text" placeholder="Tipo Áurico" />
+    <input formControlName="aura" type="text" placeholder="Aura" />
+    <input formControlName="energia" type="text" placeholder="Energia" />
+    <input formControlName="palavra_chave" type="text" placeholder="Palavra Chave" />
+    <input formControlName="estrategia" type="text" placeholder="Estratégia" />
+    <input formControlName="assinatura" type="text" placeholder="Assinatura" />
+    <input formControlName="nao_ser" type="text" placeholder="Tema do Não-Ser" />
+    <input formControlName="autoridade" type="text" placeholder="Autoridade" />
+    <input formControlName="perfil" type="text" placeholder="Perfil" />
+    <hr class="opacity-30 mt-3" />
+    <p>Centros Energéticos</p>
+    <input formControlName="centros_definidos" type="text" placeholder="Centros Definidos" />
+    <input formControlName="centros_indefinidos" type="text" placeholder="Centros Indefinidos" />
+    <input formControlName="centros_abertos" type="text" placeholder="Centros Abertos" />
+    <hr class="opacity-30 mt-3" />
     <p>Canais</p>
-    <div class="flex gap-3">
-      <input type="text" placeholder="10-10" class="w-[5rem]" />
-      <input type="text" placeholder="Canal" class="w-full" />
+    <div formArrayName="canais" class="grid gap-3">
+      @for (canal of canais.controls; track canal) {
+        <div class="grid grid-cols-[4fr_1fr] gap-3">
+          <input [formControlName]="$index" type="text" placeholder="10-10: Canal" class="w-full" />
+          <app-icon-text-button
+            (click)="removeCanal($index)"
+            [disabled]="canais.controls.length <= 1 ? true : false"
+            icon=""
+            text="Remover"
+            class="bg-[red]/70 text-white rounded-xl"
+          ></app-icon-text-button>
+        </div>
+      }
     </div>
     <app-icon-text-button
+      type="button"
+      (click)="addCanal()"
       icon="plus"
       text="Novo Canal"
       class="text-secondary shadow-sm rounded-xl w-full"
     ></app-icon-text-button>
-  </div>
-  <div class="grid gap-3">
-    <p for="">Ativações</p>
-    <div class="pl-5 grid gap-3">
-      <p>Personalidade</p>
-      <div class="grid grid-cols-3 gap-3">
-        <input type="text" placeholder="Sol" />
-        <input type="text" placeholder="Terra" />
-        <input type="text" placeholder="Lua" />
+    <div class="grid gap-3">
+      <p for="">Ativações</p>
+      <div class="pl-5 grid gap-3">
+        <p>Personalidade</p>
+        <div class="grid grid-cols-3 gap-3">
+          <input formControlName="personalidade_sol" type="text" placeholder="Sol" />
+          <input formControlName="personalidade_terra" type="text" placeholder="Terra" />
+          <input formControlName="personalidade_lua" type="text" placeholder="Lua" />
+        </div>
       </div>
-    </div>
-    <div class="pl-5 grid gap-3">
-      <p>Desenho</p>
-      <div class="grid grid-cols-3 gap-3">
-        <input type="text" placeholder="Sol" />
-        <input type="text" placeholder="Terra" />
-        <input type="text" placeholder="Lua" />
+      <div class="pl-5 grid gap-3">
+        <p>Desenho</p>
+        <div class="grid grid-cols-3 gap-3">
+          <input formControlName="desenho_sol" type="text" placeholder="Sol" />
+          <input formControlName="desenho_terra" type="text" placeholder="Terra" />
+          <input formControlName="desenho_lua" type="text" placeholder="Lua" />
+        </div>
       </div>
-    </div>
-    <p>Encarnação</p>
-    <div class="grid grid-cols-2 gap-3">
-      <input type="text" placeholder="Ângulo" />
-      <input type="text" placeholder="Cruz" />
+      <p>Encarnação</p>
+      <div class="grid grid-cols-2 gap-3">
+        <input formControlName="angulo" type="text" placeholder="Ângulo" />
+        <input formControlName="cruz" type="text" placeholder="Cruz" />
 
-      <input type="text" placeholder="Portões" />
-      <input type="text" placeholder="Quarto de Cruz" />
+        <input formControlName="portoes" type="text" placeholder="Portões" />
+        <input formControlName="quarto_cruz" type="text" placeholder="Quarto de Cruz" />
+      </div>
     </div>
-  </div>
-  <app-icon-text-button icon="plus" text="Salvar Dados" class="bg-primary text-white rounded-xl w-full"></app-icon-text-button>
-</form>
+    <app-icon-text-button
+      [disabled]="!dhForm.valid"
+      (click)="saveHumanDesignData()"
+      icon="plus"
+      text="Salvar Dados"
+      class="bg-primary text-white rounded-xl w-full"
+    ></app-icon-text-button>
+  </form>
+}
+
+@if (isLoading()) {
+  <app-infinity></app-infinity>
+}

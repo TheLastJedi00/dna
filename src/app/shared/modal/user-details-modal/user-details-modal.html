@@ -15,6 +15,12 @@
         <p>{{ userData().birthTime }}</p>
         <p>{{ userData().birthPlace }}</p>
       </div>
+      <app-icon-text-button
+      (click)="router.navigate([`user-supply/${managerId()}/${userData().id}`])"
+        icon="magnifying-glass"
+        text="Detalhes"
+        class="bg-white rounded-xl text-secondary shadow-xl w-full"
+      ></app-icon-text-button>
       <div class="grid py-3 gap-3">
         <div class="grid grid-cols-2 gap-3">
           <app-icon-text-button

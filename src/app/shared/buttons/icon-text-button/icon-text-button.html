@@ -1,6 +1,6 @@
 <button
   [disabled]="disabled()"
-  (click)="onClick()"
+  (click)="onClick($event)"
   [ngClass]="class() ? class() : 'text-secondary'"
   [type]="type()"
 >

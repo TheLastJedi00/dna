@@ -3,12 +3,12 @@ import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-pan
 import { ManagerHeader } from '../../shared/headers/manager-header/manager-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { PanelCard } from '../../shared/cards/panel-card/panel-card';
-import { LoginService } from '../../core/services/login-service';
+import { LoginService } from '../../core/services/login.service';
 import { Router } from '@angular/router';
 import { UserRole } from '../../types/types';
 import { UserData } from '../../core/models/userdata.model';
 import { firstValueFrom } from 'rxjs';
-import { UserService } from '../../core/services/user-service';
+import { UserService } from '../../core/services/user.service';
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { HttpErrorResponse } from '@angular/common/http';
 

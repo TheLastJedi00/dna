@@ -2,10 +2,10 @@ import { Component, inject, output, signal } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserData } from '../../../core/models/userdata.model';
-import { UserService } from '../../../core/services/user-service';
+import { UserService } from '../../../core/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Infinity } from "../../loading/infinity/infinity";
+import { Infinity } from '../../loading/infinity/infinity';
 
 @Component({
   selector: 'app-new-user-form',
@@ -16,14 +16,14 @@ import { Infinity } from "../../loading/infinity/infinity";
 export class NewUserForm {
   private fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
-  onCloseModal = output<void>()
+  onCloseModal = output<void>();
   isPassVisible = signal<boolean>(false);
   passwordInputType = signal<string>('password');
   isFormOpen = signal(false);
-  isLoading = signal(false)
+  isLoading = signal(false);
 
-  onClose(){
-    this.onCloseModal.emit()
+  onClose() {
+    this.onCloseModal.emit();
   }
 
   togglePassVisibility() {
@@ -44,7 +44,7 @@ export class NewUserForm {
   });
 
   async createUser() {
-    this.isLoading.set(true)
+    this.isLoading.set(true);
     const form = this.createUserForm.getRawValue();
     if (this.createUserForm.invalid) {
       this.createUserForm.markAllAsTouched();
@@ -62,15 +62,15 @@ export class NewUserForm {
         },
       };
       await firstValueFrom(this.userService.createMaestra(user));
-      alert("Nova Maestra cadastrada com sucesso.")
+      alert('Nova Maestra cadastrada com sucesso.');
     } catch (e) {
       console.error(e);
-      if(e instanceof HttpErrorResponse){
-        alert(e.error.message)
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
       }
     } finally {
-      this.isLoading.set(false)
-      this.createUserForm.reset()
+      this.isLoading.set(false);
+      this.createUserForm.reset();
     }
   }
 }

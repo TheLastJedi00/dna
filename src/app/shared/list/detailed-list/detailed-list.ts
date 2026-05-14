@@ -1,11 +1,11 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { DetailedItem } from '../../listed-items/detailed-item/detailed-item';
-import { UserService } from '../../../core/services/user-service';
+import { UserService } from '../../../core/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../../core/models/userdata.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Infinity } from "../../loading/infinity/infinity";
-import { NewUserForm } from "../../forms/new-user-form/new-user-form";
+import { Infinity } from '../../loading/infinity/infinity';
+import { NewUserForm } from '../../forms/new-user-form/new-user-form';
 
 @Component({
   selector: 'app-detailed-list',
@@ -15,7 +15,8 @@ import { NewUserForm } from "../../forms/new-user-form/new-user-form";
 })
 export class DetailedList implements OnInit {
   private readonly userService = inject(UserService);
-
+  managerId = input.required<string>()
+  
   async ngOnInit() {
     this.userList.set(await this.getAllActiveUsersFirstPage());
   }
@@ -24,16 +25,16 @@ export class DetailedList implements OnInit {
   type = input.required<string>();
 
   async getAllActiveUsersFirstPage() {
-    this.isLoading.set(true)
+    this.isLoading.set(true);
     try {
       return await firstValueFrom(this.userService.getAllActiveUsers('fullName', 'asc', 1));
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
         alert(e.error.message);
       }
-      throw new Error("Erro desconhecido")
+      throw new Error('Erro desconhecido');
     } finally {
-      this.isLoading.set(false)
+      this.isLoading.set(false);
     }
   }
 }
