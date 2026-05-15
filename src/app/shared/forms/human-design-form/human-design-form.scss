@@ -1,8 +1,12 @@
 .dna-data {
-    p {
-        box-shadow: 0 0.2rem 1.5rem rgba(0, 0, 0, 0.2);
-        border-radius: 0.75rem;
-        padding: 0.5rem;
-        opacity: 0.7;
-    }
+  display: grid;
+  gap: 0.75rem;
+  div {
+    padding-top: 0.75rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+  p {
+    opacity: 0.7;
+  }
 }

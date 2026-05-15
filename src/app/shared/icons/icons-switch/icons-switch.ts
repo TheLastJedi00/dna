@@ -16,10 +16,11 @@ import { ArrowsPointingOut } from "../arrows-pointing-out/arrows-pointing-out";
 import { ArrowLeft } from '../arrow-left/arrow-left';
 import { ChevronDown } from "../chevron-down/chevron-down";
 import { Plus } from "../plus/plus";
+import { Sparkles } from "../sparkles/sparkles";
 
 @Component({
   selector: 'app-icons-switch',
-  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown, Plus],
+  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown, Plus, Sparkles],
   templateUrl: './icons-switch.html',
   styleUrl: './icons-switch.scss',
 })

@@ -14,6 +14,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from '../../loading/infinity/infinity';
 import { DnaStatusService } from '../../../core/services/dna-status.service';
 import { DnaStatus } from '../../../core/models/dna-status.model';
+import { SupplyService } from '../../../core/services/supply.service';
+import { response } from 'express';
+import { sign } from 'crypto';
 
 @Component({
   selector: 'app-human-design-form',
@@ -21,21 +24,25 @@ import { DnaStatus } from '../../../core/models/dna-status.model';
   templateUrl: './human-design-form.html',
   styleUrl: './human-design-form.scss',
 })
-export class HumanDesignForm implements OnInit{
+export class HumanDesignForm implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.getDnaStatus();
-    if(this.dnaStatus()?.human_design){
-      this.getHumanDesignData()
+    if (this.dnaStatus()?.human_design) {
+      await this.getHumanDesignData();
+      await this.checkSupplyByMaestraId();
     }
   }
 
   maestraId = input.required<string>();
   isLoading = signal(false);
-  dnaStatus = signal<DnaStatus|null>(null)
-  humanDesignData = signal<HumanDesignData|null>(null)
+  loadingMessage = signal<string | null>(null);
+  dnaStatus = signal<DnaStatus | null>(null);
+  humanDesignData = signal<HumanDesignData | null>(null);
+  isSupplyCreated = signal<boolean>(false);
   private readonly fb = inject(FormBuilder);
   private readonly hdService = inject(HumanDesignService);
   private readonly dnaStatusService = inject(DnaStatusService);
+  private readonly supplyService = inject(SupplyService);
 
   protected dhForm = this.fb.nonNullable.group({
     tipo_aurico: this.fb.control('', [Validators.required]),
@@ -74,6 +81,8 @@ export class HumanDesignForm implements OnInit{
   removeCanal(index: number) {
     this.canais.removeAt(index);
   }
+
+  //HTTP Requests
 
   async saveHumanDesignData() {
     this.isLoading.set(true);
@@ -117,7 +126,7 @@ export class HumanDesignForm implements OnInit{
       };
       await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
       this.dhForm.reset();
-      this.getDnaStatus()
+      this.getDnaStatus();
     } catch (error) {
       console.log(error);
       if (error instanceof HttpErrorResponse) {
@@ -128,32 +137,70 @@ export class HumanDesignForm implements OnInit{
     }
   }
 
-  async getDnaStatus(){
-    this.isLoading.set(true)
-    try {
-      this.dnaStatus.set(await firstValueFrom(this.dnaStatusService.getStatusByUserId(this.maestraId()))) ;
-    } catch(e) {
-      if(e instanceof HttpErrorResponse) {
-        alert(e.error.message)
-      }
-      console.error(e)
-    } finally {
-      this.isLoading.set(false)
-    }
-  }
-
-  async getHumanDesignData(){
+  async getDnaStatus() {
     this.isLoading.set(true);
-    try{
-      this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())))
+    try {
+      this.dnaStatus.set(
+        await firstValueFrom(this.dnaStatusService.getStatusByUserId(this.maestraId())),
+      );
     } catch (e) {
-      if(e instanceof HttpErrorResponse){
-        alert(e.error.message)
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
       }
-      console.error(e)
+      console.error(e);
     } finally {
-      this.isLoading.set(false)
+      this.isLoading.set(false);
     }
   }
 
+  async getHumanDesignData() {
+    this.isLoading.set(true);
+    try {
+      this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
+      }
+      console.error(e);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async checkSupplyByMaestraId() {
+    this.isLoading.set(true);
+    try {
+      const reponse = await firstValueFrom(
+        this.supplyService.isSupplyForThisUser(this.maestraId(), 'human-design'),
+      );
+      this.isSupplyCreated.set(reponse);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
+      }
+      console.error(e);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async createAllSupply() {
+    this.isLoading.set(true);
+    this.loadingMessage.set('Isso pode levar alguns minutos, não feche a página.')
+    try {
+      const response = await firstValueFrom(
+        this.supplyService.createFullPillar('human-design', this.maestraId()),
+      );
+      console.log(response);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
+      }
+      console.error(e);
+    } finally {
+      this.isLoading.set(false);
+      this.loadingMessage.set(null)
+      this.checkSupplyByMaestraId()
+    }
+  }
 }

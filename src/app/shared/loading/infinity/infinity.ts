@@ -9,4 +9,5 @@ import { Component, input } from '@angular/core';
 })
 export class Infinity {
   scale = input('1')
+  message = input<string|null>()
 }

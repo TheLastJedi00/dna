@@ -1,28 +1,55 @@
 @if (dnaStatus()?.human_design) {
-  <div class="bg-white grid gap-3 dna-data">
+  <div class="bg-white dna-data">
     <h3 class="text-secondary font-merriweather text-xl">Desenho Humano</h3>
-    <p>Aura: {{humanDesignData()?.aura}}</p>
-    <p>Energia: {{humanDesignData()?.energia}}</p>
-    <p>Palavra Chave: {{humanDesignData()?.palavra_chave}}</p>
-    <p>Estratégia: {{humanDesignData()?.estrategia}}</p>
-    <p>Assinatura: {{humanDesignData()?.assinatura}}</p>
-    <p>Tema do Não-Ser: {{humanDesignData()?.tema_do_nao_ser}}</p>
-    <p>Autoridade: {{humanDesignData()?.autoridade}}</p>
-    <p>Perfil: {{humanDesignData()?.perfil}}</p>
-    <p>Centros Definidos: {{humanDesignData()?.centros_energeticos?.definidos}}</p>
-    <p>Centros Indefinidos: {{humanDesignData()?.centros_energeticos?.indefinidos}}</p>
-    <p>Centros Abertos: {{humanDesignData()?.centros_energeticos?.abertos}}</p>
-    <p>Canais: {{humanDesignData()?.canais}}</p>
-    <p>Personalidade Sol: {{humanDesignData()?.ativacoes?.personalidade?.sol}}</p>
-    <p>Personalidade Terra: {{humanDesignData()?.ativacoes?.personalidade?.terra}}</p>
-    <p>Personalidade Lua: {{humanDesignData()?.ativacoes?.personalidade?.lua}}</p>
-    <p>Desenho Sol: {{humanDesignData()?.ativacoes?.desenho?.sol}}</p>
-    <p>Desenho Terra: {{humanDesignData()?.ativacoes?.desenho?.terra}}</p>
-    <p>Desenho Lua: {{humanDesignData()?.ativacoes?.desenho?.lua}}</p>
-    <p>Ângulo: {{humanDesignData()?.encarnacao?.angulo}}</p>
-    <p>Cruz: {{humanDesignData()?.encarnacao?.cruz}}</p>
-    <p>Portões: {{humanDesignData()?.encarnacao?.portoes}}</p>
-    <p>Quarto de Cruz: {{humanDesignData()?.encarnacao?.quarto_de_cruz}}</p>
+    <div>
+      <p><b>Aura:</b> {{ humanDesignData()?.aura }}</p>
+      <p><b>Energia:</b> {{ humanDesignData()?.energia }}</p>
+      <p><b>Palavra Chave:</b> {{ humanDesignData()?.palavra_chave }}</p>
+      <p><b>Estratégia:</b> {{ humanDesignData()?.estrategia }}</p>
+      <p><b>Assinatura:</b> {{ humanDesignData()?.assinatura }}</p>
+      <p><b>Tema do Não-Ser:</b> {{ humanDesignData()?.tema_do_nao_ser }}</p>
+      <p><b>Autoridade:</b> {{ humanDesignData()?.autoridade }}</p>
+      <p><b>Perfil:</b> {{ humanDesignData()?.perfil }}</p>
+      <p><b>Canais:</b> {{ humanDesignData()?.canais }}</p>
+
+      <div class="border-t border-black/70">
+        <p><b>Centros:</b></p>
+        <p><b>Definidos:</b> {{ humanDesignData()?.centros_energeticos?.definidos }}</p>
+        <p><b>Indefinidos:</b> {{ humanDesignData()?.centros_energeticos?.indefinidos }}</p>
+        <p><b>Abertos:</b> {{ humanDesignData()?.centros_energeticos?.abertos }}</p>
+      </div>
+      <div class="border-t border-black/70">
+        <p><b>Ativações da Personalidade:</b></p>
+        <p><b>Sol:</b> {{ humanDesignData()?.ativacoes?.personalidade?.sol }}</p>
+        <p><b>Terra:</b> {{ humanDesignData()?.ativacoes?.personalidade?.terra }}</p>
+        <p><b>Lua:</b> {{ humanDesignData()?.ativacoes?.personalidade?.lua }}</p>
+        <p><b>Ativações do Desenho:</b></p>
+        <p><b>Sol:</b> {{ humanDesignData()?.ativacoes?.desenho?.sol }}</p>
+        <p><b>Terra:</b> {{ humanDesignData()?.ativacoes?.desenho?.terra }}</p>
+        <p><b>Lua:</b> {{ humanDesignData()?.ativacoes?.desenho?.lua }}</p>
+      </div>
+      <div class="border-t border-black/70">
+        <p><b>Encarnação:</b></p>
+        <p><b>Ângulo:</b> {{ humanDesignData()?.encarnacao?.angulo }}</p>
+        <p><b>Cruz:</b> {{ humanDesignData()?.encarnacao?.cruz }}</p>
+        <p><b>Portões:</b> {{ humanDesignData()?.encarnacao?.portoes }}</p>
+        <p><b>Quarto de Cruz:</b> {{ humanDesignData()?.encarnacao?.quarto_de_cruz }}</p>
+      </div>
+    </div>
+    @if (isSupplyCreated()) {
+      <app-icon-text-button
+        class="w-full bg-secondary text-white rounded-xl"
+        icon="magnifying-glass"
+        text="Ver Análise do DNA"
+      ></app-icon-text-button>
+    } @else {
+      <app-icon-text-button
+        (click)="createAllSupply()"
+        icon="sparkles"
+        text="Gerar Análise do DNA"
+        class="w-full bg-secondary text-white rounded-xl"
+      ></app-icon-text-button>
+    }
   </div>
 } @else {
   <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
@@ -102,5 +129,5 @@
 }
 
 @if (isLoading()) {
-  <app-infinity></app-infinity>
+  <app-infinity [message]="loadingMessage()"></app-infinity>
 }
