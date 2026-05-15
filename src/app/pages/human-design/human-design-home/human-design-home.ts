@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DhDataButton } from '../../../shared/buttons/dh-data-button/dh-data-button';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgClass } from "@angular/common";
 import { HumanDesignData } from '../../../core/models/dhdata.model';
 import { FakeApi } from '../../../core/services/fake-api';
@@ -12,23 +12,27 @@ import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-car
   templateUrl: './human-design-home.html',
   styleUrl: './human-design-home.scss',
 })
-export class HumanDesignHome implements OnInit{
-  ngOnInit(): void {
-   this.humanDesignData.set(this.api.getHumanDesignData())
-  }
+export class HumanDesignHome implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly api = inject(FakeApi);
 
+  readonly userId = signal('');
   isAlive = signal(false);
-  router = inject(Router);
-  readonly api = inject(FakeApi)
-
-  buttonGroupClasses = "p-3 text-center gradient-primary-to-secondary-85 rounded-xl"
-  titleButtonGroupClasses = "text-primary font-merriweather font-normal text-xl"
-  gridButtonGroupClasses = "grid grid-cols-1 auto-rows-fr gap-2 mt-3"
-
   humanDesignData = signal<HumanDesignData | null>(null);
 
+  buttonGroupClasses = "p-3 text-center gradient-primary-to-secondary-85 rounded-xl";
+  titleButtonGroupClasses = "text-primary font-merriweather font-normal text-xl";
+  gridButtonGroupClasses = "grid grid-cols-1 auto-rows-fr gap-2 mt-3";
+
+  ngOnInit(): void {
+    const userId = this.route.snapshot.parent!.paramMap.get('userId') ?? '';
+    this.userId.set(userId);
+    this.humanDesignData.set(this.api.getHumanDesignData());
+  }
+
   navigateTo(path: string) {
-    this.router.navigate([`human-design/${path}`]);
+    this.router.navigate([`human-design/${this.userId()}/${path}`]);
   }
 
   tipoAuricoData() {

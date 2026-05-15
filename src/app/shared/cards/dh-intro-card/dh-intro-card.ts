@@ -10,10 +10,12 @@ import { Router } from '@angular/router';
 })
 export class DhIntroCard {
   router = inject(Router);
-  title = input("Título")
-  singleIntro = input<string | null>(null)
-  intro = input<string[] | null>(null)
+  userId = input.required<string>();
+  title = input("Título");
+  singleIntro = input<string | null>(null);
+  intro = input<string[] | null>(null);
+
   navigateTo(path: string) {
-    this.router.navigate([`human-design/${path}`]);
+    this.router.navigate([`human-design/${this.userId()}/${path}`]);
   }
 }

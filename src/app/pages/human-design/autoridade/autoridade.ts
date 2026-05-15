@@ -1,9 +1,10 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DhIntroCard } from '../../../shared/cards/dh-intro-card/dh-intro-card';
 import { VerticalAccordion } from '../../../shared/accordions/vertical-accordion/vertical-accordion';
-import { FakeApi } from '../../../core/services/fake-api';
-import { ListsCardGrid } from "../../../shared/grid/lists-card-grid/lists-card-grid";
-import { TopicList } from '../../../core/models/topiclist.model';
+import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
+import { SupplyService } from '../../../core/services/supply.service';
+import { Topic } from '../../../core/models/supply.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-autoridade',
@@ -11,13 +12,32 @@ import { TopicList } from '../../../core/models/topiclist.model';
   templateUrl: './autoridade.html',
   styleUrl: './autoridade.scss',
 })
-export class Autoridade implements OnInit{
+export class Autoridade implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly supplyService = inject(SupplyService);
+
+  readonly userId = signal('');
+  topics = signal<Topic[] | null>(null);
+  isLoading = signal(true);
+  error = signal<string | null>(null);
+
   ngOnInit(): void {
-    this.topics.set(this.api.getAllTopicLists())
+    const userId = this.route.snapshot.parent!.paramMap.get('userId') ?? '';
+    this.userId.set(userId);
+
+    this.supplyService.getHumanDesignModule(userId, 'autoridade').subscribe({
+      next: (supply) => {
+        this.topics.set(supply.topics);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.error.set('Conteúdo ainda não disponível.');
+        this.isLoading.set(false);
+      },
+    });
   }
-  readonly api = inject(FakeApi)
-  topics = signal<TopicList[]|null>(null)
-  intro = input([
+
+  intro = signal([
     'Dentro do Desenho Humano, a Autoridade representa o seu centro interno de tomada de decisão, o lugar da sua energia (não da mente) onde mora a sua verdade.',
     'Quando você toma decisões a partir da sua Autoridade, você age em alinhamento com a sua energia, e a vida começa a fluir com menos resistência.',
     'Quando você ignora sua Autoridade Interna e decide com base em pressões externas, medos ou mente racional, geralmente o resultado é desconforto, frustração ou arrependimento.',
@@ -28,7 +48,7 @@ export class Autoridade implements OnInit{
 
   tiposAutoridade = signal(
     `<p><b>Plexo Solar / Emocional:</b> Decisões devem ser feitas após o tempo necessário para ganhar clareza emocional. Não decida no calor da emoção.</p>
-  <p><b>Sacral:</b> A decisão é sentida no corpo, de forma instintiva e imediata. Se for um “aham”, vá. Se for um “não sei”, espere.</p>
+  <p><b>Sacral:</b> A decisão é sentida no corpo, de forma instintiva e imediata. Se for um "aham", vá. Se for um "não sei", espere.</p>
   <p><b>Esplênica:</b> A decisão vem como um sussurro intuitivo e rápido. Confie no primeiro impulso corporal.</p>
   <p><b>Ego (Centro do Coração):</b> A decisão correta é aquela que afirma seu valor pessoal e desejo genuíno.</p>
   <p><b>Auto-Projetada:</b> Você acessa sua verdade ao escutar a si mesma falando. Decisões vêm pela verbalização do que ressoa.</p>

@@ -33,7 +33,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
   },
   {
-    path: 'human-design',
+    path: 'human-design/:userId',
     component: HumanDesign,
     canActivate: [authGuard],
     canActivateChild: [authGuard],

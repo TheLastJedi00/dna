@@ -11,7 +11,7 @@ export class FakeApi {
   getAllTopicLists(): TopicList[] {
     return [
       {
-        titulo: 'Lorem Ipsum Dolor',
+        title: 'Lorem Ipsum Dolor',
         items: [
           'Consectetur adipiscing',
           'Eiusmod tempor',
@@ -26,7 +26,7 @@ export class FakeApi {
         ],
       },
       {
-        titulo: 'Sit Amet Consectetur',
+        title: 'Sit Amet Consectetur',
         items: [
           'Reprehenderit in voluptate',
           'Velit esse cillum',
@@ -41,7 +41,7 @@ export class FakeApi {
         ],
       },
       {
-        titulo: 'Iste Natus Error',
+        title: 'Iste Natus Error',
         items: [
           'Voluptatem accusantium',
           'Doloremque laudantium',
@@ -56,7 +56,7 @@ export class FakeApi {
         ],
       },
       {
-        titulo: 'Aspernatur Aut Odit',
+        title: 'Aspernatur Aut Odit',
         items: [
           'Aut fugit sed quia',
           'Magni dolores eos',
@@ -71,7 +71,7 @@ export class FakeApi {
         ],
       },
       {
-        titulo: 'Incidunt Ut Labore',
+        title: 'Incidunt Ut Labore',
         items: [
           'Magnam aliquam quaerat',
           'Voluptatem ut enim',

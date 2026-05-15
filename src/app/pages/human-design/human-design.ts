@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { Router, RouterOutlet } from '@angular/router';
 import { DhDataButton } from '../../shared/buttons/dh-data-button/dh-data-button';
@@ -12,6 +12,7 @@ import { DnaDescriptionCard } from "../../shared/cards/dna-description-card/dna-
   styleUrl: './human-design.scss',
 })
 export class HumanDesign {
+  userId = input.required<string>();
   router = inject(Router);
 
   logout() {

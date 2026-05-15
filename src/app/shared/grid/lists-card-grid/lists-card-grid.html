@@ -1,7 +1,7 @@
 <div class="mt-4 grid md:grid-cols-2 gap-2">
   @if (topics() !== null) {
     @for (topic of topics(); track $index) {
-      <app-topic-list-card [title]="topic.titulo" [items]="topic.items"></app-topic-list-card>
+      <app-topic-list-card [title]="topic.title" [items]="topic.items"></app-topic-list-card>
     }
   }
 </div>

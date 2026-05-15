@@ -12,7 +12,7 @@
   </section>
   <app-panel-card [userId]="userId()"></app-panel-card>
 </main>
-<app-user-panel-footer></app-user-panel-footer>
+<app-user-panel-footer [userId]="userId()"></app-user-panel-footer>
 @if(isLoading()){
   <app-infinity></app-infinity>
 }

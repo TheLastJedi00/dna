@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,9 +8,14 @@ import { Router } from '@angular/router';
   styleUrl: './user-panel-footer.scss',
 })
 export class UserPanelFooter {
-  router = inject(Router)
+  userId = input('');
+  router = inject(Router);
 
-  navigateTo(url: string){
-    this.router.navigate([`${url}`]);
+  navigateTo(url: string) {
+    if (url === 'human-design') {
+      this.router.navigate([`human-design/${this.userId()}`]);
+    } else {
+      this.router.navigate([url]);
+    }
   }
 }
