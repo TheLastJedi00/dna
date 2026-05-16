@@ -127,6 +127,7 @@ export class HumanDesignForm implements OnInit {
       await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
       this.dhForm.reset();
       this.getDnaStatus();
+      this.getHumanDesignData();
     } catch (error) {
       console.log(error);
       if (error instanceof HttpErrorResponse) {
