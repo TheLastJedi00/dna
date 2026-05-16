@@ -11,12 +11,7 @@ import { Router } from '@angular/router';
 })
 export class UserPanelHeader {
   router = inject(Router);
-  logout = output<void>();
-
-  onLogout() {
-    this.logout.emit();
-  }
-
+  
   returnToHome(){
     this.router.navigate(['/dashboard'])
   }

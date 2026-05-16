@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Landing } from './pages/landing/landing';
-import { UserLogin } from './pages/user-login/user-login';
+import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { HumanDesign } from './pages/human-design/human-design';
 import { HumanDesignHome } from './pages/human-design/human-design-home/human-design-home';
@@ -19,7 +19,7 @@ import { UserSupplyDetails } from './pages/user-supply-details/user-supply-detai
 
 export const routes: Routes = [
   { path: '', component: Landing },
-  { path: 'login', component: UserLogin },
+  { path: 'login', component: Login },
   { path: 'dashboard/:userId', component: Dashboard, canActivate: [authGuard] },
   { path: 'managment/:type/:userId', component: Managment, canActivate: [authGuard, roleGuard] },
   {

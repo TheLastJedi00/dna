@@ -25,7 +25,9 @@
       </path>
     </svg>
   </div>
-  @if(message()){
-    <h1 class="text-primary font-semibold text-2xl">{{message()}}</h1>
+  @if (message()) {
+    <div class="px-[10vw]">
+      <h1 class="text-primary font-semibold text-2xl">{{ message() }}</h1>
+    </div>
   }
 </div>

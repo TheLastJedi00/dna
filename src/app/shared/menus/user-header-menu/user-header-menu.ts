@@ -12,13 +12,9 @@ import { LogoutButton } from '../../buttons/logout-button/logout-button';
 export class UserHeaderMenu {
   hrItems = Array(3).fill(0);
   toggle = false;
-  logout = output<void>();
 
   toggleMenu() {
     this.toggle = !this.toggle;
   }
 
-  onLogout() {
-    this.logout.emit();
-  }
 }

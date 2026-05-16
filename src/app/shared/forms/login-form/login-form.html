@@ -1,11 +1,11 @@
 <form
   class="flex flex-col p-4 gap-4 shadow-xl rounded-xl bg-white/95 md:min-h-[420px] md:min-w-[350px]"
+  [formGroup]="loginForm"
   (ngSubmit)="onLogin()"
 >
   <app-logo></app-logo>
   <input
-    [ngModel]="email()"
-    (ngModelChange)="email.set($event)"
+    formControlName="email"
     required
     name="email"
     type="email"
@@ -13,25 +13,23 @@
     class="input-primary-light"
   />
   <input
-    [ngModel]="password()"
-    (ngModelChange)="password.set($event)"
+    formControlName="password"
     required
     name="password"
     type="password"
     placeholder="Senha"
     class="input-primary-light"
   />
-  @if(error()){
-    <span class="text-center text-[red]">{{error()}}</span>
+  @if (error()) {
+    <span class="text-center text-[red]">{{ error() }}</span>
   }
   <app-flat-button
+    [disabled]="!loginForm.valid"
     text="Entrar"
     classes="bg-primary w-full text-white"
-    (action)="onLogin()"
-    [disabled]="isValid()"
   ></app-flat-button>
 </form>
 
 @if (isLoading()) {
-  <app-infinity scale="2"></app-infinity>
+  <app-infinity></app-infinity>
 }

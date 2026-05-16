@@ -6,7 +6,7 @@ import { LandingFooter } from '../../shared/footers/landing-footer/landing-foote
 @Component({
   selector: 'app-user-login',
   imports: [LandingHeader, LoginForm, LandingFooter],
-  templateUrl: './user-login.html',
-  styleUrl: './user-login.scss',
+  templateUrl: './login.html',
+  styleUrl: './login.scss',
 })
-export class UserLogin {}
+export class Login {}

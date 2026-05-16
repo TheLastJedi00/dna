@@ -1,5 +1,6 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { Exit } from '../../icons/exit/exit';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logout-button',
@@ -8,9 +9,10 @@ import { Exit } from '../../icons/exit/exit';
   styleUrl: './logout-button.scss',
 })
 export class LogoutButton {
-  navigateTo = output<void>();
+  router = inject(Router)
 
-  onClick() {
-    this.navigateTo.emit();
+  logout(){
+    this.router.navigate([`login`])
+    localStorage.removeItem("access_token")
   }
 }

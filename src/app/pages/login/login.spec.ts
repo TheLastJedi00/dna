@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManagerHeader } from './manager-header';
+import { Login } from './login';
 
-describe('ManagerHeader', () => {
-  let component: ManagerHeader;
-  let fixture: ComponentFixture<ManagerHeader>;
+describe('UserLogin', () => {
+  let component: Login;
+  let fixture: ComponentFixture<Login>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ManagerHeader]
-    })
-    .compileComponents();
+      imports: [Login],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(ManagerHeader);
+    fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
