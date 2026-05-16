@@ -17,6 +17,7 @@ import { DnaStatus } from '../../../core/models/dna-status.model';
 import { SupplyService } from '../../../core/services/supply.service';
 import { response } from 'express';
 import { sign } from 'crypto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-human-design-form',
@@ -39,6 +40,7 @@ export class HumanDesignForm implements OnInit {
   dnaStatus = signal<DnaStatus | null>(null);
   humanDesignData = signal<HumanDesignData | null>(null);
   isSupplyCreated = signal<boolean>(false);
+  router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly hdService = inject(HumanDesignService);
   private readonly dnaStatusService = inject(DnaStatusService);
@@ -187,12 +189,10 @@ export class HumanDesignForm implements OnInit {
 
   async createAllSupply() {
     this.isLoading.set(true);
-    this.loadingMessage.set('Isso pode levar alguns minutos, não feche a página.')
+    this.loadingMessage.set('Isso pode levar alguns minutos, não feche a página.');
     try {
-      const response = await firstValueFrom(
-        this.supplyService.createFullPillar('human-design', this.maestraId()),
-      );
-      console.log(response);
+      await firstValueFrom(this.supplyService.createFullPillar('human-design', this.maestraId()));
+      alert("Dados Gerados com Sucesso!")
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
         alert(e.error.message);
@@ -200,8 +200,8 @@ export class HumanDesignForm implements OnInit {
       console.error(e);
     } finally {
       this.isLoading.set(false);
-      this.loadingMessage.set(null)
-      this.checkSupplyByMaestraId()
+      this.loadingMessage.set(null);
+      this.checkSupplyByMaestraId();
     }
   }
 }
