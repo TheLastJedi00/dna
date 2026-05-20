@@ -1,50 +1,87 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DhDataButton } from '../../../shared/buttons/dh-data-button/dh-data-button';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgClass } from "@angular/common";
+import { NgClass } from '@angular/common';
 import { HumanDesignData } from '../../../core/models/dhdata.model';
-import { FakeApi } from '../../../core/services/fake-api';
-import { DhDataCard } from "../../../shared/cards/dh-data-card/dh-data-card";
+import { DhDataCard } from '../../../shared/cards/dh-data-card/dh-data-card';
 import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-card';
+import { HumanDesignService } from '../../../core/services/human-design.service';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from '../../../core/services/user.service';
+import { UserData } from '../../../core/models/userdata.model';
+import { Infinity } from "../../../shared/loading/infinity/infinity";
 @Component({
   selector: 'app-human-design-home',
-  imports: [DhDataButton, NgClass, DhDataCard, UserDataCard],
+  imports: [DhDataButton, NgClass, DhDataCard, UserDataCard, Infinity],
   templateUrl: './human-design-home.html',
   styleUrl: './human-design-home.scss',
 })
 export class HumanDesignHome implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly api = inject(FakeApi);
-
+  private readonly humanDesignService = inject(HumanDesignService);
+  private readonly userService = inject(UserService);
   readonly userId = signal('');
   isAlive = signal(false);
+  isLoading = signal(false);
   humanDesignData = signal<HumanDesignData | null>(null);
+  userData = signal<UserData | null>(null);
+  buttonGroupClasses = 'p-3 text-center gradient-primary-to-secondary-85 rounded-xl';
+  titleButtonGroupClasses = 'text-primary font-merriweather font-normal text-xl';
+  gridButtonGroupClasses = 'grid grid-cols-1 auto-rows-fr gap-2 mt-3';
 
-  buttonGroupClasses = "p-3 text-center gradient-primary-to-secondary-85 rounded-xl";
-  titleButtonGroupClasses = "text-primary font-merriweather font-normal text-xl";
-  gridButtonGroupClasses = "grid grid-cols-1 auto-rows-fr gap-2 mt-3";
-
-  ngOnInit(): void {
+  async ngOnInit() {
     const userId = this.route.snapshot.parent!.paramMap.get('userId') ?? '';
     this.userId.set(userId);
-    this.humanDesignData.set(this.api.getHumanDesignData());
+    await this.getHumanDesignData();
+    await this.getUserData()
   }
 
   navigateTo(path: string) {
     this.router.navigate([`human-design/${this.userId()}/${path}`]);
   }
 
+  async getHumanDesignData() {
+    this.isLoading.set(true);
+    try {
+      const data = await firstValueFrom(this.humanDesignService.getByUserId(this.userId()));
+      this.humanDesignData.set(data);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
+      }
+      console.error(e);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async getUserData() {
+    this.isLoading.set(true);
+    try {
+      const user = await firstValueFrom(this.userService.findUserById(this.userId()));
+      this.userData.set(user);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
+      }
+      console.error(e);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
   tipoAuricoData() {
-    let data = this.humanDesignData()
-    let stringList: string[] = []
+    let data = this.humanDesignData();
+    let stringList: string[] = [];
     stringList.push(
       `Tipo Áurico: ${data?.tipo_aurico}`,
       `Estratégia: ${data?.estrategia}`,
       `Assinatura: ${data?.assinatura}`,
-      `Tema do Não-Ser: ${data?.tema_do_nao_ser}`
-    )
-    return stringList
+      `Tema do Não-Ser: ${data?.tema_do_nao_ser}`,
+    );
+    return stringList;
   }
 
   listToString(list: string[]) {
@@ -65,7 +102,7 @@ export class HumanDesignHome implements OnInit {
   canaisToStringArray(list: any[]) {
     let stringList: string[] = [];
     list.forEach((c) => {
-      let string = `${c.id}: ${c.nome}`;
+      let string = c;
       stringList.push(string);
     });
     return stringList;

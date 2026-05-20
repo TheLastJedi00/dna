@@ -5,7 +5,7 @@
         Vamos analisar o seu Mapa?
       </h1>
       <div class="grid md:grid-cols-[3fr_2fr_3fr] gap-3">
-        <app-user-data-card></app-user-data-card>
+        <app-user-data-card [userData]="userData()!"></app-user-data-card>
         <div class="grid gap-2">
           <app-dh-data-card
             title="Energia"
@@ -121,3 +121,6 @@
     <div class="h-[800px]"></div>
   }
 </section>
+@if(isLoading()){
+  <app-infinity></app-infinity>
+}
