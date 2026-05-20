@@ -3,6 +3,7 @@ import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-car
 import { FakeApi } from '../../../core/services/fake-api';
 import { NumerologyData } from '../../../core/models/numdata.model';
 import { NumDataButton } from '../../../shared/buttons/num-data-button/num-data-button';
+import { UserData } from '../../../core/models/userdata.model';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +14,9 @@ import { NumDataButton } from '../../../shared/buttons/num-data-button/num-data-
 export class Home implements OnInit {
   ngOnInit(): void {
     this.numData.set(this.api.getNumerologyData());
+    this.userData.set(this.api.getUserData())
   }
-
+  userData = signal<UserData|null>(null)
   readonly api = inject(FakeApi);
   numData = signal<NumerologyData | null>(null);
 }

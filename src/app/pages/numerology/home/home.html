@@ -2,7 +2,7 @@
   @defer (on viewport) {
     <div animate.enter="fade-in">
       <div class="grid lg:grid-cols-2 gap-3 mb-3">
-        <app-user-data-card></app-user-data-card>
+        <app-user-data-card [userData]="userData()!"></app-user-data-card>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <app-num-data-button
             title="Motivação"
