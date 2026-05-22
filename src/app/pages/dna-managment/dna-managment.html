@@ -1,5 +1,5 @@
-<app-user-panel-header></app-user-panel-header>
-<main class="pt-header min-h-screen gradient-primary-to-secondary-85">
+<app-user-panel-header [userId]="userId()"></app-user-panel-header>
+<main class="pt-header min-h-[80vh] gradient-primary-to-secondary-85">
   <section class="container mx-auto bg-white main-padding">
     <div class="flex items-center justify-between">
       <h1 class="font-merriweather text-xl text-secondary">Gerenciar Análises do DNA</h1>
@@ -10,7 +10,7 @@
       ></app-icon-text-button>
     </div>
   </section>
-  <section class="container mx-auto bg-white main-padding">
+  <section class="container mx-auto bg-white main-padding min-h-[65vh]">
     <div>
         <h2 class="text-secondary text-xl">Lista de Usuários Ativos</h2>
     </div>

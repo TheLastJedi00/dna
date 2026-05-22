@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Logo } from "../../logo/logo";
 import { UserHeaderMenu } from '../../menus/user-header-menu/user-header-menu';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class UserPanelHeader {
   router = inject(Router);
+  userId = input.required<string>()
   
   returnToHome(){
     this.router.navigate(['/dashboard'])

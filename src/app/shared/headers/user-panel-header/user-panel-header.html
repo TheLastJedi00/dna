@@ -2,5 +2,5 @@
     <button (click)="returnToHome()" class="cursor-pointer">
         <app-logo [scale]="0.25"></app-logo>
     </button>
-    <app-user-header-menu></app-user-header-menu>
+    <app-user-header-menu [userId]="userId()"></app-user-header-menu>
 </header>
