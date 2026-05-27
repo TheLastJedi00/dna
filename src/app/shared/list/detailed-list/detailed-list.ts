@@ -15,8 +15,8 @@ import { NewUserForm } from '../../forms/new-user-form/new-user-form';
 })
 export class DetailedList implements OnInit {
   private readonly userService = inject(UserService);
-  managerId = input.required<string>()
-  
+  managerId = input.required<string>();
+
   async ngOnInit() {
     this.userList.set(await this.getAllActiveUsersFirstPage());
   }

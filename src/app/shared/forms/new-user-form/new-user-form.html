@@ -6,7 +6,7 @@
 ></app-icon-text-button>
 @if (isFormOpen()) {
   <div
-    (click)="isFormOpen.set(false)"
+    (click)="onClose()"
     animate.enter="expand"
     animate.leave="collapse"
     class="fixed h-screen w-screen flex top-0 left-0 z-10 items-center justify-center bg-white/20 backdrop-blur-[2px]"
@@ -53,7 +53,7 @@
           class="w-full text-white bg-primary rounded-xl"
         ></app-icon-text-button>
         <app-icon-text-button
-          (click)="isFormOpen.set(false)"
+          (click)="onClose()"
           icon="arrow-left"
           text="Voltar"
           class="w-full text-primary bg-white rounded-xl"

@@ -16,14 +16,15 @@ import { Infinity } from '../../loading/infinity/infinity';
 export class NewUserForm {
   private fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
-  onCloseModal = output<void>();
+  modalClosed = output<void>()
   isPassVisible = signal<boolean>(false);
   passwordInputType = signal<string>('password');
   isFormOpen = signal(false);
   isLoading = signal(false);
 
-  onClose() {
-    this.onCloseModal.emit();
+  onClose(){
+    this.isFormOpen.set(false)
+    this.modalClosed.emit()
   }
 
   togglePassVisibility() {

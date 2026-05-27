@@ -1,6 +1,6 @@
 <section class="grid gap-3">
   <div>
-    <app-new-user-form (onCloseModal)="getAllActiveUsersFirstPage()"></app-new-user-form>
+    <app-new-user-form (modalClosed)="getAllActiveUsersFirstPage()"></app-new-user-form>
   </div>
   <div class="grid md:grid-cols-3 gap-3">
     @for (user of userList(); track $index) {
