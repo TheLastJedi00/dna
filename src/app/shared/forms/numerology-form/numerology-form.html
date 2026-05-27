@@ -1,0 +1,223 @@
+@if (dnaStatus()?.numerology) {
+  <div class="bg-white dna-data">
+    <h3 class="text-secondary font-merriweather text-xl">Numerologia</h3>
+    <div>
+      <p><b>Motivação:</b> {{ numerologyData()?.perfil?.motivacao }}</p>
+      <p><b>Impressão:</b> {{ numerologyData()?.perfil?.impressao }}</p>
+      <p><b>Expressão:</b> {{ numerologyData()?.perfil?.expressao }}</p>
+      <p><b>Destino:</b> {{ numerologyData()?.perfil?.destino }}</p>
+      <p><b>Missão:</b> {{ numerologyData()?.perfil?.missao }}</p>
+      <p><b>Data Natalícia:</b> {{ numerologyData()?.perfil?.data_natalicia }}</p>
+      <p><b>Número Psíquico:</b> {{ numerologyData()?.perfil?.numero_psiquico }}</p>
+      <p><b>Talento Oculto:</b> {{ numerologyData()?.perfil?.talento_oculto }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Ciclos de Vida:</b></p>
+      @for (ciclo of numerologyData()?.ciclos_de_vida; track $index) {
+        <p><b>Ciclo {{ $index + 1 }}:</b> Início: {{ ciclo.inicio }} | Fim: {{ ciclo.fim }} | Número: {{ ciclo.numero }}</p>
+      }
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Desafios:</b></p>
+      @for (desafio of numerologyData()?.desafios; track $index) {
+        <p><b>Desafio {{ $index + 1 }}:</b> Início: {{ desafio.inicio }} | Fim: {{ desafio.fim }} | Número: {{ desafio.numero }}</p>
+      }
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Momentos Decisivos:</b></p>
+      @for (momento of numerologyData()?.momentos_decisivos; track $index) {
+        <p><b>Momento {{ $index + 1 }}:</b> Início: {{ momento.inicio }} | Fim: {{ momento.fim }} | Número: {{ momento.numero }}</p>
+      }
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Ano Pessoal:</b></p>
+      <p><b>Atual:</b> Número: {{ numerologyData()?.ano_pessoal?.atual?.numero }} | Validade: {{ numerologyData()?.ano_pessoal?.atual?.validade }}</p>
+      <p><b>Próximo:</b> Número: {{ numerologyData()?.ano_pessoal?.proximo?.numero }} | Validade: {{ numerologyData()?.ano_pessoal?.proximo?.validade }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Extras:</b></p>
+      <p><b>Tendências Ocultas:</b> {{ numerologyData()?.extras?.tendencias_ocultas }}</p>
+      <p><b>Respostas Subconscientes:</b> {{ numerologyData()?.extras?.respostas_subconscientes }}</p>
+      <p><b>Números Favoráveis:</b> {{ numerologyData()?.extras?.numeros_favoraveis }}</p>
+    </div>
+    @if (isSupplyCreated()) {
+      <app-icon-text-button
+        (click)="router.navigate(['numerology', maestraId()])"
+        class="w-full bg-secondary text-white rounded-xl"
+        icon="magnifying-glass"
+        text="Ver Análise do DNA"
+      ></app-icon-text-button>
+    } @else {
+      <app-icon-text-button
+        (click)="createAllSupply()"
+        icon="sparkles"
+        text="Gerar Análise do DNA"
+        class="w-full bg-secondary text-white rounded-xl"
+      ></app-icon-text-button>
+    }
+  </div>
+} @else {
+  <form [formGroup]="numForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
+    <h3 class="text-secondary font-merriweather text-xl">Numerologia</h3>
+    <input formControlName="motivacao" type="number" placeholder="Motivação" />
+    <input formControlName="impressao" type="number" placeholder="Impressão" />
+    <input formControlName="expressao" type="number" placeholder="Expressão" />
+    <input formControlName="destino" type="number" placeholder="Destino" />
+    <input formControlName="missao" type="number" placeholder="Missão" />
+    <input formControlName="data_natalicia" type="number" placeholder="Data Natalícia" />
+    <input formControlName="numero_psiquico" type="number" placeholder="Número Psíquico" />
+    <input formControlName="talento_oculto" type="number" placeholder="Talento Oculto" />
+
+    <hr class="opacity-30 mt-3" />
+    <p>Ciclos de Vida</p>
+    <div class="pl-5 grid gap-3">
+      <p>Ciclo 1</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="ciclo1_inicio" type="number" placeholder="Início" />
+        <input formControlName="ciclo1_fim" type="text" placeholder="Fim" />
+        <input formControlName="ciclo1_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Ciclo 2</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="ciclo2_inicio" type="number" placeholder="Início" />
+        <input formControlName="ciclo2_fim" type="text" placeholder="Fim" />
+        <input formControlName="ciclo2_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Ciclo 3</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="ciclo3_inicio" type="number" placeholder="Início" />
+        <input formControlName="ciclo3_fim" type="text" placeholder="Fim" />
+        <input formControlName="ciclo3_numero" type="number" placeholder="Número" />
+      </div>
+    </div>
+
+    <hr class="opacity-30 mt-3" />
+    <p>Desafios</p>
+    <div class="pl-5 grid gap-3">
+      <p>Desafio 1</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="desafio1_inicio" type="number" placeholder="Início" />
+        <input formControlName="desafio1_fim" type="text" placeholder="Fim" />
+        <input formControlName="desafio1_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Desafio 2</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="desafio2_inicio" type="number" placeholder="Início" />
+        <input formControlName="desafio2_fim" type="text" placeholder="Fim" />
+        <input formControlName="desafio2_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Desafio 3</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="desafio3_inicio" type="number" placeholder="Início" />
+        <input formControlName="desafio3_fim" type="text" placeholder="Fim" />
+        <input formControlName="desafio3_numero" type="number" placeholder="Número" />
+      </div>
+    </div>
+
+    <hr class="opacity-30 mt-3" />
+    <p>Momentos Decisivos</p>
+    <div class="pl-5 grid gap-3">
+      <p>Momento 1</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="momento1_inicio" type="number" placeholder="Início" />
+        <input formControlName="momento1_fim" type="text" placeholder="Fim" />
+        <input formControlName="momento1_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Momento 2</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="momento2_inicio" type="number" placeholder="Início" />
+        <input formControlName="momento2_fim" type="text" placeholder="Fim" />
+        <input formControlName="momento2_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Momento 3</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="momento3_inicio" type="number" placeholder="Início" />
+        <input formControlName="momento3_fim" type="text" placeholder="Fim" />
+        <input formControlName="momento3_numero" type="number" placeholder="Número" />
+      </div>
+      <p>Momento 4</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="momento4_inicio" type="number" placeholder="Início" />
+        <input formControlName="momento4_fim" type="text" placeholder="Fim" />
+        <input formControlName="momento4_numero" type="number" placeholder="Número" />
+      </div>
+    </div>
+
+    <hr class="opacity-30 mt-3" />
+    <p>Ano Pessoal</p>
+    <div class="pl-5 grid gap-3">
+      <p>Atual</p>
+      <div class="grid grid-cols-2 gap-3">
+        <input formControlName="ano_atual_numero" type="number" placeholder="Número" />
+        <input formControlName="ano_atual_validade" type="text" placeholder="Validade" />
+      </div>
+      <p>Próximo</p>
+      <div class="grid grid-cols-2 gap-3">
+        <input formControlName="ano_proximo_numero" type="number" placeholder="Número" />
+        <input formControlName="ano_proximo_validade" type="text" placeholder="Validade" />
+      </div>
+    </div>
+
+    <hr class="opacity-30 mt-3" />
+    <p>Extras</p>
+    <input formControlName="respostas_subconscientes" type="number" placeholder="Respostas Subconscientes" />
+
+    <p>Tendências Ocultas</p>
+    <div formArrayName="tendencias_ocultas" class="grid gap-3">
+      @for (tendencia of tendenciasOcultas.controls; track tendencia) {
+        <div class="grid grid-cols-[4fr_1fr] gap-3">
+          <input [formControlName]="$index" type="number" placeholder="Número" class="w-full" />
+          <app-icon-text-button
+            (click)="removeTendencia($index)"
+            [disabled]="tendenciasOcultas.controls.length <= 1 ? true : false"
+            icon=""
+            text="Remover"
+            class="bg-[red]/70 text-white rounded-xl"
+          ></app-icon-text-button>
+        </div>
+      }
+    </div>
+    <app-icon-text-button
+      type="button"
+      (click)="addTendencia()"
+      icon="plus"
+      text="Nova Tendência"
+      class="text-secondary shadow-sm rounded-xl w-full"
+    ></app-icon-text-button>
+
+    <p>Números Favoráveis</p>
+    <div formArrayName="numeros_favoraveis" class="grid gap-3">
+      @for (numero of numerosFavoraveis.controls; track numero) {
+        <div class="grid grid-cols-[4fr_1fr] gap-3">
+          <input [formControlName]="$index" type="number" placeholder="Número" class="w-full" />
+          <app-icon-text-button
+            (click)="removeNumeroFavoravel($index)"
+            [disabled]="numerosFavoraveis.controls.length <= 1 ? true : false"
+            icon=""
+            text="Remover"
+            class="bg-[red]/70 text-white rounded-xl"
+          ></app-icon-text-button>
+        </div>
+      }
+    </div>
+    <app-icon-text-button
+      type="button"
+      (click)="addNumeroFavoravel()"
+      icon="plus"
+      text="Novo Número Favorável"
+      class="text-secondary shadow-sm rounded-xl w-full"
+    ></app-icon-text-button>
+
+    <app-icon-text-button
+      [disabled]="!numForm.valid"
+      (click)="saveNumerologyData()"
+      icon="plus"
+      text="Salvar Dados"
+      class="bg-primary text-white rounded-xl w-full"
+    ></app-icon-text-button>
+  </form>
+}
+
+@if (isLoading()) {
+  <app-infinity [message]="loadingMessage()"></app-infinity>
+}

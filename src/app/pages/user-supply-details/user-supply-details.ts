@@ -9,10 +9,11 @@ import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../core/models/userdata.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HumanDesignForm } from '../../shared/forms/human-design-form/human-design-form';
+import { NumerologyForm } from '../../shared/forms/numerology-form/numerology-form';
 
 @Component({
   selector: 'app-user-supply-details',
-  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, HumanDesignForm],
+  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, HumanDesignForm, NumerologyForm],
   templateUrl: './user-supply-details.html',
   styleUrl: './user-supply-details.scss',
 })
