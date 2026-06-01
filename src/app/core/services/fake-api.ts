@@ -137,6 +137,7 @@ export class FakeApi {
 
   getNumerologyData(): NumerologyData {
     return {
+      userId: "1234",
       perfil: {
         motivacao: 6,
         impressao: 1,

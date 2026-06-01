@@ -134,6 +134,7 @@ export class NumerologyForm implements OnInit {
     const form = this.numForm.getRawValue();
     try {
       const numData: NumerologyData = {
+        userId: this.maestraId(),
         perfil: {
           motivacao: form.motivacao!,
           impressao: form.impressao!,

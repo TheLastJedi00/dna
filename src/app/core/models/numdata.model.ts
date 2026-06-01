@@ -10,6 +10,7 @@ export interface AnoPessoal {
 }
 
 export interface NumerologyData {
+  userId: string;
   perfil: {
     motivacao: number;
     impressao: number;
