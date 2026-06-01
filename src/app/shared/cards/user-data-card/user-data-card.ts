@@ -1,5 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { FakeApi } from '../../../core/services/fake-api';
+import { Component, input } from '@angular/core';
 import { UserData } from '../../../core/models/userdata.model';
 
 @Component({

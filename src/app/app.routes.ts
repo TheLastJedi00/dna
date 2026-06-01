@@ -65,8 +65,10 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'numerology',
+    path: 'numerology/:userId',
     component: Numerology,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [{ path: '', component: Home }],
   },
 ];

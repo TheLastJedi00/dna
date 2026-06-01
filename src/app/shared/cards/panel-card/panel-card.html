@@ -9,7 +9,7 @@
         description="Descubra como sua energia opera e como tomar decisões alinhadas com sua essência."
       ></app-dashboard-button>
       <app-dashboard-button
-        (action)="this.router.navigate(['numerology'])"
+        (action)="this.router.navigate([`numerology/${userId()}`])"
         imgSrc="https://i.imgur.com/hYZJdpD.png"
         title="Numerologia"
         subtitle="A vibração do seu destino"

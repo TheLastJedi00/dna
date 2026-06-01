@@ -1,4 +1,4 @@
-<app-user-panel-header userId="teste"></app-user-panel-header>
+<app-user-panel-header [userId]="userId()"></app-user-panel-header>
 <main class="pt-header gradient-primary-to-secondary-85">
   <section class="mx-auto container main-padding bg-white">
     <app-dna-title-card
@@ -8,10 +8,10 @@
       subTitle="A vibração do seu destino."
     ></app-dna-title-card>
     <app-dna-description-card
-      [innerHtml]="intro"
+      [innerHtml]="descriptionHtml()"
       title="O que é a Numerologia Cabalística?"
     ></app-dna-description-card>
   </section>
-  <router-outlet/>
+  <router-outlet></router-outlet>
 </main>
-<app-user-panel-footer></app-user-panel-footer>
+<app-user-panel-footer [userId]="userId()"></app-user-panel-footer>
