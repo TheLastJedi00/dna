@@ -17,6 +17,7 @@ interface AnosPessoais {
 export class NumDataButton {
   title = input<string>("Título")
   data = input<number|null>(null)
+  dataArray = input<number[]|null>(null)
   periodTitle = input<string|null>(null)
   periods = input<PeriodoNumerologico[]|null>(null)
   cols = input<number>(3)

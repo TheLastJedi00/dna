@@ -1,77 +1,102 @@
 <div class="mx-auto container bg-white main-padding">
-  @defer (on viewport) {
-    <div animate.enter="fade-in">
-      <div class="grid lg:grid-cols-2 gap-3 mb-3">
-        <app-user-data-card [userData]="userData()!"></app-user-data-card>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+  @if (numData() && userData()) {
+    @defer (on viewport) {
+      <div animate.enter="fade-in">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
           <app-num-data-button
+            (click)="navigateTo('motivacao')"
             title="Motivação"
             [data]="numData()!.perfil.motivacao"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('impressao')"
             title="Impressão"
             [data]="numData()!.perfil.impressao"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('expressao')"
             title="Expressão"
             [data]="numData()!.perfil.expressao"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('destino')"
             title="Destino"
             [data]="numData()!.perfil.destino"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('missao')"
             title="Missão"
             [data]="numData()!.perfil.missao"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('numero-natalicio')"
             title="Data Natalícia"
             [data]="numData()!.perfil.data_natalicia"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('numero-psiquico')"
             title="Número Psíquico"
             [data]="numData()!.perfil.numero_psiquico"
           ></app-num-data-button>
 
           <app-num-data-button
+            (click)="navigateTo('talento-oculto')"
             title="Talento Oculto"
             [data]="numData()!.perfil.talento_oculto"
           ></app-num-data-button>
+
+          <app-num-data-button
+            (click)="navigateTo('tendencias-ocultas')"
+            title="Tendências Ocultas"
+            [dataArray]="numData()!.extras.tendencias_ocultas"
+          ></app-num-data-button>
+          <app-num-data-button
+            (click)="navigateTo('resposta-subconsciente')"
+            title="Resposta Subconsciente"
+            [data]="numData()!.extras!.respostas_subconscientes"
+          ></app-num-data-button>
         </div>
-        <app-num-data-button
-          title="Ciclos de Vida"
-          [periods]="numData()!.ciclos_de_vida"
-          periodTitle="Ciclo"
-        ></app-num-data-button>
-        <app-num-data-button
-          title="Desafios de Vida"
-          periodTitle="Desafio"
-          [periods]="numData()!.desafios"
-        ></app-num-data-button>
+
+        <div class="grid md:grid-cols-2 gap-3 mb-3">
+          <app-num-data-button
+            (click)="navigateTo('ciclos-de-vida')"
+            title="Ciclos de Vida"
+            [periods]="numData()!.ciclos_de_vida"
+            periodTitle="Ciclo"
+          ></app-num-data-button>
+          <app-num-data-button
+            (click)="navigateTo('desafios')"
+            title="Desafios de Vida"
+            periodTitle="Desafio"
+            [periods]="numData()!.desafios"
+          ></app-num-data-button>
+        </div>
+        <div class="grid sm:grid-cols-[4fr_2fr] gap-3 mb-3">
+          <app-num-data-button
+            (click)="navigateTo('momentos-decisivos')"
+            [cols]="4"
+            title="Momentos decisivos"
+            periodTitle="Momento"
+            [periods]="numData()!.momentos_decisivos"
+          ></app-num-data-button>
+          <app-num-data-button
+            (click)="navigateTo('ano-pessoal')"
+            [isAnoPessoal]="true"
+            [anoPessoalData]="numData()!.ano_pessoal"
+          ></app-num-data-button>
+        </div>
       </div>
-      <div class="grid sm:grid-cols-[4fr_2fr] gap-3">
-        <app-num-data-button
-          [cols]="4"
-          title="Momentos decisivos"
-          periodTitle="Momento"
-          [periods]="numData()!.momentos_decisivos"
-        ></app-num-data-button>
-        <app-num-data-button
-          [isAnoPessoal]="true"
-          [anoPessoalData]="numData()!.ano_pessoal"
-        ></app-num-data-button>
-      </div>
-    </div>
-  } @placeholder {
-    <div class="h-[800px]"></div>
+    } @placeholder {
+      <div class="h-[800px]"></div>
+    }
   }
 </div>
-@if(isLoading()){
+@if (isLoading()) {
   <app-infinity></app-infinity>
 }

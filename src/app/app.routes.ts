@@ -11,6 +11,7 @@ import { Encarnacao } from './pages/human-design/encarnacao/encarnacao';
 import { Centros } from './pages/human-design/centros/centros';
 import { Numerology } from './pages/numerology/numerology';
 import { Home } from './pages/numerology/home/home';
+import { NumerologyDetail } from './pages/numerology/numerology-detail/numerology-detail';
 import { authGuard } from './core/guards/auth-guard';
 import { Managment } from './pages/managment/managment';
 import { roleGuard } from './core/guards/role-guard';
@@ -69,6 +70,9 @@ export const routes: Routes = [
     component: Numerology,
     canActivate: [authGuard],
     canActivateChild: [authGuard],
-    children: [{ path: '', component: Home }],
+    children: [
+      { path: '', component: Home },
+      { path: ':module', component: NumerologyDetail },
+    ],
   },
 ];

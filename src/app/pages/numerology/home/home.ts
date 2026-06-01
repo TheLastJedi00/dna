@@ -4,7 +4,7 @@ import { NumerologyService } from '../../../core/services/numerology.service';
 import { NumerologyData } from '../../../core/models/numdata.model';
 import { NumDataButton } from '../../../shared/buttons/num-data-button/num-data-button';
 import { UserData } from '../../../core/models/userdata.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../core/services/user.service';
@@ -18,6 +18,7 @@ import { Infinity } from '../../../shared/loading/infinity/infinity';
 })
 export class Home implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly numerologyService = inject(NumerologyService);
   private readonly userService = inject(UserService);
   readonly userId = signal('');
@@ -30,6 +31,10 @@ export class Home implements OnInit {
     this.userId.set(userId);
     await this.getNumerologyData();
     await this.getUserData();
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([`numerology/${this.userId()}/${path}`]);
   }
 
   async getNumerologyData() {
