@@ -10,10 +10,11 @@ import { UserData } from '../../core/models/userdata.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HumanDesignForm } from '../../shared/forms/human-design-form/human-design-form';
 import { NumerologyForm } from '../../shared/forms/numerology-form/numerology-form';
+import { AstrologyForm } from '../../shared/forms/astrology-form/astrology-form';
 
 @Component({
   selector: 'app-user-supply-details',
-  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, HumanDesignForm, NumerologyForm],
+  imports: [UserPanelHeader, UserPanelFooter, IconTextButton, Infinity, HumanDesignForm, NumerologyForm, AstrologyForm],
   templateUrl: './user-supply-details.html',
   styleUrl: './user-supply-details.scss',
 })

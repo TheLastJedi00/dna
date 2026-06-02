@@ -18,6 +18,7 @@ export interface TriadeAstrologica {
 }
 
 export interface LeituraAstrologica {
+  userId?: string;
   triadeAstrologica: TriadeAstrologica;
   meioDoCeu: PontoAstrologico;
   dinheiro: PontoAstrologico;

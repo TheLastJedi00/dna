@@ -1,0 +1,139 @@
+@if (dnaStatus()?.astrology) {
+  <div class="bg-white dna-data">
+    <h3 class="text-secondary font-merriweather text-xl">Astrologia</h3>
+    <div>
+      <p><b>Tríade Astrológica</b></p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Sol</b></p>
+      <p><b>Signo:</b> {{ astrologyData()?.triadeAstrologica?.sol?.signo }}</p>
+      <p><b>Casa:</b> {{ astrologyData()?.triadeAstrologica?.sol?.casaAstrologica }}</p>
+      <p><b>Planetas:</b> {{ astrologyData()?.triadeAstrologica?.sol?.planetas }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Ascendente</b></p>
+      <p><b>Signo:</b> {{ astrologyData()?.triadeAstrologica?.ascendente?.signo }}</p>
+      <p><b>Casa:</b> {{ astrologyData()?.triadeAstrologica?.ascendente?.casaAstrologica }}</p>
+      <p><b>Planetas:</b> {{ astrologyData()?.triadeAstrologica?.ascendente?.planetas }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Lua</b></p>
+      <p><b>Signo:</b> {{ astrologyData()?.triadeAstrologica?.lua?.signo }}</p>
+      <p><b>Casa:</b> {{ astrologyData()?.triadeAstrologica?.lua?.casaAstrologica }}</p>
+      <p><b>Planetas:</b> {{ astrologyData()?.triadeAstrologica?.lua?.planetas }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Casas Importantes</b></p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Meio do Céu (Missão)</b></p>
+      <p><b>Signo:</b> {{ astrologyData()?.meioDoCeu?.signo }}</p>
+      <p><b>Casa:</b> {{ astrologyData()?.meioDoCeu?.casaAstrologica }}</p>
+      <p><b>Planetas:</b> {{ astrologyData()?.meioDoCeu?.planetas }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Dinheiro</b></p>
+      <p><b>Signo:</b> {{ astrologyData()?.dinheiro?.signo }}</p>
+      <p><b>Casa:</b> {{ astrologyData()?.dinheiro?.casaAstrologica }}</p>
+      <p><b>Planetas:</b> {{ astrologyData()?.dinheiro?.planetas }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Comunicação</b></p>
+      <p><b>Signo:</b> {{ astrologyData()?.comunicacao?.signo }}</p>
+      <p><b>Casa:</b> {{ astrologyData()?.comunicacao?.casaAstrologica }}</p>
+      <p><b>Planetas:</b> {{ astrologyData()?.comunicacao?.planetas }}</p>
+    </div>
+    <div class="border-t border-black/70">
+      <p><b>Elementos</b></p>
+      <p><b>Fogo:</b> {{ astrologyData()?.elementos?.fogo }}</p>
+      <p><b>Terra:</b> {{ astrologyData()?.elementos?.terra }}</p>
+      <p><b>Ar:</b> {{ astrologyData()?.elementos?.ar }}</p>
+      <p><b>Água:</b> {{ astrologyData()?.elementos?.agua }}</p>
+    </div>
+    @if (isSupplyCreated()) {
+      <app-icon-text-button
+        (click)="router.navigate(['astrology', maestraId()])"
+        class="w-full bg-secondary text-white rounded-xl"
+        icon="magnifying-glass"
+        text="Ver Análise do DNA"
+      ></app-icon-text-button>
+    } @else {
+      <app-icon-text-button
+        (click)="createAllSupply()"
+        icon="sparkles"
+        text="Gerar Análise do DNA"
+        class="w-full bg-secondary text-white rounded-xl"
+      ></app-icon-text-button>
+    }
+  </div>
+} @else {
+  <form [formGroup]="astroForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
+    <h3 class="text-secondary font-merriweather text-xl">Astrologia</h3>
+
+    <p>Tríade Astrológica</p>
+    <div class="pl-5 grid gap-3">
+      <p>Sol</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="triade_sol_signo" type="text" placeholder="Signo" />
+        <input formControlName="triade_sol_casa" type="number" placeholder="Casa" />
+        <input formControlName="triade_sol_planetas" type="text" placeholder="Planetas" />
+      </div>
+      <p>Ascendente</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="triade_ascendente_signo" type="text" placeholder="Signo" />
+        <input formControlName="triade_ascendente_casa" type="number" placeholder="Casa" />
+        <input formControlName="triade_ascendente_planetas" type="text" placeholder="Planetas" />
+      </div>
+      <p>Lua</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="triade_lua_signo" type="text" placeholder="Signo" />
+        <input formControlName="triade_lua_casa" type="number" placeholder="Casa" />
+        <input formControlName="triade_lua_planetas" type="text" placeholder="Planetas" />
+      </div>
+    </div>
+
+    <hr class="opacity-30 mt-3" />
+    <p>Casas Importantes</p>
+    <div class="pl-5 grid gap-3">
+      <p>Meio do Céu (Missão)</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="meio_ceu_signo" type="text" placeholder="Signo" />
+        <input formControlName="meio_ceu_casa" type="number" placeholder="Casa" />
+        <input formControlName="meio_ceu_planetas" type="text" placeholder="Planetas" />
+      </div>
+      <p>Dinheiro</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="dinheiro_signo" type="text" placeholder="Signo" />
+        <input formControlName="dinheiro_casa" type="number" placeholder="Casa" />
+        <input formControlName="dinheiro_planetas" type="text" placeholder="Planetas" />
+      </div>
+      <p>Comunicação</p>
+      <div class="grid grid-cols-3 gap-3">
+        <input formControlName="comunicacao_signo" type="text" placeholder="Signo" />
+        <input formControlName="comunicacao_casa" type="number" placeholder="Casa" />
+        <input formControlName="comunicacao_planetas" type="text" placeholder="Planetas" />
+      </div>
+    </div>
+
+    <hr class="opacity-30 mt-3" />
+    <p>Elementos</p>
+    <div class="grid grid-cols-2 gap-3">
+      <input formControlName="elementos_fogo" type="number" placeholder="Fogo" />
+      <input formControlName="elementos_terra" type="number" placeholder="Terra" />
+      <input formControlName="elementos_ar" type="number" placeholder="Ar" />
+      <input formControlName="elementos_agua" type="number" placeholder="Água" />
+    </div>
+
+    <app-icon-text-button
+      [disabled]="!astroForm.valid"
+      (click)="saveAstrologyData()"
+      icon="plus"
+      text="Salvar Dados"
+      class="bg-primary text-white rounded-xl w-full"
+    ></app-icon-text-button>
+  </form>
+}
+
+@if (isLoading()) {
+  <app-infinity [message]="loadingMessage()"></app-infinity>
+}
