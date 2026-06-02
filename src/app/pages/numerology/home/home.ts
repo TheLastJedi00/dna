@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-card';
 import { NumerologyService } from '../../../core/services/numerology.service';
 import { NumerologyData } from '../../../core/models/numdata.model';
 import { NumDataButton } from '../../../shared/buttons/num-data-button/num-data-button';
@@ -12,7 +11,7 @@ import { Infinity } from '../../../shared/loading/infinity/infinity';
 
 @Component({
   selector: 'app-home',
-  imports: [UserDataCard, NumDataButton, Infinity],
+  imports: [NumDataButton, Infinity],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
