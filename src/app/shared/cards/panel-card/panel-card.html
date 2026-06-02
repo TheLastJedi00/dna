@@ -16,6 +16,7 @@
         description="Entenda os ciclos numéricos que regem sua vida e os propósitos por trás do seu nome."
       ></app-dashboard-button>
       <app-dashboard-button
+        (action)="this.router.navigate([`astrology/${userId()}`])"
         imgSrc="https://i.imgur.com/Wh3IKVb.png"
         title="Astrologia"
         subtitle="O mapa do seu sucesso"

@@ -1,0 +1,17 @@
+<app-user-panel-header [userId]="userId()"></app-user-panel-header>
+<main class="pt-header gradient-primary-to-secondary-85">
+  <section class="mx-auto container main-padding bg-white">
+    <app-dna-title-card
+      imgSrc="https://i.imgur.com/Wh3IKVb.png"
+      imgAlt="Astrologia"
+      title="Astrologia"
+      subTitle="O mapa do seu sucesso."
+    ></app-dna-title-card>
+    <app-dna-description-card
+      [innerHtml]="descriptionHtml()"
+      title="O que é a Astrologia Ocidental?"
+    ></app-dna-description-card>
+  </section>
+  <router-outlet></router-outlet>
+</main>
+<app-user-panel-footer [userId]="userId()"></app-user-panel-footer>

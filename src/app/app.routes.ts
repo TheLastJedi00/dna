@@ -17,6 +17,8 @@ import { Managment } from './pages/managment/managment';
 import { roleGuard } from './core/guards/role-guard';
 import { DnaManagment } from './pages/dna-managment/dna-managment';
 import { UserSupplyDetails } from './pages/user-supply-details/user-supply-details';
+import { Astrology } from './pages/astrology/astrology';
+import { AstrologyHome } from './pages/astrology/astrology-home/astrology-home';
 
 export const routes: Routes = [
   { path: '', component: Landing },
@@ -73,6 +75,15 @@ export const routes: Routes = [
     children: [
       { path: '', component: Home },
       { path: ':module', component: NumerologyDetail },
+    ],
+  },
+  {
+    path: 'astrology/:userId',
+    component: Astrology,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
+    children: [
+      { path: '', component: AstrologyHome },
     ],
   },
 ];

@@ -3,6 +3,7 @@ import { TopicList } from '../models/topiclist.model';
 import { HumanDesignData } from '../models/dhdata.model';
 import { UserData } from '../models/userdata.model';
 import { NumerologyData } from '../models/numdata.model';
+import { LeituraAstrologica } from '../models/astrology.model';
 
 @Injectable({
   providedIn: 'root',
@@ -173,6 +174,20 @@ export class FakeApi {
         respostas_subconscientes: 7,
         numeros_favoraveis: [1, 6, 12, 13, 19, 20, 26, 27],
       },
+    };
+  }
+
+  getAstrologyData(): LeituraAstrologica {
+    return {
+      triadeAstrologica: {
+        sol: { signo: 'Leão', casaAstrologica: 5, planetas: 'Sol' },
+        ascendente: { signo: 'Escorpião', casaAstrologica: 1, planetas: null },
+        lua: { signo: 'Peixes', casaAstrologica: 4, planetas: 'Lua' },
+      },
+      meioDoCeu: { signo: 'Leão', casaAstrologica: 10, planetas: 'Sol' },
+      dinheiro: { signo: 'Sagitário', casaAstrologica: 2, planetas: 'Júpiter' },
+      comunicacao: { signo: 'Virgem', casaAstrologica: 3, planetas: 'Mercúrio' },
+      elementos: { fogo: 4, terra: 2, ar: 3, agua: 3 },
     };
   }
 

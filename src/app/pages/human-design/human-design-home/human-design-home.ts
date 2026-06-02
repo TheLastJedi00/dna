@@ -60,7 +60,7 @@ export class HumanDesignHome implements OnInit {
   async getUserData() {
     this.isLoading.set(true);
     try {
-      const user = await firstValueFrom(this.userService.findUserById(this.userId()));
+      const user = await firstValueFrom(this.userService.findMe(this.userId()));
       this.userData.set(user);
     } catch (e) {
       if (e instanceof HttpErrorResponse) {

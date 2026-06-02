@@ -1,0 +1,101 @@
+<section class="container mx-auto main-padding bg-white">
+  @defer (on viewport) {
+    <div animate.enter="fade-in">
+      <h1 class="text-center font-merriweather text-primary text-xl mb-4">
+        Vamos analisar o seu Mapa?
+      </h1>
+      <div class="grid md:grid-cols-[3fr_2fr] gap-3">
+        <app-user-data-card [userData]="userData()!"></app-user-data-card>
+        <app-astro-data-button
+          [disabled]="true"
+          icon="sparkles"
+          title="Elementos"
+          [dataArray]="elementosToStringArray()"
+        ></app-astro-data-button>
+      </div>
+
+      <div class="mt-3 mb-2" [ngClass]="buttonGroupClasses">
+        <b [ngClass]="titleButtonGroupClasses">Tríade Astrológica</b>
+        <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-3">
+          <app-astro-data-button
+            (click)="navigateTo('sol')"
+            icon="sol-astro"
+            title="Sol"
+            [dataArray]="pontoToStringArray(astrologyData()!.triadeAstrologica.sol)"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            (click)="navigateTo('ascendente')"
+            icon="terra-astro"
+            title="Ascendente"
+            [dataArray]="pontoToStringArray(astrologyData()!.triadeAstrologica.ascendente)"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            (click)="navigateTo('lua')"
+            icon="lua-astro"
+            title="Lua"
+            [dataArray]="pontoToStringArray(astrologyData()!.triadeAstrologica.lua)"
+          ></app-astro-data-button>
+        </div>
+      </div>
+
+      <div class="mb-2" [ngClass]="buttonGroupClasses">
+        <b [ngClass]="titleButtonGroupClasses">Casas Importantes</b>
+        <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-3">
+          <app-astro-data-button
+            (click)="navigateTo('meio-do-ceu')"
+            icon="sol-astro"
+            title="Meio do Céu (Missão)"
+            [dataArray]="pontoToStringArray(astrologyData()!.meioDoCeu)"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            (click)="navigateTo('dinheiro')"
+            icon="chart-pie"
+            title="Dinheiro"
+            [dataArray]="pontoToStringArray(astrologyData()!.dinheiro)"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            (click)="navigateTo('comunicacao')"
+            icon="chat-bubble"
+            title="Comunicação"
+            [dataArray]="pontoToStringArray(astrologyData()!.comunicacao)"
+          ></app-astro-data-button>
+        </div>
+      </div>
+
+      <div [ngClass]="buttonGroupClasses">
+        <b [ngClass]="titleButtonGroupClasses">Elementos</b>
+        <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-4">
+          <app-astro-data-button
+            [disabled]="true"
+            icon="elemento-fogo"
+            title="Fogo"
+            [data]="astrologyData()!.elementos.fogo.toString()"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            [disabled]="true"
+            icon="elemento-terra"
+            title="Terra"
+            [data]="astrologyData()!.elementos.terra.toString()"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            [disabled]="true"
+            icon="elemento-ar"
+            title="Ar"
+            [data]="astrologyData()!.elementos.ar.toString()"
+          ></app-astro-data-button>
+          <app-astro-data-button
+            [disabled]="true"
+            icon="elemento-agua"
+            title="Água"
+            [data]="astrologyData()!.elementos.agua.toString()"
+          ></app-astro-data-button>
+        </div>
+      </div>
+    </div>
+  } @placeholder {
+    <div class="h-[800px]"></div>
+  }
+</section>
+@if(isLoading()){
+  <app-infinity></app-infinity>
+}
