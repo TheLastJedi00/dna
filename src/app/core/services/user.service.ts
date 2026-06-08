@@ -30,4 +30,8 @@ export class UserService {
   createMaestra(user: UserData) {
     return this.http.post<UserData>(`${this.api}/maestra`, user);
   }
+
+  deleteUser(userId: string){
+    return this.http.delete<UserData>(`${this.api}/${userId}`);
+  }
 }

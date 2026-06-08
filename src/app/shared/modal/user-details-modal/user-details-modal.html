@@ -16,7 +16,7 @@
         <p>{{ userData().birthPlace }}</p>
       </div>
       <app-icon-text-button
-      (click)="router.navigate([`user-supply/${managerId()}/${userData().id}`])"
+        (click)="router.navigate([`user-supply/${managerId()}/${userData().id}`])"
         icon="magnifying-glass"
         text="Detalhes"
         class="bg-white rounded-xl text-secondary shadow-xl w-full"
@@ -29,6 +29,7 @@
             class="bg-secondary rounded-xl text-white"
           ></app-icon-text-button>
           <app-icon-text-button
+            (click)="deleteUser()"
             icon="lock-closed"
             text="Desativar"
             class="bg-[red] rounded-xl text-white"
