@@ -10,7 +10,10 @@
       <p><b>Tema do Não-Ser:</b> {{ humanDesignData()?.tema_do_nao_ser }}</p>
       <p><b>Autoridade:</b> {{ humanDesignData()?.autoridade }}</p>
       <p><b>Perfil:</b> {{ humanDesignData()?.perfil }}</p>
-      <p><b>Canais:</b> {{ humanDesignData()?.canais }}</p>
+      <p><b>Canais:</b></p>
+      @for (canal of humanDesignData()?.canais; track canal.id) {
+        <p>{{ canal.id }}: {{ canal.nome }}</p>
+      }
 
       <div class="border-t border-black/70">
         <p><b>Centros:</b></p>
@@ -73,8 +76,9 @@
     <p>Canais</p>
     <div formArrayName="canais" class="grid gap-3">
       @for (canal of canais.controls; track canal) {
-        <div class="grid grid-cols-[4fr_1fr] gap-3">
-          <input [formControlName]="$index" type="text" placeholder="10-10: Canal" class="w-full" />
+        <div [formGroupName]="$index" class="grid grid-cols-[1fr_2fr_1fr] gap-3 w-full">
+          <input formControlName="id" type="text" placeholder="10-10" class="w-[5rem]"/>
+          <input formControlName="nome" type="text" placeholder="Nome do Canal"/>
           <app-icon-text-button
             (click)="removeCanal($index)"
             [disabled]="canais.controls.length <= 1 ? true : false"

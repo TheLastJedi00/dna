@@ -8,7 +8,7 @@ import {
   ɵInternalFormsSharedModule,
 } from '@angular/forms';
 import { HumanDesignService } from '../../../core/services/human-design.service';
-import { HumanDesignData } from '../../../core/models/dhdata.model';
+import { Canal, HumanDesignData } from '../../../core/models/dhdata.model';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from '../../loading/infinity/infinity';
@@ -59,7 +59,12 @@ export class HumanDesignForm implements OnInit {
     centros_definidos: this.fb.control('', [Validators.required]),
     centros_indefinidos: this.fb.control('', [Validators.required]),
     centros_abertos: this.fb.control('', [Validators.required]),
-    canais: this.fb.nonNullable.array([this.fb.control('', [Validators.required])]),
+    canais: this.fb.nonNullable.array([
+      this.fb.nonNullable.group({
+        id: ['', Validators.required],
+        nome: ['', Validators.required],
+      }),
+    ]),
     personalidade_sol: this.fb.control('', [Validators.required]),
     personalidade_terra: this.fb.control('', [Validators.required]),
     personalidade_lua: this.fb.control('', [Validators.required]),
@@ -77,7 +82,12 @@ export class HumanDesignForm implements OnInit {
   }
 
   addCanal() {
-    this.canais.push(this.fb.control('', [Validators.required]));
+    this.canais.push(
+      this.fb.nonNullable.group({
+        id: ['', Validators.required],
+        nome: ['', Validators.required],
+      }),
+    );
   }
 
   removeCanal(index: number) {
@@ -108,14 +118,14 @@ export class HumanDesignForm implements OnInit {
         },
         ativacoes: {
           personalidade: {
-            sol: form.personalidade_sol!,
-            terra: form.personalidade_terra!,
-            lua: form.personalidade_lua!,
+            sol: Number(form.personalidade_sol),
+            terra: Number(form.personalidade_terra),
+            lua: Number(form.personalidade_lua),
           },
           desenho: {
-            sol: form.desenho_sol!,
-            terra: form.desenho_terra!,
-            lua: form.desenho_lua!,
+            sol: Number(form.desenho_sol),
+            terra: Number(form.desenho_terra),
+            lua: Number(form.desenho_lua),
           },
         },
         encarnacao: {
@@ -124,7 +134,7 @@ export class HumanDesignForm implements OnInit {
           portoes: form.portoes!,
           quarto_de_cruz: form.quarto_cruz!,
         },
-        canais: form.canais as string[],
+        canais: form.canais as Canal[],
       };
       await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
       this.dhForm.reset();

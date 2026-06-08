@@ -101,9 +101,9 @@ export class FakeApi {
       autoridade: 'Autoprojetada',
       perfil: '2/4',
       centros_energeticos: {
-        definidos: ['Centro G', 'Garganta', 'Ajna'],
-        indefinidos: ['Cabeça', 'Ego/Coração', 'Plexo Solar', 'Raiz', 'Sacral'],
-        abertos: ['Esplênico'],
+        definidos: 'Centro G, Garganta, Ajna',
+        indefinidos: 'Cabeça, Ego/Coração, Plexo Solar, Raiz, Sacral',
+        abertos: 'Esplênico',
       },
       canais: [
         {

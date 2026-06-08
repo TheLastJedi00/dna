@@ -4,15 +4,15 @@ export interface Canal {
 }
 
 export interface CentrosEnergeticos {
-  definidos: string[] | string;
-  indefinidos: string[] | string;
-  abertos: string[] | string;
+  definidos: string;
+  indefinidos: string;
+  abertos: string;
 }
 
 export interface PontosAtivacao {
-  sol: string | number;
-  terra: string | number;
-  lua: string | number;
+  sol: number;
+  terra: number;
+  lua: number;
 }
 
 export interface Ativacoes {
@@ -39,7 +39,7 @@ export interface HumanDesignData {
   autoridade: string;
   perfil: string;
   centros_energeticos: CentrosEnergeticos;
-  canais: string[] | Canal[];
+  canais: Canal[];
   ativacoes: Ativacoes;
   encarnacao: CruzEncarnacao;
 }
