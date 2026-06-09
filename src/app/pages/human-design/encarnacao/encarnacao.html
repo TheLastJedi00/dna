@@ -1,7 +1,7 @@
 <section class="container mx-auto bg-white main-padding">
   @defer (on viewport) {
     <div animate.enter="slide-in">
-      <app-dh-intro-card title="Cruz Da Encarnação" [userId]="userId()"></app-dh-intro-card>
+      <app-dh-intro-card title="Cruz Da Encarnação"></app-dh-intro-card>
       <div class="text-black/70 grid gap-3">
         @for (p of intro(); track $index) {
           <p>{{ p }}</p>

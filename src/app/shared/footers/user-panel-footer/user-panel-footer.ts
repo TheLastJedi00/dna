@@ -1,7 +1,8 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { LoginService } from '../../../core/services/login.service';
+import { UserContextService } from '../../../core/services/user-context.service';
 
 @Component({
   selector: 'app-user-panel-footer',
@@ -10,13 +11,13 @@ import { LoginService } from '../../../core/services/login.service';
   styleUrl: './user-panel-footer.scss',
 })
 export class UserPanelFooter {
-  userId = input('');
+  readonly userContext = inject(UserContextService);
   router = inject(Router);
   loginservice = inject(LoginService)
 
   navigateTo(url: string) {
     if (url === 'human-design') {
-      this.router.navigate([`human-design/${this.userId()}`]);
+      this.router.navigate([`human-design/${this.userContext.userId}`]);
     } else {
       this.router.navigate([url]);
     }

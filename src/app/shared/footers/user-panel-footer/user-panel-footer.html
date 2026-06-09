@@ -1,12 +1,12 @@
 <footer class="main-padding">
   @if (loginservice.getUserRole()?.includes('ADMIN')) {
     <section>
-      <a (click)="router.navigate(['managment/maestras', userId()])">Gerenciar Maestras</a>
-      <a (click)="router.navigate(['dna-managment', userId()])">Gerenciar Análises do DNA</a>
+      <a (click)="router.navigate(['managment/maestras'])">Gerenciar Maestras</a>
+      <a (click)="router.navigate(['dna-managment'])">Gerenciar Análises do DNA</a>
       @if (loginservice.getUserRole()?.includes('MANAGER')) {
         <a>Gerenciar Analistas do DNA</a>
       }
-      <a (click)="router.navigate(['dashboard', userId()])">Home</a>
+      <a (click)="router.navigate(['dashboard'])">Home</a>
     </section>
   }
   @if (loginservice.getUserRole()?.includes('USER')) {

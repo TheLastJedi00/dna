@@ -32,8 +32,7 @@ export class LoginForm {
     const form = this.loginForm.getRawValue()
     try {
       await firstValueFrom(this.loginService.login(form.email, form.password));
-      const user = this.loginService.getDecodedToken();
-      this.router.navigate([`/dashboard/${user?.id}`]);
+      this.router.navigate([`/dashboard`]);
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
         this.error.set(e.error.message);

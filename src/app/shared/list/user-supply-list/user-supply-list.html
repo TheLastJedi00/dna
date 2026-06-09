@@ -1,6 +1,6 @@
 <section class="p-3">
   @for (user of usersList(); track $index) {
-    <app-user-supply-item (click)="router.navigate([`${userSupplyUrl()}/${user.id}`])" [userData]="user" [index]="$index + 1"></app-user-supply-item>
+    <app-user-supply-item (click)="router.navigate([`user-supply/${user.id}`])" [userData]="user" [index]="$index + 1"></app-user-supply-item>
   }
 </section>
 @if (isLoading()) {

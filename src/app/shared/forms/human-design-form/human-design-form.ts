@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import {
   FormArray,
@@ -17,7 +17,7 @@ import { DnaStatus } from '../../../core/models/dna-status.model';
 import { SupplyService } from '../../../core/services/supply.service';
 import { response } from 'express';
 import { sign } from 'crypto';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-human-design-form',
@@ -27,6 +27,8 @@ import { Router } from '@angular/router';
 })
 export class HumanDesignForm implements OnInit {
   async ngOnInit(): Promise<void> {
+    const id = this.route.snapshot.paramMap.get('maestraId') ?? '';
+    this.maestraId.set(id);
     await this.getDnaStatus();
     if (this.dnaStatus()?.human_design) {
       await this.getHumanDesignData();
@@ -34,13 +36,14 @@ export class HumanDesignForm implements OnInit {
     }
   }
 
-  maestraId = input.required<string>();
+  maestraId = signal('');
   isLoading = signal(false);
   loadingMessage = signal<string | null>(null);
   dnaStatus = signal<DnaStatus | null>(null);
   humanDesignData = signal<HumanDesignData | null>(null);
   isSupplyCreated = signal<boolean>(false);
   router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly hdService = inject(HumanDesignService);
   private readonly dnaStatusService = inject(DnaStatusService);

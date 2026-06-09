@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UserPanelHeader } from "../../shared/headers/user-panel-header/user-panel-header";
 import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-panel-footer";
 import { IconTextButton } from "../../shared/buttons/icon-text-button/icon-text-button";
@@ -12,6 +12,5 @@ import { UserSupplyList } from '../../shared/list/user-supply-list/user-supply-l
   styleUrl: './dna-managment.scss',
 })
 export class DnaManagment {
-  userId = input.required<string>()
   router = inject(Router)
 }

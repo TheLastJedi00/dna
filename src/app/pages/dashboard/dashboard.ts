@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { PanelCard } from '../../shared/cards/panel-card/panel-card';
@@ -22,7 +22,6 @@ export class Dashboard implements OnInit {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
   isLoading = signal(false);
-  userId = input.required<string>();
   userData = signal<UserData | null>(null);
   roles = signal<UserRole[]>([]);
   firstRole = computed(() => this.roles().find((r) => r === 'MANAGER' || r === 'ADMIN'));
