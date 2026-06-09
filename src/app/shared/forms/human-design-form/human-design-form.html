@@ -76,14 +76,16 @@
     <p>Canais</p>
     <div formArrayName="canais" class="grid gap-3">
       @for (canal of canais.controls; track canal) {
-        <div [formGroupName]="$index" class="grid grid-cols-[1fr_2fr_1fr] gap-3 w-full">
-          <input formControlName="id" type="text" placeholder="10-10" class="w-[5rem]"/>
-          <input formControlName="nome" type="text" placeholder="Nome do Canal"/>
+        <div [formGroupName]="$index" class="flex gap-3 w-full">
+          <div class="flex gap-3">
+            <input formControlName="id" type="text" placeholder="10-10" class="w-[4rem]"/>
+            <input formControlName="nome" type="text" placeholder="Nome do Canal" class="w-full"/>
+          </div>
           <app-icon-text-button
             (click)="removeCanal($index)"
             [disabled]="canais.controls.length <= 1 ? true : false"
-            icon=""
-            text="Remover"
+            icon="trash"
+            text=""
             class="bg-[red]/70 text-white rounded-xl"
           ></app-icon-text-button>
         </div>

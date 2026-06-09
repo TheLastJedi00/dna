@@ -24,10 +24,11 @@ import { ElementoFogo } from "../elemento-fogo/elemento-fogo";
 import { ElementoTerra } from "../elemento-terra/elemento-terra";
 import { ElementoAr } from "../elemento-ar/elemento-ar";
 import { ElementoAgua } from "../elemento-agua/elemento-agua";
+import { Trash } from "../trash/trash";
 
 @Component({
   selector: 'app-icons-switch',
-  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown, Plus, Sparkles, SolAstro, TerraAstro, LuaAstro, ElementoFogo, ElementoTerra, ElementoAr, ElementoAgua],
+  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown, Plus, Sparkles, SolAstro, TerraAstro, LuaAstro, ElementoFogo, ElementoTerra, ElementoAr, ElementoAgua, Trash],
   templateUrl: './icons-switch.html',
   styleUrl: './icons-switch.scss',
 })
