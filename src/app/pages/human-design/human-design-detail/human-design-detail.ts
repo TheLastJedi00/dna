@@ -34,13 +34,11 @@ export class HumanDesignDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly userContext = inject(UserContextService);
   private readonly supplyService = inject(SupplyService);
-
   readonly userId = signal('');
   readonly moduleKey = signal('');
   topics = signal<Topic[] | null>(null);
   isLoading = signal(true);
   error = signal<string | null>(null);
-  
   config = signal<ModuleConfig | null>(null);
 
   private readonly MODULE_CONFIG: Record<string, ModuleConfig> = {

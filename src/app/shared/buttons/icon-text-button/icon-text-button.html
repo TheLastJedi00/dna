@@ -3,6 +3,7 @@
   (click)="onClick($event)"
   [ngClass]="class() ? class() : 'text-secondary'"
   [type]="type()"
+  [routerLink]="routerLink()"
 >
   <app-icons-switch [icon]="icon()"></app-icons-switch>
   {{ text() }}
