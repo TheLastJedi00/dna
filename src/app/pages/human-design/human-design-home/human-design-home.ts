@@ -102,7 +102,7 @@ export class HumanDesignHome implements OnInit {
   canaisToStringArray(list: any[]) {
     let stringList: string[] = [];
     list.forEach((c) => {
-      let string = c;
+      let string = `${c.id}: ${c.nome}`;
       stringList.push(string);
     });
     return stringList;
