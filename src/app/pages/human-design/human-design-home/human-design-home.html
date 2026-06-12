@@ -58,19 +58,19 @@
         <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
         <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3">
           <app-dh-data-button
-            (click)="navigateTo('centros/definidos')"
+            (click)="navigateTo('centros-definidos')"
             icon="magnifying-glass"
             title="Definidos"
             [data]="humanDesignData()!.centros_energeticos.definidos"
           ></app-dh-data-button>
           <app-dh-data-button
-            (click)="navigateTo('centros/indefinidos')"
+            (click)="navigateTo('centros-indefinidos')"
             icon="magnifying-glass"
             title="Indefinidos"
             [data]="humanDesignData()!.centros_energeticos.indefinidos"
           ></app-dh-data-button>
           <app-dh-data-button
-            (click)="navigateTo('centros/abertos')"
+            (click)="navigateTo('centros-abertos')"
             icon="magnifying-glass"
             title="Abertos"
             [data]="humanDesignData()!.centros_energeticos.abertos"

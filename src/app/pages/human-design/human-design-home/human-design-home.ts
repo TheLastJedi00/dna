@@ -10,7 +10,7 @@ import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../core/services/user.service';
 import { UserData } from '../../../core/models/userdata.model';
-import { Infinity } from "../../../shared/loading/infinity/infinity";
+import { Infinity } from '../../../shared/loading/infinity/infinity';
 @Component({
   selector: 'app-human-design-home',
   imports: [DhDataButton, NgClass, DhDataCard, UserDataCard, Infinity],
@@ -35,7 +35,7 @@ export class HumanDesignHome implements OnInit {
     const userId = this.route.snapshot.parent!.paramMap.get('userId') ?? '';
     this.userId.set(userId);
     await this.getHumanDesignData();
-    await this.getUserData()
+    await this.getUserData();
   }
 
   navigateTo(path: string) {

@@ -12,11 +12,8 @@ import { UserContextService } from '../../../core/services/user-context.service'
 export class DhIntroCard {
   router = inject(Router);
   private readonly userContext = inject(UserContextService);
+  userId = this.userContext.userId
   title = input("Título");
   singleIntro = input<string | null>(null);
   intro = input<string[] | null>(null);
-
-  navigateTo(path: string) {
-    this.router.navigate([`human-design/${this.userContext.userId}/${path}`]);
-  }
 }

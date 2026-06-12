@@ -3,7 +3,7 @@
   <app-icon-text-button
     icon="arrow-left"
     text="Voltar"
-    (click)="navigateTo('')"
+    (click)="router.navigate(['numerology', userId])"
   ></app-icon-text-button>
 </div>
 @if (intro() !== null) {

@@ -4,11 +4,7 @@ import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { HumanDesign } from './pages/human-design/human-design';
 import { HumanDesignHome } from './pages/human-design/human-design-home/human-design-home';
-import { HumanDesignTipoAurico } from './pages/human-design/human-design-tipo-aurico/human-design-tipo-aurico';
-import { Autoridade } from './pages/human-design/autoridade/autoridade';
-import { Perfil } from './pages/human-design/perfil/perfil';
-import { Encarnacao } from './pages/human-design/encarnacao/encarnacao';
-import { Centros } from './pages/human-design/centros/centros';
+import { HumanDesignDetail } from './pages/human-design/human-design-detail/human-design-detail';
 import { Numerology } from './pages/numerology/numerology';
 import { Home } from './pages/numerology/home/home';
 import { NumerologyDetail } from './pages/numerology/numerology-detail/numerology-detail';
@@ -41,30 +37,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
     canActivateChild: [authGuard],
     children: [
-      {
-        path: '',
-        component: HumanDesignHome,
-      },
-      {
-        path: 'tipo-aurico',
-        component: HumanDesignTipoAurico,
-      },
-      {
-        path: 'autoridade',
-        component: Autoridade,
-      },
-      {
-        path: 'perfil',
-        component: Perfil,
-      },
-      {
-        path: 'encarnacao',
-        component: Encarnacao,
-      },
-      {
-        path: 'centros/:centro',
-        component: Centros,
-      },
+      { path: '', component: HumanDesignHome },
+      { path: ':module', component: HumanDesignDetail },
     ],
   },
   {

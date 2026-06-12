@@ -9,7 +9,7 @@ import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../core/services/user.service';
 import { UserData } from '../../../core/models/userdata.model';
-import { Infinity } from "../../../shared/loading/infinity/infinity";
+import { Infinity } from '../../../shared/loading/infinity/infinity';
 
 @Component({
   selector: 'app-astrology-home',
