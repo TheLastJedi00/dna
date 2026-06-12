@@ -260,7 +260,7 @@ como ter uma bússola energética para tudo na sua vida e
     } catch (e) {
       console.error(`Erro ao carregar módulo ${supplyModule}:`, e);
       if (e instanceof HttpErrorResponse) {
-        //alert(e.error.message);
+        alert(e.error.message);
       }
       this.error.set('Conteúdo ainda não disponível.');
     } finally {
