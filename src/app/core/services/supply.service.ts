@@ -40,6 +40,10 @@ export class SupplyService {
     return this.http.get<Supply>(`${this.api}/numerology/${module}/${userId}`);
   }
 
+  getAstrologyModule(userId: string, module: string): Observable<Supply> {
+    return this.http.get<Supply>(`${this.api}/astrology/${module}/${userId}`);
+  }
+
   createModule(userId: string, pillar: string, module: string) {
     return this.http.post<any>(`${this.api}/${userId}/${pillar}/${module}`, module);
   }

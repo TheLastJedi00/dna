@@ -42,19 +42,19 @@
         <b [ngClass]="titleButtonGroupClasses">Casas Importantes</b>
         <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-3">
           <app-astro-data-button
-            (click)="navigateTo('meio-do-ceu')"
+            (click)="navigateTo('meio-ceu')"
             icon="sol-astro"
             title="Meio do Céu (Missão)"
             [dataArray]="pontoToStringArray(astrologyData()!.meioDoCeu)"
           ></app-astro-data-button>
           <app-astro-data-button
-            (click)="navigateTo('dinheiro')"
+            (click)="navigateTo('casa-dinheiro')"
             icon="chart-pie"
             title="Dinheiro"
             [dataArray]="pontoToStringArray(astrologyData()!.dinheiro)"
           ></app-astro-data-button>
           <app-astro-data-button
-            (click)="navigateTo('comunicacao')"
+            (click)="navigateTo('casa-comunicacao')"
             icon="chat-bubble"
             title="Comunicação"
             [dataArray]="pontoToStringArray(astrologyData()!.comunicacao)"
@@ -66,25 +66,25 @@
         <b [ngClass]="titleButtonGroupClasses">Elementos</b>
         <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-4">
           <app-astro-data-button
-            [disabled]="true"
+            (click)="navigateTo('elemento-fogo')"
             icon="elemento-fogo"
             title="Fogo"
             [data]="astrologyData()!.elementos.fogo.toString()"
           ></app-astro-data-button>
           <app-astro-data-button
-            [disabled]="true"
+            (click)="navigateTo('elemento-terra')"
             icon="elemento-terra"
             title="Terra"
             [data]="astrologyData()!.elementos.terra.toString()"
           ></app-astro-data-button>
           <app-astro-data-button
-            [disabled]="true"
+            (click)="navigateTo('elemento-ar')"
             icon="elemento-ar"
             title="Ar"
             [data]="astrologyData()!.elementos.ar.toString()"
           ></app-astro-data-button>
           <app-astro-data-button
-            [disabled]="true"
+            (click)="navigateTo('elemento-agua')"
             icon="elemento-agua"
             title="Água"
             [data]="astrologyData()!.elementos.agua.toString()"

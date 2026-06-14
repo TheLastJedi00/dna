@@ -1,0 +1,23 @@
+@if (isLoading()) {
+  <app-infinity></app-infinity>
+} @else {
+  <section class="container mx-auto bg-white main-padding">
+    @defer (on viewport) {
+      <div animate.enter="slide-in">
+        <app-num-intro-card
+          [title]="moduleTitle()"
+        ></app-num-intro-card>
+        @if (error()) {
+          <div class="text-center text-black/50 py-10">
+            <p>{{ error() }}</p>
+          </div>
+        }
+        @if (topics()) {
+          <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+        }
+      </div>
+    } @placeholder {
+      <div class="h-[800px]"></div>
+    }
+  </section>
+}
