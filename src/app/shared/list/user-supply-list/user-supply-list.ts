@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
 import { UserData } from '../../../core/models/userdata.model';
 import { firstValueFrom } from 'rxjs';
@@ -19,7 +19,6 @@ export class UserSupplyList implements OnInit {
   }
 
   private readonly service = inject(UserService);
-  userSupplyUrl = input.required<string>();
   router = inject(Router);
   usersList = signal<UserData[] | null>(null);
   isLoading = signal(false);

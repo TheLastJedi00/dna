@@ -1,4 +1,4 @@
-<app-user-panel-header [userId]="userId()"></app-user-panel-header>
+<app-user-panel-header></app-user-panel-header>
 <main class="min-h-screen pt-header gradient-primary-to-secondary-85">
   <section class="main-padding bg-white container mx-auto grid gap-3">
     <div class="flex justify-between items-center">
@@ -6,7 +6,7 @@
       <app-icon-text-button
         icon="arrow-left"
         text="Voltar"
-        (click)="router.navigate([`dna-managment/${userId()}`])"
+        (click)="router.navigate(['dna-managment'])"
       ></app-icon-text-button>
     </div>
     <div>
@@ -14,9 +14,9 @@
     </div>
   </section>
   <section class="main-padding bg-white container mx-auto grid lg:grid-cols-3 gap-10 items-start justify-center">
-    <app-human-design-form [maestraId]="maestraId()"></app-human-design-form>
-    <app-numerology-form [maestraId]="maestraId()"></app-numerology-form>
-    <app-astrology-form [maestraId]="maestraId()"></app-astrology-form>
+    <app-human-design-form></app-human-design-form>
+    <app-numerology-form></app-numerology-form>
+    <app-astrology-form></app-astrology-form>
   </section>
 </main>
 <app-user-panel-footer></app-user-panel-footer>

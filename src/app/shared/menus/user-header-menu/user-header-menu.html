@@ -37,17 +37,17 @@
             <app-text-button
               textColor="text-secondary"
               text="Home"
-              (action)="router.navigate(['dashboard', userId()])"
+              (action)="router.navigate(['dashboard'])"
             ></app-text-button>
             <app-text-button
               textColor="text-secondary"
               text="Gerenciar Maestras"
-              (action)="router.navigate(['managment/maestras', userId()])"
+              (action)="router.navigate(['managment/maestras'])"
             ></app-text-button>
             <app-text-button
               textColor="text-secondary"
               text="Gerenciar Análises do DNA"
-              (action)="router.navigate(['dna-managment', userId()])"
+              (action)="router.navigate(['dna-managment'])"
             ></app-text-button>
             @if (loginService.getUserRole()?.includes('MANAGER')) {
               <app-text-button

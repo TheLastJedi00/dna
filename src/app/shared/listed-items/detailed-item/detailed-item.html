@@ -7,5 +7,5 @@
     (click)="openModal()"
   ></app-icon-text-button>
 </div>
-<app-user-details-modal [managerId]="userId()" (close)="closeModal()" [isOpen]="isModalOpen()" [userData]="data()"></app-user-details-modal>
+<app-user-details-modal (close)="closeModal()" [isOpen]="isModalOpen()" [userData]="data()"></app-user-details-modal>
 

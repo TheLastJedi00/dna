@@ -1,4 +1,4 @@
-<app-user-panel-header [userId]="userId()"></app-user-panel-header>
+<app-user-panel-header></app-user-panel-header>
 <main class="pt-header gradient-primary-to-secondary-85 min-h-[80vh]">
   <section class="main-padding container mx-auto bg-white">
     <div class="flex justify-between items-center">
@@ -6,11 +6,11 @@
       <app-icon-text-button
         icon="arrow-left"
         text="Voltar"
-        (click)="this.router.navigate([`dashboard/${userId()}`])"
+        (click)="this.router.navigate(['dashboard'])"
       ></app-icon-text-button>
     </div>
     <div class="mt-3 min-h-[65vh]">
-      <app-detailed-list [managerId]="userId()" [type]="type()"></app-detailed-list>
+      <app-detailed-list [type]="type()"></app-detailed-list>
     </div>
   </section>
 </main>

@@ -15,7 +15,6 @@ import { firstValueFrom } from 'rxjs';
 export class UserDetailsModal {
   private readonly userService = inject(UserService);
   isLoading = signal(false);
-  managerId = input.required<string>();
   userData = input.required<UserData>();
   isOpen = input<boolean>(false);
   close = output();

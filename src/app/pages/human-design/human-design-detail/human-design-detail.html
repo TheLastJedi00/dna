@@ -1,0 +1,61 @@
+<section class="container mx-auto main-padding bg-white min-h-screen">
+  @defer (on viewport) {
+    @if (config(); as conf) {
+      <div animate.enter="slide-in">
+        <app-dh-intro-card
+          [title]="conf.title"
+          [singleIntro]="conf.singleIntro ?? null"
+          [intro]="conf.arrayIntro ?? null"
+        ></app-dh-intro-card>
+        
+        @if (conf.accordions) {
+          <div class="mt-4 flex flex-col gap-4">
+            @for (acc of conf.accordions; track acc.title) {
+              <app-vertical-accordion
+                [title]="acc.title"
+                contentClass="text-black/70"
+                [cardContent]="acc.content"
+                titleClass="text-title"
+              ></app-vertical-accordion>
+            }
+          </div>
+        }
+
+        @if (conf.paragraphsAfter) {
+          <div class="mt-4 grid gap-3 text-black/70">
+            @for (p of conf.paragraphsAfter; track $index) {
+              <p>{{ p }}</p>
+            }
+          </div>
+        }
+
+        <div class="mt-4">
+          @if (groupedTopics().length > 0) {
+            @for (group of groupedTopics(); track group.label) {
+              <div class="mb-6">
+                <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mb-2">
+                  <b class="text-primary font-merriweather font-normal text-xl">{{ group.label }}</b>
+                </div>
+                <app-lists-card-grid [topics]="group.topics"></app-lists-card-grid>
+              </div>
+            }
+          } @else {
+            <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+          }
+        </div>
+      </div>
+    } @else {
+      @if (error()) {
+        <div class="p-8 text-center text-red-500 font-bold">
+          {{ error() }}
+        </div>
+      }
+    }
+  } @placeholder {
+    <div class="h-[800px]"></div>
+  }
+
+  @if (isLoading()) {
+    <app-infinity></app-infinity>
+  }
+</section>

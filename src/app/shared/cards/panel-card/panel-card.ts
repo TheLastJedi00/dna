@@ -1,8 +1,9 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DashboardButton } from '../../buttons/dashboard-button/dashboard-button';
 import { LoginService } from '../../../core/services/login.service';
 import { UserRole } from '../../../types/types';
 import { Router } from '@angular/router';
+import { UserContextService } from '../../../core/services/user-context.service';
 
 @Component({
   selector: 'app-panel-card',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class PanelCard implements OnInit {
   private readonly loginService = inject(LoginService);
-  userId = input.required<string>();
+  readonly userContext = inject(UserContextService);
   roles = signal<UserRole[]>([]);
   router = inject(Router);
 

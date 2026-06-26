@@ -22,7 +22,6 @@ export class UserSupplyDetails implements OnInit {
   async ngOnInit() {
     await this.getUserById(this.maestraId());
   }
-  userId = input.required<string>();
   maestraId = input.required<string>();
   router = inject(Router);
   service = inject(UserService);
