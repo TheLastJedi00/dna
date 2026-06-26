@@ -30,7 +30,18 @@
         }
 
         <div class="mt-4">
-          <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+          @if (groupedTopics().length > 0) {
+            @for (group of groupedTopics(); track group.label) {
+              <div class="mb-6">
+                <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mb-2">
+                  <b class="text-primary font-merriweather font-normal text-xl">{{ group.label }}</b>
+                </div>
+                <app-lists-card-grid [topics]="group.topics"></app-lists-card-grid>
+              </div>
+            }
+          } @else {
+            <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+          }
         </div>
       </div>
     } @else {

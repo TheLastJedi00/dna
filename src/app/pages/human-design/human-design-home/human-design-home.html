@@ -104,11 +104,13 @@
           <b class="text-primary font-merriweather font-normal text-xl">Portões</b>
           <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-2 gap-2 mt-3">
             <app-dh-data-button
+              (click)="navigateTo('portoes-personalidade')"
               icon="lock-open"
               title="Personalidade"
               [dataArray]="portoesToStringArray(humanDesignData()!.ativacoes.personalidade)"
             ></app-dh-data-button>
             <app-dh-data-button
+              (click)="navigateTo('portoes-desenho')"
               icon="lock-closed"
               title="Desenho"
               [dataArray]="portoesToStringArray(humanDesignData()!.ativacoes.desenho)"
