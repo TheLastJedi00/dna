@@ -1,0 +1,27 @@
+<app-user-panel-header></app-user-panel-header>
+<main class="pt-header gradient-primary-to-secondary-85">
+  <section class="mx-auto container main-padding bg-white">
+    <app-dna-title-card
+      imgSrc="https://i.imgur.com/ji8gc9V.png"
+      imgAlt="Plano Perfeito"
+      title="Plano Perfeito"
+      subTitle="Sua rota de mentoria."
+    ></app-dna-title-card>
+    <app-dna-description-card
+      [innerHtml]="descriptionHtml()"
+      title="O que é o Plano Perfeito?"
+    ></app-dna-description-card>
+
+    @if (topics(); as topicList) {
+      <app-lists-card-grid [topics]="topicList"></app-lists-card-grid>
+    } @else if (error()) {
+      <div class="p-8 text-center text-red-500 font-bold">
+        {{ error() }}
+      </div>
+    }
+  </section>
+  @if (isLoading()) {
+    <app-infinity></app-infinity>
+  }
+</main>
+<app-user-panel-footer></app-user-panel-footer>

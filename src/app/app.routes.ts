@@ -16,6 +16,7 @@ import { UserSupplyDetails } from './pages/user-supply-details/user-supply-detai
 import { Astrology } from './pages/astrology/astrology';
 import { AstrologyHome } from './pages/astrology/astrology-home/astrology-home';
 import { AstrologyDetail } from './pages/astrology/astrology-detail/astrology-detail';
+import { PerfectPlain } from './pages/perfect-plain/perfect-plain';
 
 export const routes: Routes = [
   { path: '', component: Landing },
@@ -61,5 +62,10 @@ export const routes: Routes = [
       { path: '', component: AstrologyHome },
       { path: ':module', component: AstrologyDetail },
     ],
+  },
+  {
+    path: 'perfect-plain/:userId',
+    component: PerfectPlain,
+    canActivate: [authGuard],
   },
 ];
