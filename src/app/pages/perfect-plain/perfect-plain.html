@@ -11,7 +11,17 @@
       [innerHtml]="descriptionHtml()"
       title="O que é o Plano Perfeito?"
     ></app-dna-description-card>
+
+    @if (topics(); as topicList) {
+      <app-lists-card-grid [topics]="topicList"></app-lists-card-grid>
+    } @else if (error()) {
+      <div class="p-8 text-center text-red-500 font-bold">
+        {{ error() }}
+      </div>
+    }
   </section>
-  <router-outlet></router-outlet>
+  @if (isLoading()) {
+    <app-infinity></app-infinity>
+  }
 </main>
 <app-user-panel-footer></app-user-panel-footer>

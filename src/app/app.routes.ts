@@ -67,7 +67,5 @@ export const routes: Routes = [
     path: 'perfect-plain/:userId',
     component: PerfectPlain,
     canActivate: [authGuard],
-    canActivateChild: [authGuard],
-    children: [],
   },
 ];

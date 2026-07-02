@@ -1,19 +1,67 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { DnaTitleCard } from '../../shared/cards/dna-title-card/dna-title-card';
-import { DnaDescriptionCard } from "../../shared/cards/dna-description-card/dna-description-card";
-import { Router, RouterOutlet } from '@angular/router';
-import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-panel-footer";
+import { DnaDescriptionCard } from '../../shared/cards/dna-description-card/dna-description-card';
+import { Router } from '@angular/router';
+import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
+import { ListsCardGrid } from '../../shared/grid/lists-card-grid/lists-card-grid';
+import { Infinity } from '../../shared/loading/infinity/infinity';
+import { SupplyService } from '../../core/services/supply.service';
+import { Topic } from '../../core/models/supply.model';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-perfect-plain',
-  imports: [UserPanelHeader, DnaTitleCard, DnaDescriptionCard, RouterOutlet, UserPanelFooter],
+  imports: [
+    UserPanelHeader,
+    DnaTitleCard,
+    DnaDescriptionCard,
+    UserPanelFooter,
+    ListsCardGrid,
+    Infinity,
+  ],
   templateUrl: './perfect-plain.html',
   styleUrl: './perfect-plain.scss',
 })
-export class PerfectPlain {
+export class PerfectPlain implements OnInit {
+  private static readonly PILLAR = 'perfect-plain';
+
   userId = input.required<string>();
   router = inject(Router);
+  private readonly supplyService = inject(SupplyService);
+
+  topics = signal<Topic[] | null>(null);
+  isLoading = signal(true);
+  error = signal<string | null>(null);
+
+  async ngOnInit() {
+    await this.loadTopics();
+  }
+
+  private async loadTopics() {
+    try {
+      const supply = await firstValueFrom(
+        this.supplyService.getPerfectPlainModule(
+          this.userId(),
+          PerfectPlain.PILLAR
+        ),
+      );
+      if (supply.topics && supply.topics.length > 0) {
+        this.topics.set(supply.topics);
+      } else {
+        this.error.set('Conteúdo ainda não disponível.');
+      }
+    } catch (e) {
+      console.error('Erro ao carregar o Plano Perfeito:', e);
+      if (e instanceof HttpErrorResponse) {
+        alert(e.error.message);
+      }
+      this.error.set('Conteúdo ainda não disponível.');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
 
   descriptionHtml() {
     return `
