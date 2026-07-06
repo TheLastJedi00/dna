@@ -42,12 +42,12 @@
             <app-text-button
               textColor="text-secondary"
               text="Gerenciar Maestras"
-              (action)="router.navigate(['managment/maestras'])"
+              (action)="router.navigate(['management/maestras'])"
             ></app-text-button>
             <app-text-button
               textColor="text-secondary"
               text="Gerenciar Análises do DNA"
-              (action)="router.navigate(['dna-managment'])"
+              (action)="router.navigate(['dna-management'])"
             ></app-text-button>
             @if (loginService.getUserRole()?.includes('MANAGER')) {
               <app-text-button

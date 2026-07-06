@@ -19,15 +19,17 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'managment/:type',
+    path: 'management/:type',
     loadComponent: () =>
-      import('./pages/managment/managment').then((m) => m.Managment),
+      import('./pages/management/management').then((m) => m.Management),
     canActivate: [authGuard, roleGuard],
   },
   {
-    path: 'dna-managment',
+    path: 'dna-management',
     loadComponent: () =>
-      import('./pages/dna-managment/dna-managment').then((m) => m.DnaManagment),
+      import('./pages/dna-management/dna-management').then(
+        (m) => m.DnaManagement,
+      ),
     canActivate: [authGuard, roleGuard],
   },
   {

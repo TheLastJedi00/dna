@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 import { UserSupplyList } from '../../shared/list/user-supply-list/user-supply-list';
 
 @Component({
-  selector: 'app-dna-managment',
+  selector: 'app-dna-management',
   imports: [UserPanelHeader, UserPanelFooter, IconTextButton, UserSupplyList],
-  templateUrl: './dna-managment.html',
-  styleUrl: './dna-managment.scss',
+  templateUrl: './dna-management.html',
+  styleUrl: './dna-management.scss',
 })
-export class DnaManagment {
+export class DnaManagement {
   router = inject(Router)
 }

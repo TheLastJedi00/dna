@@ -7,12 +7,12 @@ import { UserPanelFooter } from "../../shared/footers/user-panel-footer/user-pan
 import { UserContextService } from '../../core/services/user-context.service';
 
 @Component({
-  selector: 'app-managment',
+  selector: 'app-management',
   imports: [UserPanelHeader, DetailedList, IconTextButton, UserPanelFooter],
-  templateUrl: './managment.html',
-  styleUrl: './managment.scss',
+  templateUrl: './management.html',
+  styleUrl: './management.scss',
 })
-export class Managment {
+export class Management {
   router = inject(Router)
   readonly userContext = inject(UserContextService)
   type = input.required<string>()

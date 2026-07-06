@@ -1,8 +1,8 @@
 <footer class="main-padding">
   @if (loginservice.getUserRole()?.includes('ADMIN')) {
     <section>
-      <a (click)="router.navigate(['managment/maestras'])">Gerenciar Maestras</a>
-      <a (click)="router.navigate(['dna-managment'])">Gerenciar Análises do DNA</a>
+      <a (click)="router.navigate(['management/maestras'])">Gerenciar Maestras</a>
+      <a (click)="router.navigate(['dna-management'])">Gerenciar Análises do DNA</a>
       @if (loginservice.getUserRole()?.includes('MANAGER')) {
         <a>Gerenciar Analistas do DNA</a>
       }
