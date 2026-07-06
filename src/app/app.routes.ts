@@ -9,6 +9,7 @@ import { Numerology } from './pages/numerology/numerology';
 import { Home } from './pages/numerology/home/home';
 import { NumerologyDetail } from './pages/numerology/numerology-detail/numerology-detail';
 import { authGuard } from './core/guards/auth-guard';
+import { ownershipGuard } from './core/guards/ownership-guard';
 import { Managment } from './pages/managment/managment';
 import { roleGuard } from './core/guards/role-guard';
 import { DnaManagment } from './pages/dna-managment/dna-managment';
@@ -35,7 +36,7 @@ export const routes: Routes = [
   {
     path: 'human-design/:userId',
     component: HumanDesign,
-    canActivate: [authGuard],
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
       { path: '', component: HumanDesignHome },
@@ -45,7 +46,7 @@ export const routes: Routes = [
   {
     path: 'numerology/:userId',
     component: Numerology,
-    canActivate: [authGuard],
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
       { path: '', component: Home },
@@ -55,7 +56,7 @@ export const routes: Routes = [
   {
     path: 'astrology/:userId',
     component: Astrology,
-    canActivate: [authGuard],
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
       { path: '', component: AstrologyHome },
