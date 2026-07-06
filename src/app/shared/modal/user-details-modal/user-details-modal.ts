@@ -35,9 +35,6 @@ export class UserDetailsModal {
       alert(`${deleted.fullName} foi excluída com sucesso`);
     } catch (e) {
       console.error(e);
-      if(e instanceof HttpErrorResponse){
-        alert(e.error.message);
-      }
     } finally {
       this.isLoading.set(false);
       this.close.emit()

@@ -49,9 +49,6 @@ export class Dashboard implements OnInit {
       const user = await firstValueFrom(this.userService.findMe(decoded.id));
       this.userData.set(user);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

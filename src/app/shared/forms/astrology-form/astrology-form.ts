@@ -132,9 +132,6 @@ export class AstrologyForm implements OnInit {
       this.getAstrologyData();
     } catch (error) {
       console.log(error);
-      if (error instanceof HttpErrorResponse) {
-        alert(error.error.message);
-      }
     } finally {
       this.isLoading.set(false);
     }
@@ -147,9 +144,6 @@ export class AstrologyForm implements OnInit {
         await firstValueFrom(this.dnaStatusService.getStatusByUserId(this.maestraId())),
       );
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -161,9 +155,6 @@ export class AstrologyForm implements OnInit {
     try {
       this.astrologyData.set(await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())));
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -178,9 +169,6 @@ export class AstrologyForm implements OnInit {
       );
       this.isSupplyCreated.set(reponse);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -194,9 +182,6 @@ export class AstrologyForm implements OnInit {
       await firstValueFrom(this.supplyService.createFullPillar('astrology', this.maestraId()));
       alert("Dados Gerados com Sucesso!")
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

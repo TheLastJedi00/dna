@@ -47,9 +47,6 @@ export class AstrologyHome implements OnInit {
       const data = await firstValueFrom(this.astrologyService.getByUserId(this.userId()));
       this.astrologyData.set(data);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -62,9 +59,6 @@ export class AstrologyHome implements OnInit {
       const user = await firstValueFrom(this.userService.findMe(this.userId()));
       this.userData.set(user);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

@@ -180,9 +180,6 @@ export class NumerologyForm implements OnInit {
       this.getNumerologyData();
     } catch (error) {
       console.log(error);
-      if (error instanceof HttpErrorResponse) {
-        alert(error.error.message);
-      }
     } finally {
       this.isLoading.set(false);
     }
@@ -195,9 +192,6 @@ export class NumerologyForm implements OnInit {
         await firstValueFrom(this.dnaStatusService.getStatusByUserId(this.maestraId())),
       );
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -209,9 +203,6 @@ export class NumerologyForm implements OnInit {
     try {
       this.numerologyData.set(await firstValueFrom(this.numService.getByUserId(this.maestraId())));
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -226,9 +217,6 @@ export class NumerologyForm implements OnInit {
       );
       this.isSupplyCreated.set(reponse);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -242,9 +230,6 @@ export class NumerologyForm implements OnInit {
       await firstValueFrom(this.supplyService.createFullPillar('numerology', this.maestraId()));
       alert("Dados Gerados com Sucesso!")
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

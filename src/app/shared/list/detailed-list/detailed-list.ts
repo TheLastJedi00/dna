@@ -28,9 +28,6 @@ export class DetailedList implements OnInit {
     try {
       return await firstValueFrom(this.userService.getAllActiveUsers('fullName', 'asc', 1));
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       throw new Error('Erro desconhecido');
     } finally {
       this.isLoading.set(false);

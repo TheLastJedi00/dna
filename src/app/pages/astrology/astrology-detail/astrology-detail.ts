@@ -71,9 +71,6 @@ export class AstrologyDetail implements OnInit {
         allTopics.push(...supply.topics);
       } catch (e) {
         console.error(`Erro ao carregar módulo ${supplyModule}:`, e);
-        if(e instanceof HttpErrorResponse){
-          alert(e.error.message)
-        }
       }
     }
 
