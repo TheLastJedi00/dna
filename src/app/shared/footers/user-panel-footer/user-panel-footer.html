@@ -12,11 +12,10 @@
   @if (loginservice.getUserRole()?.includes('USER')) {
     <section>
       <a (click)="router.navigate(['dashboard'])">Home</a>
-      <a (click)="router.navigate(['human-design'])">Desenho Humano</a>
-      <a>Numerologia</a>
-      <a>Astrologia</a>
-      <a>Plano Perfeito</a>
-      <a>Sair</a>
+      <a (click)="navigateTo('human-design')">Desenho Humano</a>
+      <a (click)="navigateTo('numerology')">Numerologia</a>
+      <a (click)="navigateTo('astrology')">Astrologia</a>
+      <a (click)="logout()">Sair</a>
     </section>
   }
   <h4 class="uppercase opacity-70">

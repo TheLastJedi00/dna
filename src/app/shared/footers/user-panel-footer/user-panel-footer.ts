@@ -15,11 +15,18 @@ export class UserPanelFooter {
   router = inject(Router);
   loginservice = inject(LoginService)
 
+  private readonly pillars = ['human-design', 'numerology', 'astrology'];
+
   navigateTo(url: string) {
-    if (url === 'human-design') {
-      this.router.navigate([`human-design/${this.userContext.userId}`]);
+    if (this.pillars.includes(url)) {
+      this.router.navigate([`${url}/${this.userContext.userId}`]);
     } else {
       this.router.navigate([url]);
     }
+  }
+
+  logout() {
+    this.loginservice.logout();
+    this.router.navigate(['login']);
   }
 }
