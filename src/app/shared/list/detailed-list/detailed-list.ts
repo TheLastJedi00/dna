@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { DetailedItem } from '../../listed-items/detailed-item/detailed-item';
+import { DetailedItem } from '../detailed-item/detailed-item';
 import { UserService } from '../../../core/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../../core/models/userdata.model';

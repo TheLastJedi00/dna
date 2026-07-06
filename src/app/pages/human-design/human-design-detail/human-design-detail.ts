@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserContextService } from '../../../core/services/user-context.service';
 import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../../core/services/supply.service';
 import { Topic } from '../../../core/models/supply.model';
@@ -32,7 +31,6 @@ interface ModuleConfig {
 })
 export class HumanDesignDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly userContext = inject(UserContextService);
   private readonly supplyService = inject(SupplyService);
   readonly userId = signal('');
   readonly moduleKey = signal('');
