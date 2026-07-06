@@ -4,9 +4,9 @@
   <section class="container mx-auto bg-white main-padding">
     @defer (on viewport) {
       <div animate.enter="slide-in">
-        <app-num-intro-card
+        <app-intro-card
           [title]="moduleTitle()"
-        ></app-num-intro-card>
+        ></app-intro-card>
         @if (error()) {
           <div class="text-center text-black/50 py-10">
             <p>{{ error() }}</p>
