@@ -1,6 +1,5 @@
 import { Component, input } from '@angular/core';
 import { Heart } from '../heart/heart';
-import { Shield } from '../shield/shield';
 import { Bolt } from '../bolt/bolt';
 import { ChatBubble } from '../chat-bubble/chat-bubble';
 import { ChartPie } from '../chart-pie/chart-pie';
@@ -28,7 +27,7 @@ import { Trash } from "../trash/trash";
 
 @Component({
   selector: 'app-icons-switch',
-  imports: [Heart, Shield, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown, Plus, Sparkles, SolAstro, TerraAstro, LuaAstro, ElementoFogo, ElementoTerra, ElementoAr, ElementoAgua, Trash],
+  imports: [Heart, Bolt, ChatBubble, ChartPie, Pencil, Users, Flag, UserCircle, MagnifyingGlass, ArrowsRightLeft, LockClosed, LockOpen, ArrowsPointingOut, ArrowLeft, ChevronDown, Plus, Sparkles, SolAstro, TerraAstro, LuaAstro, ElementoFogo, ElementoTerra, ElementoAr, ElementoAgua, Trash],
   templateUrl: './icons-switch.html',
   styleUrl: './icons-switch.scss',
 })
