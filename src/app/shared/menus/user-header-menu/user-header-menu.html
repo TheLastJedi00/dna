@@ -25,11 +25,11 @@
         </div>
         @if (loginService.getUserRole()?.includes('USER')) {
           <div class="flex flex-col text-left">
-            <app-button variant="text" classes="text-secondary" text="Home"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Desenho Humano"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Numerologia"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Astrologia"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Plano Perfeito"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Home" (action)="router.navigate(['dashboard'])"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Desenho Humano" (action)="router.navigate(['human-design/' + loginService.userId])"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Numerologia" (action)="router.navigate(['numerology/' + loginService.userId])"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Astrologia" (action)="router.navigate(['astrology/' + loginService.userId])"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Plano Perfeito" (action)="router.navigate(['perfect-plain/' + loginService.userId])"></app-button>
           </div>
         }
         @if (loginService.getUserRole()?.includes('ADMIN')) {

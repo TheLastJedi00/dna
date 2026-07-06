@@ -107,5 +107,11 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'perfect-plain/:userId',
+    loadComponent: () =>
+      import('./pages/perfect-plain/perfect-plain').then((m) => m.PerfectPlain),
+    canActivate: [authGuard, ownershipGuard],
+  },
   { path: '**', redirectTo: '' },
 ];

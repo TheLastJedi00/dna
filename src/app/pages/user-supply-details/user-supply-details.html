@@ -13,13 +13,71 @@
       <h2 class="text-primary text-xl">{{ userData()?.fullName }}</h2>
     </div>
   </section>
-  <section class="main-padding bg-white container mx-auto grid lg:grid-cols-3 gap-10 items-start justify-center">
-    <app-human-design-form></app-human-design-form>
-    <app-numerology-form></app-numerology-form>
-    <app-astrology-form></app-astrology-form>
+
+  <section
+    class="main-padding bg-white container mx-auto grid grid-cols-1 gap-3 md:grid-cols-2"
+  >
+    <app-dashboard-button
+      (action)="openModal.set('human-design')"
+      imgSrc="https://i.imgur.com/U4xU7Hj.png"
+      title="Desenho Humano"
+      subtitle="Sua Estratégia Natural"
+      description="Preencher dados, gerar e ver a análise."
+    ></app-dashboard-button>
+    <app-dashboard-button
+      (action)="openModal.set('numerology')"
+      imgSrc="https://i.imgur.com/hYZJdpD.png"
+      title="Numerologia"
+      subtitle="A vibração do destino"
+      description="Preencher dados, gerar e ver a análise."
+    ></app-dashboard-button>
+    <app-dashboard-button
+      (action)="openModal.set('astrology')"
+      imgSrc="https://i.imgur.com/Wh3IKVb.png"
+      title="Astrologia"
+      subtitle="O mapa do sucesso"
+      description="Preencher dados, gerar e ver a análise."
+    ></app-dashboard-button>
+    <app-dashboard-button
+      (action)="openModal.set('perfect-plain')"
+      imgSrc="https://i.imgur.com/ji8gc9V.png"
+      title="Plano Perfeito"
+      subtitle="Síntese dos 3 pilares"
+      description="Requer os 3 pilares preenchidos; gera e vê o plano único."
+    ></app-dashboard-button>
   </section>
 </main>
 <app-user-panel-footer></app-user-panel-footer>
+
+<app-form-modal
+  [isOpen]="openModal() === 'human-design'"
+  title="Desenho Humano"
+  (close)="openModal.set(null)"
+>
+  <app-human-design-form></app-human-design-form>
+</app-form-modal>
+<app-form-modal
+  [isOpen]="openModal() === 'numerology'"
+  title="Numerologia"
+  (close)="openModal.set(null)"
+>
+  <app-numerology-form></app-numerology-form>
+</app-form-modal>
+<app-form-modal
+  [isOpen]="openModal() === 'astrology'"
+  title="Astrologia"
+  (close)="openModal.set(null)"
+>
+  <app-astrology-form></app-astrology-form>
+</app-form-modal>
+<app-form-modal
+  [isOpen]="openModal() === 'perfect-plain'"
+  title="Plano Perfeito"
+  (close)="openModal.set(null)"
+>
+  <app-perfect-plain-trigger [maestraId]="maestraId()"></app-perfect-plain-trigger>
+</app-form-modal>
+
 @if (isLoading()) {
   <app-infinity></app-infinity>
 }

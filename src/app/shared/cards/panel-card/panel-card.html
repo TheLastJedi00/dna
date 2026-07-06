@@ -23,6 +23,7 @@
         description="Explore a influência dos astros em sua jornada empreendedora e talentos inatos."
       ></app-dashboard-button>
       <app-dashboard-button
+        (action)="this.router.navigate([`perfect-plain/${loginService.userId}`])"
         imgSrc="https://i.imgur.com/ji8gc9V.png"
         title="Plano Perfeito"
         subtitle="Sua rota de mentoria"

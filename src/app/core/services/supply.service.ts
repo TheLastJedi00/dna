@@ -27,8 +27,13 @@ export class SupplyService {
     return this.http.get<Supply>(`${this.api}/astrology/${module}/${userId}`);
   }
 
+  getPerfectPlain(userId: string): Observable<Supply> {
+    return this.http.get<Supply>(`${this.api}/perfect-plain/${userId}`);
+  }
+
   createModule(userId: string, pillar: string, module: string) {
-    return this.http.post<any>(`${this.api}/${userId}/${pillar}/${module}`, module);
+    // Backend: POST /supply/:pillar/:module/:userId
+    return this.http.post<any>(`${this.api}/${pillar}/${module}/${userId}`, module);
   }
 
   createFullPillar(pillar: string, userId: string) {

@@ -14,6 +14,12 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
   refresh falhar. `authGuard`/`roleGuard`/`ownershipGuard` protegem as rotas.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
 
+## Plano Perfeito
+
+Página `perfect-plain/:userId` (síntese dos 3 pilares, módulo único). O gatilho
+"Gerar/Ver Plano Perfeito" fica no painel admin (`user-supply-details`), onde cada
+pilar é um botão no padrão do dashboard que abre o respectivo form/gatilho em modal.
+
 ## Ambientes
 
 `src/environments/`: `environment.ts` (prod), `environment.development.ts` (dev)
