@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import {
   FormBuilder,
@@ -9,12 +9,9 @@ import {
 import { AstrologyService } from '../../../core/services/astrology.service';
 import { LeituraAstrologica } from '../../../core/models/astrology.model';
 import { firstValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from '../../loading/infinity/infinity';
-import { DnaStatusService } from '../../../core/services/dna-status.service';
 import { DnaStatus } from '../../../core/models/dna-status.model';
-import { SupplyService } from '../../../core/services/supply.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { PillarFormBase } from '../pillar-form.base';
 
 @Component({
   selector: 'app-astrology-form',
@@ -22,36 +19,18 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './astrology-form.html',
   styleUrl: './astrology-form.scss',
 })
-export class AstrologyForm implements OnInit {
-  async ngOnInit(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('maestraId') ?? '';
-    this.maestraId.set(id);
-    await this.getDnaStatus();
-    if (this.dnaStatus()?.astrology) {
-      await this.getAstrologyData();
-      await this.checkSupplyByMaestraId();
-    }
-  }
-
-  maestraId = signal('');
-  isLoading = signal(false);
-  loadingMessage = signal<string | null>(null);
-  dnaStatus = signal<DnaStatus | null>(null);
-  astrologyData = signal<LeituraAstrologica | null>(null);
-  isSupplyCreated = signal<boolean>(false);
-  router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
+export class AstrologyForm extends PillarFormBase implements OnInit {
+  protected readonly pillar = 'astrology' as const;
   private readonly fb = inject(FormBuilder);
   private readonly astrologyService = inject(AstrologyService);
-  private readonly dnaStatusService = inject(DnaStatusService);
-  private readonly supplyService = inject(SupplyService);
+  readonly astrologyData = signal<LeituraAstrologica | null>(null);
 
   protected astroForm = this.fb.nonNullable.group({
     // Tríade Astrológica
     triade_sol_signo: this.fb.control('', [Validators.required]),
     triade_sol_casa: this.fb.control<number | null>(null, [Validators.required]),
     triade_sol_planetas: this.fb.control<string | null>(null),
-    
+
     triade_ascendente_signo: this.fb.control('', [Validators.required]),
     triade_ascendente_casa: this.fb.control<number | null>(null, [Validators.required]),
     triade_ascendente_planetas: this.fb.control<string | null>(null),
@@ -80,7 +59,18 @@ export class AstrologyForm implements OnInit {
     elementos_agua: this.fb.control<number | null>(null, [Validators.required]),
   });
 
-  //HTTP Requests
+  async ngOnInit(): Promise<void> {
+    await this.initPillarForm();
+  }
+
+  protected hasPillarData(status: DnaStatus | null): boolean {
+    return !!status?.astrology;
+  }
+
+  protected async loadPillarData(): Promise<void> {
+    await this.getAstrologyData();
+  }
+
   async saveAstrologyData() {
     this.isLoading.set(true);
     const form = this.astroForm.getRawValue();
@@ -131,77 +121,22 @@ export class AstrologyForm implements OnInit {
       this.getDnaStatus();
       this.getAstrologyData();
     } catch (error) {
-      console.log(error);
-      if (error instanceof HttpErrorResponse) {
-        alert(error.error.message);
-      }
+      console.error(error);
     } finally {
       this.isLoading.set(false);
     }
   }
 
-  async getDnaStatus() {
+  private async getAstrologyData() {
     this.isLoading.set(true);
     try {
-      this.dnaStatus.set(
-        await firstValueFrom(this.dnaStatusService.getStatusByUserId(this.maestraId())),
+      this.astrologyData.set(
+        await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())),
       );
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
-    }
-  }
-
-  async getAstrologyData() {
-    this.isLoading.set(true);
-    try {
-      this.astrologyData.set(await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())));
-    } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  async checkSupplyByMaestraId() {
-    this.isLoading.set(true);
-    try {
-      const reponse = await firstValueFrom(
-        this.supplyService.isSupplyForThisUser(this.maestraId(), 'astrology'),
-      );
-      this.isSupplyCreated.set(reponse);
-    } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  async createAllSupply() {
-    this.isLoading.set(true);
-    this.loadingMessage.set('Isso pode levar alguns minutos, não feche a página.');
-    try {
-      await firstValueFrom(this.supplyService.createFullPillar('astrology', this.maestraId()));
-      alert("Dados Gerados com Sucesso!")
-    } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-      this.loadingMessage.set(null);
-      this.checkSupplyByMaestraId();
     }
   }
 }

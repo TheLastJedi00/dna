@@ -28,9 +28,6 @@ export class UserSupplyList implements OnInit {
     try {
       this.usersList.set(await firstValueFrom(this.service.getAllActiveUsers('fullName', 'asc')));
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

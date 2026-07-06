@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import {
   FormArray,
@@ -10,12 +10,9 @@ import {
 import { NumerologyService } from '../../../core/services/numerology.service';
 import { NumerologyData } from '../../../core/models/numdata.model';
 import { firstValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from '../../loading/infinity/infinity';
-import { DnaStatusService } from '../../../core/services/dna-status.service';
 import { DnaStatus } from '../../../core/models/dna-status.model';
-import { SupplyService } from '../../../core/services/supply.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { PillarFormBase } from '../pillar-form.base';
 
 @Component({
   selector: 'app-numerology-form',
@@ -23,29 +20,11 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './numerology-form.html',
   styleUrl: './numerology-form.scss',
 })
-export class NumerologyForm implements OnInit {
-  async ngOnInit(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('maestraId') ?? '';
-    this.maestraId.set(id);
-    await this.getDnaStatus();
-    if (this.dnaStatus()?.numerology) {
-      await this.getNumerologyData();
-      await this.checkSupplyByMaestraId();
-    }
-  }
-
-  maestraId = signal('');
-  isLoading = signal(false);
-  loadingMessage = signal<string | null>(null);
-  dnaStatus = signal<DnaStatus | null>(null);
-  numerologyData = signal<NumerologyData | null>(null);
-  isSupplyCreated = signal<boolean>(false);
-  router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
+export class NumerologyForm extends PillarFormBase implements OnInit {
+  protected readonly pillar = 'numerology' as const;
   private readonly fb = inject(FormBuilder);
   private readonly numService = inject(NumerologyService);
-  private readonly dnaStatusService = inject(DnaStatusService);
-  private readonly supplyService = inject(SupplyService);
+  readonly numerologyData = signal<NumerologyData | null>(null);
 
   protected numForm = this.fb.nonNullable.group({
     // Perfil
@@ -130,7 +109,17 @@ export class NumerologyForm implements OnInit {
     this.numerosFavoraveis.removeAt(index);
   }
 
-  //HTTP Requests
+  async ngOnInit(): Promise<void> {
+    await this.initPillarForm();
+  }
+
+  protected hasPillarData(status: DnaStatus | null): boolean {
+    return !!status?.numerology;
+  }
+
+  protected async loadPillarData(): Promise<void> {
+    await this.getNumerologyData();
+  }
 
   async saveNumerologyData() {
     this.isLoading.set(true);
@@ -179,77 +168,22 @@ export class NumerologyForm implements OnInit {
       this.getDnaStatus();
       this.getNumerologyData();
     } catch (error) {
-      console.log(error);
-      if (error instanceof HttpErrorResponse) {
-        alert(error.error.message);
-      }
+      console.error(error);
     } finally {
       this.isLoading.set(false);
     }
   }
 
-  async getDnaStatus() {
+  private async getNumerologyData() {
     this.isLoading.set(true);
     try {
-      this.dnaStatus.set(
-        await firstValueFrom(this.dnaStatusService.getStatusByUserId(this.maestraId())),
+      this.numerologyData.set(
+        await firstValueFrom(this.numService.getByUserId(this.maestraId())),
       );
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
-    }
-  }
-
-  async getNumerologyData() {
-    this.isLoading.set(true);
-    try {
-      this.numerologyData.set(await firstValueFrom(this.numService.getByUserId(this.maestraId())));
-    } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  async checkSupplyByMaestraId() {
-    this.isLoading.set(true);
-    try {
-      const reponse = await firstValueFrom(
-        this.supplyService.isSupplyForThisUser(this.maestraId(), 'numerology'),
-      );
-      this.isSupplyCreated.set(reponse);
-    } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  async createAllSupply() {
-    this.isLoading.set(true);
-    this.loadingMessage.set('Isso pode levar alguns minutos, não feche a página.');
-    try {
-      await firstValueFrom(this.supplyService.createFullPillar('numerology', this.maestraId()));
-      alert("Dados Gerados com Sucesso!")
-    } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-      this.loadingMessage.set(null);
-      this.checkSupplyByMaestraId();
     }
   }
 }
