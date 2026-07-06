@@ -25,35 +25,35 @@
         </div>
         @if (loginService.getUserRole()?.includes('USER')) {
           <div class="flex flex-col text-left">
-            <app-text-button textColor="text-secondary" text="Home"></app-text-button>
-            <app-text-button textColor="text-secondary" text="Desenho Humano"></app-text-button>
-            <app-text-button textColor="text-secondary" text="Numerologia"></app-text-button>
-            <app-text-button textColor="text-secondary" text="Astrologia"></app-text-button>
-            <app-text-button textColor="text-secondary" text="Plano Perfeito"></app-text-button>
+            <app-button variant="text" classes="text-secondary" text="Home"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Desenho Humano"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Numerologia"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Astrologia"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Plano Perfeito"></app-button>
           </div>
         }
         @if (loginService.getUserRole()?.includes('ADMIN')) {
           <div class="flex flex-col text-left">
-            <app-text-button
-              textColor="text-secondary"
+            <app-button variant="text"
+              classes="text-secondary"
               text="Home"
               (action)="router.navigate(['dashboard'])"
-            ></app-text-button>
-            <app-text-button
-              textColor="text-secondary"
+            ></app-button>
+            <app-button variant="text"
+              classes="text-secondary"
               text="Gerenciar Maestras"
               (action)="router.navigate(['management/maestras'])"
-            ></app-text-button>
-            <app-text-button
-              textColor="text-secondary"
+            ></app-button>
+            <app-button variant="text"
+              classes="text-secondary"
               text="Gerenciar Análises do DNA"
               (action)="router.navigate(['dna-management'])"
-            ></app-text-button>
+            ></app-button>
             @if (loginService.getUserRole()?.includes('MANAGER')) {
-              <app-text-button
-                textColor="text-secondary"
+              <app-button variant="text"
+                classes="text-secondary"
                 text="Gerenciar Analistas do DNA"
-              ></app-text-button>
+              ></app-button>
             }
           </div>
         }
