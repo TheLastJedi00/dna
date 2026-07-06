@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 
 @Component({
-  selector: 'app-num-intro-card',
+  selector: 'app-intro-card',
   imports: [IconTextButton],
-  templateUrl: './num-intro-card.html',
-  styleUrl: './num-intro-card.scss',
+  templateUrl: './intro-card.html',
+  styleUrl: './intro-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumIntroCard {
+export class IntroCard {
   title = input('Título');
   singleIntro = input<string | null>(null);
   intro = input<string[] | null>(null);

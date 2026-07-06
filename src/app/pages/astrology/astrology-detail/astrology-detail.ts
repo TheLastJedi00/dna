@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../../core/services/supply.service';
 import { Topic } from '../../../core/models/supply.model';
-import { NumIntroCard } from '../../../shared/cards/num-intro-card/num-intro-card';
+import { IntroCard } from '../../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
 import { Infinity } from '../../../shared/loading/infinity/infinity';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,7 +15,7 @@ interface ModuleConfig {
 
 @Component({
   selector: 'app-astrology-detail',
-  imports: [NumIntroCard, ListsCardGrid, Infinity],
+  imports: [IntroCard, ListsCardGrid, Infinity],
   templateUrl: './astrology-detail.html',
   styleUrl: './astrology-detail.scss',
 })

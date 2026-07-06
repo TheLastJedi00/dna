@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { AstroDataButton } from '../../../shared/buttons/astro-data-button/astro-data-button';
+import { DataButton } from '../../../shared/buttons/data-button/data-button';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { LeituraAstrologica } from '../../../core/models/astrology.model';
@@ -13,7 +13,7 @@ import { Infinity } from '../../../shared/loading/infinity/infinity';
 
 @Component({
   selector: 'app-astrology-home',
-  imports: [AstroDataButton, NgClass, UserDataCard, Infinity],
+  imports: [DataButton, NgClass, UserDataCard, Infinity],
   templateUrl: './astrology-home.html',
   styleUrl: './astrology-home.scss',
 })

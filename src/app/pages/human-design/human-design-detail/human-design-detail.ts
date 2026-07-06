@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../../core/services/supply.service';
 import { Topic } from '../../../core/models/supply.model';
-import { DhIntroCard } from '../../../shared/cards/dh-intro-card/dh-intro-card';
+import { IntroCard } from '../../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
 import { Infinity } from '../../../shared/loading/infinity/infinity';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -25,7 +25,7 @@ interface ModuleConfig {
 
 @Component({
   selector: 'app-human-design-detail',
-  imports: [DhIntroCard, ListsCardGrid, Infinity, VerticalAccordion],
+  imports: [IntroCard, ListsCardGrid, Infinity, VerticalAccordion],
   templateUrl: './human-design-detail.html',
   styleUrl: './human-design-detail.scss',
 })
