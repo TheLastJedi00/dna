@@ -1,19 +1,15 @@
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
-import { Router } from '@angular/router';
-import { UserContextService } from '../../../core/services/user-context.service';
 
 @Component({
   selector: 'app-num-intro-card',
   imports: [IconTextButton],
   templateUrl: './num-intro-card.html',
   styleUrl: './num-intro-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NumIntroCard {
-  router = inject(Router);
-  private readonly userContext = inject(UserContextService);
-  userId = this.userContext.userId
-  title = input("Título");
+  title = input('Título');
   singleIntro = input<string | null>(null);
   intro = input<string[] | null>(null);
 }
