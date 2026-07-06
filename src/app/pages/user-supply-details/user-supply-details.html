@@ -18,6 +18,9 @@
     <app-numerology-form></app-numerology-form>
     <app-astrology-form></app-astrology-form>
   </section>
+  <section class="main-padding bg-white container mx-auto">
+    <app-perfect-plain-trigger [maestraId]="maestraId()"></app-perfect-plain-trigger>
+  </section>
 </main>
 <app-user-panel-footer></app-user-panel-footer>
 @if (isLoading()) {

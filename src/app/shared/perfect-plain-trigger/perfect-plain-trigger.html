@@ -1,0 +1,31 @@
+<div class="bg-white dna-data grid gap-3">
+  <h3 class="text-secondary font-merriweather text-xl">Plano Perfeito</h3>
+  <p class="text-black/70">
+    Reúne os três pilares num plano único. Requer Desenho Humano, Numerologia e
+    Astrologia já preenchidos.
+  </p>
+
+  @if (!ready()) {
+    <p class="text-black/50">
+      Preencha os dados dos 3 pilares para habilitar a geração.
+    </p>
+  } @else if (isCreated()) {
+    <app-icon-text-button
+      (click)="view()"
+      icon="magnifying-glass"
+      text="Ver Plano Perfeito"
+      class="w-full bg-secondary text-white rounded-xl"
+    ></app-icon-text-button>
+  } @else {
+    <app-icon-text-button
+      (click)="generate()"
+      icon="sparkles"
+      text="Gerar Plano Perfeito"
+      class="w-full bg-secondary text-white rounded-xl"
+    ></app-icon-text-button>
+  }
+</div>
+
+@if (isLoading()) {
+  <app-infinity [message]="loadingMessage()"></app-infinity>
+}
