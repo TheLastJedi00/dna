@@ -1,6 +1,7 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Exit } from '../../icons/exit/exit';
 import { Router } from '@angular/router';
+import { LoginService } from '../../../core/services/login.service';
 
 @Component({
   selector: 'app-logout-button',
@@ -9,10 +10,11 @@ import { Router } from '@angular/router';
   styleUrl: './logout-button.scss',
 })
 export class LogoutButton {
-  router = inject(Router)
+  private readonly router = inject(Router);
+  private readonly loginService = inject(LoginService);
 
-  logout(){
-    this.router.navigate([`login`])
-    localStorage.removeItem("access_token")
+  logout() {
+    this.loginService.logout();
+    this.router.navigate(['login']);
   }
 }
