@@ -15,8 +15,6 @@ import { Infinity } from '../../loading/infinity/infinity';
 import { DnaStatusService } from '../../../core/services/dna-status.service';
 import { DnaStatus } from '../../../core/models/dna-status.model';
 import { SupplyService } from '../../../core/services/supply.service';
-import { response } from 'express';
-import { sign } from 'crypto';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
