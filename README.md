@@ -1,6 +1,23 @@
 # DnaProject
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
+Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
+[DNA API](https://github.com/TheLastJedi00/dna-api).
+
+## Arquitetura
+
+- **Smart pages / dumb components:** páginas (`pages/*`) concentram estado e
+  chamadas HTTP; componentes de `shared/` recebem dados prontos por `input()` e
+  emitem por `output()`. Convenções em `.specs/global-strategy.md`.
+- **Sessão:** `LoginService` é o dono único da sessão — guarda o par
+  **access/refresh token**, valida expiração e coordena o refresh. O
+  `authInterceptor` renova o token em 401 (fila compartilhada) e desloga se o
+  refresh falhar. `authGuard`/`roleGuard`/`ownershipGuard` protegem as rotas.
+- **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
+
+## Ambientes
+
+`src/environments/`: `environment.ts` (prod), `environment.development.ts` (dev)
+e `environment.local.ts` (localhost). Cada um define `apiUrl`.
 
 ## Development server
 
