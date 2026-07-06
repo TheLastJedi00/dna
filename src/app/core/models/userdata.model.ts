@@ -1,15 +1,14 @@
-export type Role = 'MANAGER' | 'ADMIN' | 'USER';
+import { UserRole } from '../../types/types';
 
 export interface UserData {
-  id?: string
+  id?: string;
   fullName: string;
   birthDate: string;
   birthTime: string;
   birthPlace: string;
-  role?: Role;
+  roles?: UserRole[];
   login?: {
     password?: string;
     email?: string;
-    role?: Role;
   };
 }
