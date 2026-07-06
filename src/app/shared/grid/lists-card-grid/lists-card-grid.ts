@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { TopicListCard } from "../../cards/topic-list-card/topic-list-card";
-import { TopicList } from '../../../core/models/topiclist.model';
+import { Topic } from '../../../core/models/supply.model';
 
 @Component({
   selector: 'app-lists-card-grid',
@@ -9,5 +9,5 @@ import { TopicList } from '../../../core/models/topiclist.model';
   styleUrl: './lists-card-grid.scss',
 })
 export class ListsCardGrid {
-  topics = input<TopicList[] | null>(null)
+  topics = input<Topic[] | null>(null)
 }

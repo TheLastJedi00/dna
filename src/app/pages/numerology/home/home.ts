@@ -42,9 +42,6 @@ export class Home implements OnInit {
       const data = await firstValueFrom(this.numerologyService.getByUserId(this.userId()));
       this.numData.set(data);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -57,9 +54,6 @@ export class Home implements OnInit {
       const user = await firstValueFrom(this.userService.findMe(this.userId()));
       this.userData.set(user);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

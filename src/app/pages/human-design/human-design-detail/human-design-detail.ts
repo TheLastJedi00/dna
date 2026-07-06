@@ -1,10 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserContextService } from '../../../core/services/user-context.service';
 import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../../core/services/supply.service';
 import { Topic } from '../../../core/models/supply.model';
-import { DhIntroCard } from '../../../shared/cards/dh-intro-card/dh-intro-card';
+import { IntroCard } from '../../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
 import { Infinity } from '../../../shared/loading/infinity/infinity';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -26,13 +25,12 @@ interface ModuleConfig {
 
 @Component({
   selector: 'app-human-design-detail',
-  imports: [DhIntroCard, ListsCardGrid, Infinity, VerticalAccordion],
+  imports: [IntroCard, ListsCardGrid, Infinity, VerticalAccordion],
   templateUrl: './human-design-detail.html',
   styleUrl: './human-design-detail.scss',
 })
 export class HumanDesignDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly userContext = inject(UserContextService);
   private readonly supplyService = inject(SupplyService);
   readonly userId = signal('');
   readonly moduleKey = signal('');
@@ -259,9 +257,6 @@ como ter uma bússola energética para tudo na sua vida e
       }
     } catch (e) {
       console.error(`Erro ao carregar módulo ${supplyModule}:`, e);
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       this.error.set('Conteúdo ainda não disponível.');
     } finally {
       this.isLoading.set(false);

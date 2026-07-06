@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { AnoPessoal, PeriodoNumerologico } from '../../../core/models/numdata.model';
 import { NgClass } from "@angular/common";
-import { ArrowLeft } from "../../icons/arrow-left/arrow-left";
+import { IconsSwitch } from "../../icons/icons-switch/icons-switch";
 
 interface AnosPessoais {
   atual: AnoPessoal,
@@ -10,7 +10,7 @@ interface AnosPessoais {
 
 @Component({
   selector: 'app-num-data-button',
-  imports: [NgClass, ArrowLeft],
+  imports: [NgClass, IconsSwitch],
   templateUrl: './num-data-button.html',
   styleUrl: './num-data-button.scss',
 })

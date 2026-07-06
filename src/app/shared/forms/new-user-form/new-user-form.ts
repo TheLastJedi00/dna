@@ -66,9 +66,6 @@ export class NewUserForm {
       alert('Nova Maestra cadastrada com sucesso.');
     } catch (e) {
       console.error(e);
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
     } finally {
       this.isLoading.set(false);
       this.createUserForm.reset();

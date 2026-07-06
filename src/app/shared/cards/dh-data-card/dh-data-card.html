@@ -6,7 +6,7 @@
   @if (data() !== null) {
     <p class="text-secondary">{{ data() }}</p>
   }
-  @if (dataArray !== null) {
+  @if (dataArray() !== null) {
     @for (data of dataArray(); track $index) {
       <p class="text-secondary">{{ data }}</p>
     }

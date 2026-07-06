@@ -11,23 +11,6 @@ export class SupplyService {
   private readonly http = inject(HttpClient);
   private readonly api = `${environment.apiUrl}/supply`;
 
-  readonly validHumanDesignModules = [
-    'tipo-aurico',
-    'autoridade',
-    'perfil',
-    'centros-definidos',
-    'centros-indefinidos',
-    'centros-abertos',
-    'canais',
-    'portao-personalidade-sol',
-    'portao-personalidade-terra',
-    'portao-personalidade-lua',
-    'portao-desenho-sol',
-    'portao-desenho-terra',
-    'portao-desenho-lua',
-    'encarnacao',
-  ];
-
   isSupplyForThisUser(userId: string, pillar: string) {
     return this.http.get<boolean>(`${this.api}/check/${userId}/${pillar}`);
   }

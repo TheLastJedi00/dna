@@ -4,7 +4,7 @@ import { UserData } from '../../../core/models/userdata.model';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from '../../loading/infinity/infinity';
-import { UserSupplyItem } from '../../listed-item/user-supply-item/user-supply-item';
+import { UserSupplyItem } from '../user-supply-item/user-supply-item';
 import { Router } from '@angular/router';
 
 @Component({
@@ -28,9 +28,6 @@ export class UserSupplyList implements OnInit {
     try {
       this.usersList.set(await firstValueFrom(this.service.getAllActiveUsers('fullName', 'asc')));
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

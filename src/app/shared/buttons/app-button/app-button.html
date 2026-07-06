@@ -1,0 +1,8 @@
+<button
+  [class]="'variant-' + variant()"
+  [ngClass]="classes()"
+  [disabled]="disabled()"
+  (click)="onClick()"
+>
+  {{ text() }}
+</button>

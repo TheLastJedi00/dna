@@ -34,9 +34,6 @@ export class UserSupplyDetails implements OnInit {
       const user = await firstValueFrom(this.service.findUserById(id));
       this.userData.set(user);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

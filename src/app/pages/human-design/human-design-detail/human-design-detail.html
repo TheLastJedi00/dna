@@ -2,11 +2,11 @@
   @defer (on viewport) {
     @if (config(); as conf) {
       <div animate.enter="slide-in">
-        <app-dh-intro-card
+        <app-intro-card
           [title]="conf.title"
           [singleIntro]="conf.singleIntro ?? null"
           [intro]="conf.arrayIntro ?? null"
-        ></app-dh-intro-card>
+        ></app-intro-card>
         
         @if (conf.accordions) {
           <div class="mt-4 flex flex-col gap-4">

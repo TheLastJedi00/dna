@@ -2,21 +2,21 @@
   @if (roles().includes('USER')) {
     <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-2">
       <app-dashboard-button
-        (action)="this.router.navigate([`human-design/${userContext.userId}`])"
+        (action)="this.router.navigate([`human-design/${loginService.userId}`])"
         imgSrc="https://i.imgur.com/U4xU7Hj.png"
         title="Desenho Humano"
         subtitle="Sua Estratégia Natural"
         description="Descubra como sua energia opera e como tomar decisões alinhadas com sua essência."
       ></app-dashboard-button>
       <app-dashboard-button
-        (action)="this.router.navigate([`numerology/${userContext.userId}`])"
+        (action)="this.router.navigate([`numerology/${loginService.userId}`])"
         imgSrc="https://i.imgur.com/hYZJdpD.png"
         title="Numerologia"
         subtitle="A vibração do seu destino"
         description="Entenda os ciclos numéricos que regem sua vida e os propósitos por trás do seu nome."
       ></app-dashboard-button>
       <app-dashboard-button
-        (action)="this.router.navigate([`astrology/${userContext.userId}`])"
+        (action)="this.router.navigate([`astrology/${loginService.userId}`])"
         imgSrc="https://i.imgur.com/Wh3IKVb.png"
         title="Astrologia"
         subtitle="O mapa do seu sucesso"
@@ -33,14 +33,14 @@
   @if(roles().includes('ADMIN') || roles().includes('MANAGER')){
     <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-3">
     <app-dashboard-button
-      (action)="this.router.navigate(['managment/maestras'])"
+      (action)="this.router.navigate(['management/maestras'])"
       imgSrc="https://i.imgur.com/U4xU7Hj.png"
       title="Gerenciar Maestras"
       subtitle=""
       description=""
     ></app-dashboard-button>
     <app-dashboard-button
-    (action)="router.navigate(['dna-managment'])"
+    (action)="router.navigate(['dna-management'])"
       imgSrc="https://i.imgur.com/hYZJdpD.png"
       title="Gerenciar Análises do DNA"
       subtitle=""
