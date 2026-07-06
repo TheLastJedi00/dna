@@ -32,7 +32,8 @@ export class SupplyService {
   }
 
   createModule(userId: string, pillar: string, module: string) {
-    return this.http.post<any>(`${this.api}/${userId}/${pillar}/${module}`, module);
+    // Backend: POST /supply/:pillar/:module/:userId
+    return this.http.post<any>(`${this.api}/${pillar}/${module}/${userId}`, module);
   }
 
   createFullPillar(pillar: string, userId: string) {
