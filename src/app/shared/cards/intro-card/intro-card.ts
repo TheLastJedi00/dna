@@ -12,4 +12,6 @@ export class IntroCard {
   title = input('Título');
   singleIntro = input<string | null>(null);
   intro = input<string[] | null>(null);
+  /** Destino do botão "Voltar". Padrão sobe um nível na rota atual. */
+  backLink = input<string>('../');
 }

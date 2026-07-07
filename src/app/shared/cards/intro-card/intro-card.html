@@ -3,7 +3,7 @@
   <app-icon-text-button
     icon="arrow-left"
     text="Voltar"
-    routerLink="../"
+    [routerLink]="backLink()"
   ></app-icon-text-button>
 </div>
 @if (intro() !== null) {
