@@ -1,6 +1,5 @@
 @if (dnaStatus()?.human_design) {
   <div class="bg-white dna-data">
-    <h3 class="text-secondary font-merriweather text-xl">Desenho Humano</h3>
     <div>
       <p><b>Aura:</b> {{ humanDesignData()?.aura }}</p>
       <p><b>Energia:</b> {{ humanDesignData()?.energia }}</p>
@@ -57,7 +56,6 @@
   </div>
 } @else {
   <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
-    <h3 class="text-secondary font-merriweather text-xl">Desenho Humano</h3>
     <input formControlName="tipo_aurico" type="text" placeholder="Tipo Áurico" />
     <input formControlName="aura" type="text" placeholder="Aura" />
     <input formControlName="energia" type="text" placeholder="Energia" />

@@ -1,8 +1,8 @@
 <footer class="main-padding">
   @if (loginservice.getUserRole()?.includes('ADMIN')) {
     <section>
-      <a (click)="router.navigate(['managment/maestras'])">Gerenciar Maestras</a>
-      <a (click)="router.navigate(['dna-managment'])">Gerenciar Análises do DNA</a>
+      <a (click)="router.navigate(['management/maestras'])">Gerenciar Maestras</a>
+      <a (click)="router.navigate(['dna-management'])">Gerenciar Análises do DNA</a>
       @if (loginservice.getUserRole()?.includes('MANAGER')) {
         <a>Gerenciar Analistas do DNA</a>
       }
@@ -12,11 +12,10 @@
   @if (loginservice.getUserRole()?.includes('USER')) {
     <section>
       <a (click)="router.navigate(['dashboard'])">Home</a>
-      <a (click)="router.navigate(['human-design'])">Desenho Humano</a>
-      <a>Numerologia</a>
-      <a>Astrologia</a>
-      <a>Plano Perfeito</a>
-      <a>Sair</a>
+      <a (click)="navigateTo('human-design')">Desenho Humano</a>
+      <a (click)="navigateTo('numerology')">Numerologia</a>
+      <a (click)="navigateTo('astrology')">Astrologia</a>
+      <a (click)="logout()">Sair</a>
     </section>
   }
   <h4 class="uppercase opacity-70">

@@ -1,0 +1,22 @@
+@if (message()) {
+  <section
+    animate.enter="expand"
+    animate.leave="collapse"
+    (click)="close()"
+    class="fixed z-20 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
+  >
+    <div
+      class="p-4 bg-white shadow-xl rounded-xl transition-all max-w-sm mx-3"
+      (click)="$event.stopPropagation()"
+    >
+      <h1 class="text-primary font-merriweather">Ops! Algo deu errado</h1>
+      <p class="text-black/70 py-3">{{ message() }}</p>
+      <app-icon-text-button
+        icon="arrow-left"
+        text="Fechar"
+        class="bg-primary rounded-xl text-white w-full text-center"
+        (click)="close()"
+      ></app-icon-text-button>
+    </div>
+  </section>
+}

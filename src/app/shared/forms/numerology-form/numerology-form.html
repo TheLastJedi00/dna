@@ -1,6 +1,5 @@
 @if (dnaStatus()?.numerology) {
   <div class="bg-white dna-data">
-    <h3 class="text-secondary font-merriweather text-xl">Numerologia</h3>
     <div>
       <p><b>Motivação:</b> {{ numerologyData()?.perfil?.motivacao }}</p>
       <p><b>Impressão:</b> {{ numerologyData()?.perfil?.impressao }}</p>
@@ -58,7 +57,6 @@
   </div>
 } @else {
   <form [formGroup]="numForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
-    <h3 class="text-secondary font-merriweather text-xl">Numerologia</h3>
     <input formControlName="motivacao" type="number" placeholder="Motivação" />
     <input formControlName="impressao" type="number" placeholder="Impressão" />
     <input formControlName="expressao" type="number" placeholder="Expressão" />

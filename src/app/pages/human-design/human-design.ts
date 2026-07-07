@@ -1,7 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { Router, RouterOutlet } from '@angular/router';
-import { DhDataButton } from '../../shared/buttons/dh-data-button/dh-data-button';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { DnaTitleCard } from "../../shared/cards/dna-title-card/dna-title-card";
 import { DnaDescriptionCard } from "../../shared/cards/dna-description-card/dna-description-card";

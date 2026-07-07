@@ -11,23 +11,6 @@ export class SupplyService {
   private readonly http = inject(HttpClient);
   private readonly api = `${environment.apiUrl}/supply`;
 
-  readonly validHumanDesignModules = [
-    'tipo-aurico',
-    'autoridade',
-    'perfil',
-    'centros-definidos',
-    'centros-indefinidos',
-    'centros-abertos',
-    'canais',
-    'portao-personalidade-sol',
-    'portao-personalidade-terra',
-    'portao-personalidade-lua',
-    'portao-desenho-sol',
-    'portao-desenho-terra',
-    'portao-desenho-lua',
-    'encarnacao',
-  ];
-
   isSupplyForThisUser(userId: string, pillar: string) {
     return this.http.get<boolean>(`${this.api}/check/${userId}/${pillar}`);
   }
@@ -44,8 +27,13 @@ export class SupplyService {
     return this.http.get<Supply>(`${this.api}/astrology/${module}/${userId}`);
   }
 
-  getPerfectPlainModule(userId: string, pillar: string): Observable<Supply> {
-    return this.http.get<Supply>(`${this.api}/${pillar}/${userId}`);
+  getPerfectPlain(userId: string): Observable<Supply> {
+    return this.http.get<Supply>(`${this.api}/perfect-plain/${userId}`);
+  }
+
+  createModule(userId: string, pillar: string, module: string) {
+    // Backend: POST /supply/:pillar/:module/:userId
+    return this.http.post<any>(`${this.api}/${pillar}/${module}/${userId}`, module);
   }
 
   createFullPillar(pillar: string, userId: string) {

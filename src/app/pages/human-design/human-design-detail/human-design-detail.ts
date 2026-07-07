@@ -1,10 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserContextService } from '../../../core/services/user-context.service';
-import { firstValueFrom, forkJoin } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../../core/services/supply.service';
 import { Topic } from '../../../core/models/supply.model';
-import { DhIntroCard } from '../../../shared/cards/dh-intro-card/dh-intro-card';
+import { IntroCard } from '../../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
 import { Infinity } from '../../../shared/loading/infinity/infinity';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -24,34 +23,23 @@ interface ModuleConfig {
   paragraphsAfter?: string[];
 }
 
-interface MultiModuleConfig extends ModuleConfig {
-  supplyModules: { module: string; label: string }[];
-}
-
-export interface TopicGroup {
-  label: string;
-  topics: Topic[];
-}
-
 @Component({
   selector: 'app-human-design-detail',
-  imports: [DhIntroCard, ListsCardGrid, Infinity, VerticalAccordion],
+  imports: [IntroCard, ListsCardGrid, Infinity, VerticalAccordion],
   templateUrl: './human-design-detail.html',
   styleUrl: './human-design-detail.scss',
 })
 export class HumanDesignDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly userContext = inject(UserContextService);
   private readonly supplyService = inject(SupplyService);
   readonly userId = signal('');
   readonly moduleKey = signal('');
   topics = signal<Topic[] | null>(null);
-  groupedTopics = signal<TopicGroup[]>([]);
   isLoading = signal(true);
   error = signal<string | null>(null);
-  config = signal<ModuleConfig | MultiModuleConfig | null>(null);
+  config = signal<ModuleConfig | null>(null);
 
-  private readonly MODULE_CONFIG: Record<string, ModuleConfig | MultiModuleConfig> = {
+  private readonly MODULE_CONFIG: Record<string, ModuleConfig> = {
     'tipo-aurico': {
       title: 'Tipo Áurico, Estratégia, Assinatura e Não-Ser',
       supplyModule: 'tipo-aurico',
@@ -237,62 +225,6 @@ como ter uma bússola energética para tudo na sua vida e
       paragraphsAfter: [
         'Compreender seus Centros é fundamental para entender como você opera energeticamente, onde você tem estabilidade, onde você pode se perder, e onde você tem sabedoria natural ao observar os outros.'
       ]
-    },
-    'portoes-personalidade': {
-      title: 'Portões da Personalidade',
-      supplyModule: '',
-      supplyModules: [
-        { module: 'portao-personalidade-sol', label: 'Sol da Personalidade' },
-        { module: 'portao-personalidade-terra', label: 'Terra da Personalidade' },
-        { module: 'portao-personalidade-lua', label: 'Lua da Personalidade' }
-      ],
-      arrayIntro: [
-        'Os Portões da Personalidade representam as ativações conscientes no seu Desenho Humano.',
-        'Eles indicam as energias que você reconhece em si mesma — aquilo que você vive de forma mais consciente e ativa.',
-        'Cada portão está ligado a um astro (Sol, Terra e Lua), e revela uma qualidade energética específica que influencia a sua expressão no mundo.'
-      ],
-      accordions: [
-        {
-          title: 'Sol da Personalidade',
-          content: '<p>O Portão do Sol da Personalidade representa o tema central da sua identidade consciente — é a energia que você mais reconhece em si mesma e que mais expressa no mundo.</p>'
-        },
-        {
-          title: 'Terra da Personalidade',
-          content: '<p>O Portão da Terra da Personalidade é a sua base de sustentação consciente — aquilo que te ancora e te dá estabilidade enquanto você expressa a energia do Sol.</p>'
-        },
-        {
-          title: 'Lua da Personalidade',
-          content: '<p>O Portão da Lua da Personalidade representa um impulso emocional consciente — uma força motriz que te move de forma cíclica e instintiva.</p>'
-        }
-      ]
-    },
-    'portoes-desenho': {
-      title: 'Portões do Desenho',
-      supplyModule: '',
-      supplyModules: [
-        { module: 'portao-desenho-sol', label: 'Sol do Desenho' },
-        { module: 'portao-desenho-terra', label: 'Terra do Desenho' },
-        { module: 'portao-desenho-lua', label: 'Lua do Desenho' }
-      ],
-      arrayIntro: [
-        'Os Portões do Desenho representam as ativações inconscientes no seu Desenho Humano.',
-        'Eles revelam energias que operam nas camadas mais profundas da sua natureza — aquilo que os outros percebem em você, mesmo quando você não percebe.',
-        'Assim como nos Portões da Personalidade, cada portão está ligado a um astro (Sol, Terra e Lua), mas aqui a influência é mais sutil e automática.'
-      ],
-      accordions: [
-        {
-          title: 'Sol do Desenho',
-          content: '<p>O Portão do Sol do Desenho é a essência inconsciente que você emana — uma energia poderosa que os outros reconhecem em você, mesmo que você não perceba conscientemente.</p>'
-        },
-        {
-          title: 'Terra do Desenho',
-          content: '<p>O Portão da Terra do Desenho é a sua base inconsciente — o alicerce energético que sustenta a expressão do Sol do Desenho, trazendo equilíbrio à sua natureza profunda.</p>'
-        },
-        {
-          title: 'Lua do Desenho',
-          content: '<p>O Portão da Lua do Desenho representa um impulso emocional inconsciente — uma força interior que te impulsiona de maneiras que muitas vezes só os outros percebem.</p>'
-        }
-      ]
     }
   };
 
@@ -310,16 +242,7 @@ como ter uma bússola energética para tudo na sua vida e
     }
 
     this.config.set(config);
-
-    if (this.isMultiModuleConfig(config)) {
-      await this.loadMultipleTopics(userId, config.supplyModules);
-    } else {
-      await this.loadTopics(userId, config.supplyModule);
-    }
-  }
-
-  private isMultiModuleConfig(config: ModuleConfig | MultiModuleConfig): config is MultiModuleConfig {
-    return 'supplyModules' in config && Array.isArray((config as MultiModuleConfig).supplyModules);
+    await this.loadTopics(userId, config.supplyModule);
   }
 
   private async loadTopics(userId: string, supplyModule: string) {
@@ -334,38 +257,6 @@ como ter uma bússola energética para tudo na sua vida e
       }
     } catch (e) {
       console.error(`Erro ao carregar módulo ${supplyModule}:`, e);
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
-      this.error.set('Conteúdo ainda não disponível.');
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async loadMultipleTopics(userId: string, supplyModules: { module: string; label: string }[]) {
-    try {
-      const observables = supplyModules.map(m =>
-        this.supplyService.getHumanDesignModule(userId, m.module)
-      );
-      const supplies = await firstValueFrom(forkJoin(observables));
-      const groups: TopicGroup[] = supplies
-        .map((supply, i) => ({
-          label: supplyModules[i].label,
-          topics: supply.topics ?? []
-        }))
-        .filter(g => g.topics.length > 0);
-
-      if (groups.length > 0) {
-        this.groupedTopics.set(groups);
-      } else {
-        this.error.set('Conteúdo ainda não disponível.');
-      }
-    } catch (e) {
-      console.error(`Erro ao carregar módulos ${supplyModules.map(m => m.module).join(', ')}:`, e);
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       this.error.set('Conteúdo ainda não disponível.');
     } finally {
       this.isLoading.set(false);

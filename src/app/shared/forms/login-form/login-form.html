@@ -23,11 +23,11 @@
   @if (error()) {
     <span class="text-center text-[red]">{{ error() }}</span>
   }
-  <app-flat-button
+  <app-button variant="flat"
     [disabled]="!loginForm.valid"
     text="Entrar"
     classes="bg-primary w-full text-white"
-  ></app-flat-button>
+  ></app-button>
 </form>
 
 @if (isLoading()) {
