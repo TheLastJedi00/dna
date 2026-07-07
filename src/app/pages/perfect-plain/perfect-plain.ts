@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../core/services/supply.service';
+import { LoginService } from '../../core/services/login.service';
 import { Topic } from '../../core/models/supply.model';
 import { IntroCard } from '../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../shared/grid/lists-card-grid/lists-card-grid';
@@ -24,11 +25,23 @@ import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-pan
 export class PerfectPlain implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly supplyService = inject(SupplyService);
+  private readonly loginService = inject(LoginService);
 
   readonly userId = signal('');
   readonly topics = signal<Topic[] | null>(null);
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
+
+  /**
+   * Destino do "Voltar": o admin volta para o painel do usuário (user-supply);
+   * o próprio usuário volta para o seu dashboard. Absoluto de propósito — a rota
+   * `perfect-plain/:userId` é plana, então o "../" padrão iria para a landing.
+   */
+  readonly backLink = computed(() => {
+    const roles = this.loginService.getUserRole() ?? [];
+    const isAdmin = roles.includes('ADMIN') || roles.includes('MANAGER');
+    return isAdmin ? `/user-supply/${this.userId()}` : '/dashboard';
+  });
 
   async ngOnInit() {
     const userId = this.route.snapshot.paramMap.get('userId') ?? '';
