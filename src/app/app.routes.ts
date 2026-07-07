@@ -1,71 +1,117 @@
 import { Routes } from '@angular/router';
-import { Landing } from './pages/landing/landing';
-import { Login } from './pages/login/login';
-import { Dashboard } from './pages/dashboard/dashboard';
-import { HumanDesign } from './pages/human-design/human-design';
-import { HumanDesignHome } from './pages/human-design/human-design-home/human-design-home';
-import { HumanDesignDetail } from './pages/human-design/human-design-detail/human-design-detail';
-import { Numerology } from './pages/numerology/numerology';
-import { Home } from './pages/numerology/home/home';
-import { NumerologyDetail } from './pages/numerology/numerology-detail/numerology-detail';
 import { authGuard } from './core/guards/auth-guard';
-import { Managment } from './pages/managment/managment';
+import { ownershipGuard } from './core/guards/ownership-guard';
 import { roleGuard } from './core/guards/role-guard';
-import { DnaManagment } from './pages/dna-managment/dna-managment';
-import { UserSupplyDetails } from './pages/user-supply-details/user-supply-details';
-import { Astrology } from './pages/astrology/astrology';
-import { AstrologyHome } from './pages/astrology/astrology-home/astrology-home';
-import { AstrologyDetail } from './pages/astrology/astrology-detail/astrology-detail';
-import { PerfectPlain } from './pages/perfect-plain/perfect-plain';
 
 export const routes: Routes = [
-  { path: '', component: Landing },
-  { path: 'login', component: Login },
-  { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
-  { path: 'managment/:type', component: Managment, canActivate: [authGuard, roleGuard] },
   {
-    path: 'dna-managment',
-    component: DnaManagment,
+    path: '',
+    loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'management/:type',
+    loadComponent: () =>
+      import('./pages/management/management').then((m) => m.Management),
+    canActivate: [authGuard, roleGuard],
+  },
+  {
+    path: 'dna-management',
+    loadComponent: () =>
+      import('./pages/dna-management/dna-management').then(
+        (m) => m.DnaManagement,
+      ),
     canActivate: [authGuard, roleGuard],
   },
   {
     path: 'user-supply/:maestraId',
-    component: UserSupplyDetails,
+    loadComponent: () =>
+      import('./pages/user-supply-details/user-supply-details').then(
+        (m) => m.UserSupplyDetails,
+      ),
     canActivate: [authGuard, roleGuard],
   },
   {
     path: 'human-design/:userId',
-    component: HumanDesign,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/human-design/human-design').then((m) => m.HumanDesign),
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
-      { path: '', component: HumanDesignHome },
-      { path: ':module', component: HumanDesignDetail },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/human-design/human-design-home/human-design-home').then(
+            (m) => m.HumanDesignHome,
+          ),
+      },
+      {
+        path: ':module',
+        loadComponent: () =>
+          import(
+            './pages/human-design/human-design-detail/human-design-detail'
+          ).then((m) => m.HumanDesignDetail),
+      },
     ],
   },
   {
     path: 'numerology/:userId',
-    component: Numerology,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/numerology/numerology').then((m) => m.Numerology),
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
-      { path: '', component: Home },
-      { path: ':module', component: NumerologyDetail },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/numerology/home/home').then((m) => m.Home),
+      },
+      {
+        path: ':module',
+        loadComponent: () =>
+          import(
+            './pages/numerology/numerology-detail/numerology-detail'
+          ).then((m) => m.NumerologyDetail),
+      },
     ],
   },
   {
     path: 'astrology/:userId',
-    component: Astrology,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/astrology/astrology').then((m) => m.Astrology),
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
-      { path: '', component: AstrologyHome },
-      { path: ':module', component: AstrologyDetail },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/astrology/astrology-home/astrology-home').then(
+            (m) => m.AstrologyHome,
+          ),
+      },
+      {
+        path: ':module',
+        loadComponent: () =>
+          import('./pages/astrology/astrology-detail/astrology-detail').then(
+            (m) => m.AstrologyDetail,
+          ),
+      },
     ],
   },
   {
     path: 'perfect-plain/:userId',
-    component: PerfectPlain,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/perfect-plain/perfect-plain').then((m) => m.PerfectPlain),
+    canActivate: [authGuard, ownershipGuard],
   },
+  { path: '**', redirectTo: '' },
 ];

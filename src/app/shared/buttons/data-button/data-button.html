@@ -1,0 +1,21 @@
+<button class="data-button text-primary" [disabled]="disabled()" (click)="onClick()">
+  <div class="global-div">
+    <div class="title-div text-secondary">
+      <app-icons-switch [icon]="icon()"></app-icons-switch>
+      <b>{{ title() }}</b>
+    </div>
+    @if (data() !== null) {
+      {{ data() }}
+    }
+    @if (dataArray() !== null) {
+      <div class="flex flex-col h-full">
+        @for (data of dataArray(); track $index) {
+          <span>{{ data }}</span>
+        }
+      </div>
+    }
+  </div>
+  <div class="flex items-center h-full chevron-div my-auto">
+    <app-icons-switch icon="chevron-right"></app-icons-switch>
+  </div>
+</button>

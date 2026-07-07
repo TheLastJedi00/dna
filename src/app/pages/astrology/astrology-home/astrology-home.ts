@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { AstroDataButton } from '../../../shared/buttons/astro-data-button/astro-data-button';
+import { DataButton } from '../../../shared/buttons/data-button/data-button';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { LeituraAstrologica } from '../../../core/models/astrology.model';
@@ -13,7 +13,7 @@ import { Infinity } from '../../../shared/loading/infinity/infinity';
 
 @Component({
   selector: 'app-astrology-home',
-  imports: [AstroDataButton, NgClass, UserDataCard, Infinity],
+  imports: [DataButton, NgClass, UserDataCard, Infinity],
   templateUrl: './astrology-home.html',
   styleUrl: './astrology-home.scss',
 })
@@ -47,9 +47,6 @@ export class AstrologyHome implements OnInit {
       const data = await firstValueFrom(this.astrologyService.getByUserId(this.userId()));
       this.astrologyData.set(data);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -62,9 +59,6 @@ export class AstrologyHome implements OnInit {
       const user = await firstValueFrom(this.userService.findMe(this.userId()));
       this.userData.set(user);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

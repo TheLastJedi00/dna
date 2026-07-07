@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DhDataButton } from '../../../shared/buttons/dh-data-button/dh-data-button';
+import { DataButton } from '../../../shared/buttons/data-button/data-button';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { HumanDesignData } from '../../../core/models/dhdata.model';
@@ -13,7 +13,7 @@ import { UserData } from '../../../core/models/userdata.model';
 import { Infinity } from '../../../shared/loading/infinity/infinity';
 @Component({
   selector: 'app-human-design-home',
-  imports: [DhDataButton, NgClass, DhDataCard, UserDataCard, Infinity],
+  imports: [DataButton, NgClass, DhDataCard, UserDataCard, Infinity],
   templateUrl: './human-design-home.html',
   styleUrl: './human-design-home.scss',
 })
@@ -48,9 +48,6 @@ export class HumanDesignHome implements OnInit {
       const data = await firstValueFrom(this.humanDesignService.getByUserId(this.userId()));
       this.humanDesignData.set(data);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);
@@ -63,9 +60,6 @@ export class HumanDesignHome implements OnInit {
       const user = await firstValueFrom(this.userService.findMe(this.userId()));
       this.userData.set(user);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
       console.error(e);
     } finally {
       this.isLoading.set(false);

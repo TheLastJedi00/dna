@@ -1,6 +1,5 @@
 @if (dnaStatus()?.astrology) {
   <div class="bg-white dna-data">
-    <h3 class="text-secondary font-merriweather text-xl">Astrologia</h3>
     <div>
       <p><b>Tríade Astrológica</b></p>
     </div>
@@ -68,8 +67,6 @@
   </div>
 } @else {
   <form [formGroup]="astroForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
-    <h3 class="text-secondary font-merriweather text-xl">Astrologia</h3>
-
     <p>Tríade Astrológica</p>
     <div class="pl-5 grid gap-3">
       <p>Sol</p>

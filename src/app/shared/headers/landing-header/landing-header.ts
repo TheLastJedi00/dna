@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { TextButton } from '../../buttons/text-button/text-button';
+import { AppButton } from '../../buttons/app-button/app-button';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing-header',
-  imports: [TextButton],
+  imports: [AppButton],
   templateUrl: './landing-header.html',
   styleUrl: './landing-header.scss',
 })

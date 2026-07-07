@@ -28,93 +28,91 @@
       <div class="mt-3 mb-2" [ngClass]="buttonGroupClasses">
         <b [ngClass]="titleButtonGroupClasses">Tipo Áurico, Estratégia, Assinatura e Não-Ser</b>
         <div [ngClass]="gridButtonGroupClasses" class="md:grid-cols-4">
-          <app-dh-data-button
+          <app-data-button
             (click)="navigateTo('tipo-aurico')"
             icon="heart"
             title="Tipo Áurico"
             [data]="humanDesignData()!.tipo_aurico"
-          ></app-dh-data-button>
-          <app-dh-data-button
+          ></app-data-button>
+          <app-data-button
             (click)="navigateTo('tipo-aurico')"
             icon="chart-pie"
             title="Estratégia"
             [data]="humanDesignData()!.estrategia"
-          ></app-dh-data-button>
-          <app-dh-data-button
+          ></app-data-button>
+          <app-data-button
             (click)="navigateTo('tipo-aurico')"
             icon="pencil"
             title="Assinatura"
             [data]="humanDesignData()!.assinatura"
-          ></app-dh-data-button>
-          <app-dh-data-button
+          ></app-data-button>
+          <app-data-button
             (click)="navigateTo('tipo-aurico')"
             icon="users"
             title="Tema do Não Ser"
             [data]="humanDesignData()!.tema_do_nao_ser"
-          ></app-dh-data-button>
+          ></app-data-button>
         </div>
       </div>
       <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl mb-2">
         <b class="text-primary font-merriweather font-normal text-xl">Centros Energéticos</b>
         <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-3 gap-2 mt-3">
-          <app-dh-data-button
+          <app-data-button
             (click)="navigateTo('centros-definidos')"
             icon="magnifying-glass"
             title="Definidos"
             [data]="humanDesignData()!.centros_energeticos.definidos"
-          ></app-dh-data-button>
-          <app-dh-data-button
+          ></app-data-button>
+          <app-data-button
             (click)="navigateTo('centros-indefinidos')"
             icon="magnifying-glass"
             title="Indefinidos"
             [data]="humanDesignData()!.centros_energeticos.indefinidos"
-          ></app-dh-data-button>
-          <app-dh-data-button
+          ></app-data-button>
+          <app-data-button
             (click)="navigateTo('centros-abertos')"
             icon="magnifying-glass"
             title="Abertos"
             [data]="humanDesignData()!.centros_energeticos.abertos"
-          ></app-dh-data-button>
+          ></app-data-button>
         </div>
       </div>
       <div class="grid md:grid-cols-[1fr_2fr_3fr] gap-3">
         <div class="grid gap-3">
-          <app-dh-data-button
+          <app-data-button
             (click)="navigateTo('perfil')"
             icon="user-circle"
             title="Perfil"
             [data]="humanDesignData()!.perfil"
-          ></app-dh-data-button>
-          <app-dh-data-button
+          ></app-data-button>
+          <app-data-button
             icon="flag"
             title="Autoridade"
             [data]="humanDesignData()!.autoridade"
             (click)="navigateTo('autoridade')"
-          ></app-dh-data-button>
+          ></app-data-button>
         </div>
         <!-- Cruz Encarnação -->
-        <app-dh-data-button
+        <app-data-button
           (click)="navigateTo('encarnacao')"
           icon="arrows-pointing-out"
           title="Cruz da Encarnação"
           [dataArray]="encarnacaoToStringArray(humanDesignData()!.encarnacao)"
         >
-        </app-dh-data-button>
+        </app-data-button>
         <div class="p-3 text-center gradient-primary-to-secondary-85 rounded-xl">
           <b class="text-primary font-merriweather font-normal text-xl">Portões</b>
           <div class="grid grid-cols-1 auto-rows-fr md:grid-cols-2 gap-2 mt-3">
-            <app-dh-data-button
-              (click)="navigateTo('portoes-personalidade')"
+            <app-data-button
               icon="lock-open"
               title="Personalidade"
               [dataArray]="portoesToStringArray(humanDesignData()!.ativacoes.personalidade)"
-            ></app-dh-data-button>
-            <app-dh-data-button
-              (click)="navigateTo('portoes-desenho')"
+            ></app-data-button>
+            <app-data-button
               icon="lock-closed"
               title="Desenho"
               [dataArray]="portoesToStringArray(humanDesignData()!.ativacoes.desenho)"
-            ></app-dh-data-button>
+            ></app-data-button>
           </div>
         </div>
       </div>

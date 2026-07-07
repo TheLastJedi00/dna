@@ -1,0 +1,17 @@
+<div class="my-3 flex justify-between">
+  <h3 class="text-title">{{ title() }}</h3>
+  <app-icon-text-button
+    icon="arrow-left"
+    text="Voltar"
+    [routerLink]="backLink()"
+  ></app-icon-text-button>
+</div>
+@if (intro() !== null) {
+  <div class="grid gap-3">
+    @for (p of intro(); track $index) {
+      <p class="text-black/70">{{ p }}</p>
+    }
+  </div>
+} @else if (singleIntro() !== null) {
+  <p class="text-black/70">{{ singleIntro() }}</p>
+}

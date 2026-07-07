@@ -3,7 +3,6 @@ import { DashboardButton } from '../../buttons/dashboard-button/dashboard-button
 import { LoginService } from '../../../core/services/login.service';
 import { UserRole } from '../../../types/types';
 import { Router } from '@angular/router';
-import { UserContextService } from '../../../core/services/user-context.service';
 
 @Component({
   selector: 'app-panel-card',
@@ -12,8 +11,7 @@ import { UserContextService } from '../../../core/services/user-context.service'
   styleUrl: './panel-card.scss',
 })
 export class PanelCard implements OnInit {
-  private readonly loginService = inject(LoginService);
-  readonly userContext = inject(UserContextService);
+  readonly loginService = inject(LoginService);
   roles = signal<UserRole[]>([]);
   router = inject(Router);
 

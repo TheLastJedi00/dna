@@ -1,73 +1,69 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
-import { DnaTitleCard } from '../../shared/cards/dna-title-card/dna-title-card';
-import { DnaDescriptionCard } from '../../shared/cards/dna-description-card/dna-description-card';
-import { Router } from '@angular/router';
-import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { SupplyService } from '../../core/services/supply.service';
+import { LoginService } from '../../core/services/login.service';
+import { Topic } from '../../core/models/supply.model';
+import { IntroCard } from '../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../shared/grid/lists-card-grid/lists-card-grid';
 import { Infinity } from '../../shared/loading/infinity/infinity';
-import { SupplyService } from '../../core/services/supply.service';
-import { Topic } from '../../core/models/supply.model';
-import { firstValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
+import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 
 @Component({
   selector: 'app-perfect-plain',
   imports: [
-    UserPanelHeader,
-    DnaTitleCard,
-    DnaDescriptionCard,
-    UserPanelFooter,
+    IntroCard,
     ListsCardGrid,
     Infinity,
+    UserPanelHeader,
+    UserPanelFooter,
   ],
   templateUrl: './perfect-plain.html',
   styleUrl: './perfect-plain.scss',
 })
 export class PerfectPlain implements OnInit {
-  private static readonly PILLAR = 'perfect-plain';
-
-  userId = input.required<string>();
-  router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly supplyService = inject(SupplyService);
+  private readonly loginService = inject(LoginService);
 
-  topics = signal<Topic[] | null>(null);
-  isLoading = signal(true);
-  error = signal<string | null>(null);
+  readonly userId = signal('');
+  readonly topics = signal<Topic[] | null>(null);
+  readonly isLoading = signal(true);
+  readonly error = signal<string | null>(null);
+
+  /**
+   * Destino do "Voltar": o admin volta para o painel do usuário (user-supply);
+   * o próprio usuário volta para o seu dashboard. Absoluto de propósito — a rota
+   * `perfect-plain/:userId` é plana, então o "../" padrão iria para a landing.
+   */
+  readonly backLink = computed(() => {
+    const roles = this.loginService.getUserRole() ?? [];
+    const isAdmin = roles.includes('ADMIN') || roles.includes('MANAGER');
+    return isAdmin ? `/user-supply/${this.userId()}` : '/dashboard';
+  });
 
   async ngOnInit() {
-    await this.loadTopics();
+    const userId = this.route.snapshot.paramMap.get('userId') ?? '';
+    this.userId.set(userId);
+    await this.load(userId);
   }
 
-  private async loadTopics() {
+  private async load(userId: string) {
     try {
       const supply = await firstValueFrom(
-        this.supplyService.getPerfectPlainModule(
-          this.userId(),
-          PerfectPlain.PILLAR
-        ),
+        this.supplyService.getPerfectPlain(userId),
       );
-      if (supply.topics && supply.topics.length > 0) {
+      if (supply?.topics?.length) {
         this.topics.set(supply.topics);
       } else {
         this.error.set('Conteúdo ainda não disponível.');
       }
     } catch (e) {
-      console.error('Erro ao carregar o Plano Perfeito:', e);
-      if (e instanceof HttpErrorResponse) {
-        alert(e.error.message);
-      }
+      console.error(e);
       this.error.set('Conteúdo ainda não disponível.');
     } finally {
       this.isLoading.set(false);
     }
-  }
-
-  descriptionHtml() {
-    return `
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-`;
   }
 }
