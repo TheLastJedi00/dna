@@ -9,6 +9,8 @@ import { ListsCardGrid } from '../../shared/grid/lists-card-grid/lists-card-grid
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
+import { DnaTitleCard } from "../../shared/cards/dna-title-card/dna-title-card";
+import { DnaDescriptionCard } from "../../shared/cards/dna-description-card/dna-description-card";
 
 @Component({
   selector: 'app-perfect-plain',
@@ -18,7 +20,9 @@ import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-pan
     Infinity,
     UserPanelHeader,
     UserPanelFooter,
-  ],
+    DnaTitleCard,
+    DnaDescriptionCard
+],
   templateUrl: './perfect-plain.html',
   styleUrl: './perfect-plain.scss',
 })
@@ -65,5 +69,25 @@ export class PerfectPlain implements OnInit {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  perfectPlainIntro(){
+    return `
+      Agora você tem em mãos, de forma clara e detalhada, a sua
+Bússola Interna que vai servir como sua fonte de direção ao
+longo de toda a sua vida — e para todos os seus projetos.
+Com o seu DNA da Empresária, e se permitindo ser guiada
+por ele, você vai ver na prática:
+A sua produtividade e lucratividade vital aumentar
+O aumento em até 3x seus resultados, sem que você
+tenha que se sobrecarregar nesse processo
+A real conciliação dos seus papéis, vendo a sua vida
+pessoal e profissional “se conversando”
+E isso acontece quando o seu modelo de trabalho, rotina e
+estratégia de crescimento estão totalmente alinhados à sua
+dinâmica energética única, que foi desvendada aqui no seu
+DNA da Empresária.
+A partir de agora, seu plano prático perfeito é:
+    `
   }
 }
