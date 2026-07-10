@@ -1,19 +1,15 @@
 <section class="grid gap-3">
-  <div>
-    <app-new-user-form (modalClosed)="getAllActiveUsersFirstPage()"></app-new-user-form>
-  </div>
-  <div class="grid md:grid-cols-3 gap-3">
-    @for (user of userList(); track $index) {
-      <app-detailed-item [data]="user"></app-detailed-item>
+  <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+    @for (user of users(); track user.id) {
+      <app-detailed-item [data]="user" (changed)="changed.emit()"></app-detailed-item>
     }
   </div>
 </section>
 
-@if (isLoading()) {
-  <app-infinity></app-infinity>
-}
-@if (userList()?.length === 0) {
-  <section class="h-[75vh] flex items-center justify-center">
-    <h3 class="font-merriweather text-xl text-secondary">Nenhuma maestra ativa no momento.</h3>
+@if (users()?.length === 0) {
+  <section class="h-[55vh] flex items-center justify-center">
+    <h3 class="font-merriweather text-xl text-secondary text-center">
+      Nenhuma maestra encontrada.
+    </h3>
   </section>
 }

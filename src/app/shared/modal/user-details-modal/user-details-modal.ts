@@ -3,7 +3,6 @@ import { UserData } from '../../../core/models/userdata.model';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -17,27 +16,24 @@ export class UserDetailsModal {
   isLoading = signal(false);
   userData = input.required<UserData>();
   isOpen = input<boolean>(false);
-  close = output();
+  // Emite `true` quando houve mudança (desativou/reativou/editou) para a lista
+  // recarregar; `false` quando o modal só foi fechado.
+  close = output<boolean>();
   router = inject(Router);
 
   onClose() {
-    this.close.emit();
+    this.close.emit(false);
   }
 
   async deleteUser() {
     this.isLoading.set(true);
     try {
-      if (!this.userData()) {
-        alert('ID do usuário não encontrado.');
-        throw new Error('UserData está indefinido.');
-      }
-      const deleted = await firstValueFrom(this.userService.deleteUser(this.userData().id!)) ;
-      alert(`${deleted.fullName} foi excluída com sucesso`);
-    } catch (e) {
-      console.error(e);
+      await firstValueFrom(this.userService.deleteUser(this.userData().id!));
+      this.close.emit(true);
+    } catch {
+      // erro HTTP exibido pelo errorInterceptor global
     } finally {
       this.isLoading.set(false);
-      this.close.emit()
     }
   }
 }
