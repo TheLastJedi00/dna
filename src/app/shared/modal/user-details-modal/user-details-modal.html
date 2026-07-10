@@ -6,7 +6,7 @@
     class="fixed z-10 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
   >
     <div
-      class="p-3 bg-white shadow-xl rounded-xl transition-all"
+      class="p-3 bg-white shadow-xl rounded-xl transition-all w-full max-w-[400px] mx-3"
       (click)="$event.stopPropagation()"
     >
       <h1 class="text-primary font-merriweather">{{ userData().fullName }}</h1>
@@ -22,19 +22,29 @@
         class="bg-white rounded-xl text-secondary shadow-xl w-full"
       ></app-icon-text-button>
       <div class="grid py-3 gap-3">
-        <div class="grid grid-cols-2 gap-3">
+        @if (userData().isActive === false) {
           <app-icon-text-button
-            icon="pencil"
-            text="Editar"
-            class="bg-secondary rounded-xl text-white"
+            (click)="reactivateUser()"
+            icon="lock-open"
+            text="Reativar"
+            class="bg-secondary rounded-xl text-white w-full text-center"
           ></app-icon-text-button>
-          <app-icon-text-button
-            (click)="deleteUser()"
-            icon="lock-closed"
-            text="Desativar"
-            class="bg-[red] rounded-xl text-white"
-          ></app-icon-text-button>
-        </div>
+        } @else {
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <app-icon-text-button
+              (click)="startEdit()"
+              icon="pencil"
+              text="Editar"
+              class="bg-secondary rounded-xl text-white"
+            ></app-icon-text-button>
+            <app-icon-text-button
+              (click)="deleteUser()"
+              icon="lock-closed"
+              text="Desativar"
+              class="bg-[red] rounded-xl text-white"
+            ></app-icon-text-button>
+          </div>
+        }
         <app-icon-text-button
           icon="arrow-left"
           text="Voltar"
@@ -44,4 +54,13 @@
       </div>
     </div>
   </section>
+
+  <app-new-user-form
+    [user]="userData()"
+    [showTrigger]="false"
+    [open]="isEditing()"
+    (openChange)="isEditing.set($event)"
+    (saved)="onEditSaved()"
+    (modalClosed)="onEditCancelled()"
+  ></app-new-user-form>
 }
