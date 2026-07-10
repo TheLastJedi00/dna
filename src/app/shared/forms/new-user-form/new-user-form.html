@@ -1,23 +1,27 @@
-<app-icon-text-button
-  (click)="isFormOpen.set(true)"
-  icon="plus"
-  text="Nova Maestra"
-  class="w-full text-white bg-secondary text-center"
-></app-icon-text-button>
-@if (isFormOpen()) {
+@if (showTrigger()) {
+  <app-icon-text-button
+    (click)="open.set(true)"
+    icon="plus"
+    text="Nova Maestra"
+    class="w-full text-white bg-secondary text-center"
+  ></app-icon-text-button>
+}
+@if (open()) {
   <div
-    (click)="onClose()"
+    (click)="onCancel()"
     animate.enter="expand"
     animate.leave="collapse"
     class="fixed h-screen w-screen flex top-0 left-0 z-10 items-center justify-center bg-white/20 backdrop-blur-[2px]"
   >
     <form
-      class="grid p-3 rounded-xl shadow-xl gap-3 bg-white w-[400px] h-min"
+      class="grid p-3 rounded-xl shadow-xl gap-3 bg-white w-full max-w-[400px] h-min mx-3"
       (click)="$event.stopPropagation()"
       [formGroup]="createUserForm"
-      (ngSubmit)="createUser()"
+      (ngSubmit)="submit()"
     >
-      <h3 class="font-merriweather text-center text-secondary text-xl">Adicionar Maestra</h3>
+      <h3 class="font-merriweather text-center text-secondary text-xl">
+        {{ isEditing() ? 'Editar Maestra' : 'Adicionar Maestra' }}
+      </h3>
       <input type="text" placeholder="Nome Completo" formControlName="fullName" />
       <input type="date" placeholder="Data de Nascimento" formControlName="birthDate" />
       <input type="time" placeholder="Hora do Nascimento" formControlName="birthTime" />
@@ -29,31 +33,33 @@
           <input type="text" placeholder="UF" class="w-[100%]" formControlName="birthUf" />
         </div>
       </div>
-      <div class="grid gap-3">
-        <hr class="opacity-20" />
-        <label for="">Acessos</label>
-        <input type="text" placeholder="email@email.com" formControlName="email" />
-        <div class="grid w-full">
-          <button
-            class="text-left font-sm mb-2 show-pass text-primary"
-            type="button"
-            (click)="togglePassVisibility()"
-          >
-            Exibir Senha
-          </button>
-          <input [type]="passwordInputType()" placeholder="Senha" formControlName="password" />
+      @if (!isEditing()) {
+        <div class="grid gap-3">
+          <hr class="opacity-20" />
+          <label for="">Acessos</label>
+          <input type="text" placeholder="email@email.com" formControlName="email" />
+          <div class="grid w-full">
+            <button
+              class="text-left font-sm mb-2 show-pass text-primary"
+              type="button"
+              (click)="togglePassVisibility()"
+            >
+              Exibir Senha
+            </button>
+            <input [type]="passwordInputType()" placeholder="Senha" formControlName="password" />
+          </div>
         </div>
-      </div>
+      }
       <div class="grid grid-cols-2 gap-3 mt-1">
         <app-icon-text-button
-        [disabled]="createUserForm.invalid"
+          [disabled]="createUserForm.invalid"
           type="submit"
           icon="plus"
           text="Salvar"
           class="w-full text-white bg-primary rounded-xl"
         ></app-icon-text-button>
         <app-icon-text-button
-          (click)="onClose()"
+          (click)="onCancel()"
           icon="arrow-left"
           text="Voltar"
           class="w-full text-primary bg-white rounded-xl"
@@ -62,6 +68,6 @@
     </form>
   </div>
 }
-@if(isLoading()){
+@if (isLoading()) {
   <app-infinity></app-infinity>
 }

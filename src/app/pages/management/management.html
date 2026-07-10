@@ -12,7 +12,7 @@
 
     <!-- Controles: nova Maestra, busca e filtro de status (empilham no mobile) -->
     <div class="mt-4 grid gap-3 md:grid-cols-[1fr_1.5fr_auto] md:items-center">
-      <app-new-user-form (modalClosed)="load()"></app-new-user-form>
+      <app-new-user-form (saved)="load()"></app-new-user-form>
 
       <input
         type="search"
