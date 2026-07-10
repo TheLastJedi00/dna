@@ -20,6 +20,24 @@ Página `perfect-plain/:userId` (síntese dos 3 pilares, módulo único). O gati
 "Gerar/Ver Plano Perfeito" fica no painel admin (`user-supply-details`), onde cada
 pilar é um botão no padrão do dashboard que abre o respectivo form/gatilho em modal.
 
+## Gestão de Maestras (CRUD)
+
+Rota `management/:type` (painel de gestora). A página é **smart**: mantém o estado
+(lista, paginação, busca e filtro de status) e é a única a chamar o `UserService`;
+`detailed-list`/`detailed-item` são **dumb** (recebem os dados prontos).
+
+- **Busca** por nome (com debounce) e **filtro** Ativas / Inativas / Todas.
+- **Paginação** via `UserService.listUsers` (metadados lidos dos headers `X-*`).
+- Ações por Maestra no `user-details-modal`, condicionais ao status: **Editar** +
+  **Desativar** (ativas) e **Reativar** (inativas). Desativar é soft delete.
+- **Edição** reutiliza o `new-user-form` (modo edição: prefill + `updateUser`, sem
+  os campos de acesso).
+- `dashboard-button` aceita `icon` (SVG via `IconsSwitch`) além de `imgSrc`,
+  mantendo retrocompatibilidade; no painel, Maestras usa o ícone `users` e as
+  Análises do DNA o ícone `book`.
+
+Layout **mobile-first**: listagem e modais empilham em coluna em telas pequenas.
+
 ## Ambientes
 
 `src/environments/`: `environment.ts` (prod), `environment.development.ts` (dev)
