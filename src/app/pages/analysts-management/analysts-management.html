@@ -95,6 +95,8 @@
   <app-analyst-details-modal
     [analyst]="analyst"
     [isOpen]="true"
+    [maestras]="linkedMaestras()"
+    [isLoadingMaestras]="isLoadingMaestras()"
     (close)="closeDetails()"
     (edit)="startEdit()"
     (disable)="disableAnalyst()"

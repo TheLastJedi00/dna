@@ -13,7 +13,7 @@ import {
 import { AnalystDetailsModal } from '../../shared/modal/analyst-details-modal/analyst-details-modal';
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { AnalystService } from '../../core/services/analyst.service';
-import { AnalystData } from '../../core/models/analyst.model';
+import { AnalystData, LinkedMaestra } from '../../core/models/analyst.model';
 import { UserStatusFilter } from '../../core/models/userdata.model';
 
 /**
@@ -51,6 +51,9 @@ export class AnalystsManagement implements OnInit {
 
   /** Analista aberto no modal de detalhes; null = modal fechado. */
   selected = signal<AnalystData | null>(null);
+  /** Carteira do Analista aberto (supervisão), carregada sob demanda. */
+  linkedMaestras = signal<LinkedMaestra[]>([]);
+  isLoadingMaestras = signal(false);
   /** Analista em edição; null = o form está em modo criação. */
   editing = signal<AnalystData | null>(null);
   isFormOpen = signal(false);
@@ -103,12 +106,31 @@ export class AnalystsManagement implements OnInit {
     this.load();
   }
 
-  openDetails(analyst: AnalystData) {
+  /** Abre o detalhe e busca a carteira do Analista (só ao abrir, não na lista). */
+  async openDetails(analyst: AnalystData) {
     this.selected.set(analyst);
+    this.linkedMaestras.set([]);
+    if (!analyst.id) return;
+    this.isLoadingMaestras.set(true);
+    try {
+      const maestras = await firstValueFrom(
+        this.analystService.findLinkedMaestras(analyst.id),
+      );
+      // Se o Manager fechou o modal enquanto a busca estava em voo, o resultado
+      // já não interessa (e reabriria a supervisão do analista errado).
+      if (this.selected()?.id === analyst.id) {
+        this.linkedMaestras.set(maestras);
+      }
+    } catch {
+      // erro HTTP exibido pelo errorInterceptor global
+    } finally {
+      this.isLoadingMaestras.set(false);
+    }
   }
 
   closeDetails() {
     this.selected.set(null);
+    this.linkedMaestras.set([]);
   }
 
   /** Detalhes → Editar: fecha o modal e reabre o form já preenchido. */

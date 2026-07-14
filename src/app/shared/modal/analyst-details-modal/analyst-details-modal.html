@@ -19,6 +19,35 @@
         </p>
       </div>
 
+      <!-- Supervisão: só nome e status. Sem ações e sem link para o detalhe -->
+      <section class="border-t border-black/10 pt-3">
+        <h2 class="text-sm font-semibold text-secondary">Maestras Vinculadas</h2>
+        @if (isLoadingMaestras()) {
+          <app-infinity></app-infinity>
+        } @else if (maestras().length) {
+          <ul class="mt-2 flex flex-col gap-2">
+            @for (maestra of maestras(); track maestra.fullName) {
+              <li
+                class="flex flex-col gap-1 rounded-lg bg-primary/5 px-2 py-1.5 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <span class="text-sm text-black/70 break-words">{{ maestra.fullName }}</span>
+                @if (maestra.isActive) {
+                  <span class="text-xs rounded-full bg-primary/10 text-primary px-2 py-0.5 w-fit">
+                    Ativa
+                  </span>
+                } @else {
+                  <span class="text-xs rounded-full bg-[red]/10 text-[red] px-2 py-0.5 w-fit">
+                    Inativa
+                  </span>
+                }
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="mt-2 text-sm text-black/50">Nenhuma Maestra cadastrada por este Analista.</p>
+        }
+      </section>
+
       <div class="grid py-3 gap-3">
         @if (analyst().isActive === false) {
           <app-icon-text-button
