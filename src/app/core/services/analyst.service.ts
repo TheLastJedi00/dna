@@ -73,6 +73,18 @@ export class AnalystService {
     );
   }
 
+  /** Detalhe do Analista: único lugar com e-mail e o estado da senha provisória. */
+  findAnalystById(analystId: string): Observable<AnalystData> {
+    return this.http.get<AnalystData>(`${this.api}/${analystId}`);
+  }
+
+  /** Gera a senha provisória do Analista (recuperação de acesso pelo painel). */
+  setTempPassword(analystId: string, password: string): Observable<void> {
+    return this.http.patch<void>(`${this.api}/${analystId}/temp-password`, {
+      password,
+    });
+  }
+
   /** Supervisão: carteira do Analista (só nome + status, sem dados pessoais). */
   findLinkedMaestras(analystId: string): Observable<LinkedMaestra[]> {
     return this.http.get<LinkedMaestra[]>(`${this.api}/${analystId}/maestras`);
