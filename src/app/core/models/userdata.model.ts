@@ -12,6 +12,15 @@ export interface UserData {
   createdBy?: string;
   /** Nome do criador, resolvido pelo backend — o "Analista Responsável". */
   createdByName?: string | null;
+  /** E-mail de acesso. Só vem no **detalhe** (`GET /users/:id`). */
+  email?: string | null;
+  /** true enquanto a senha da Maestra for provisória. Só vem no detalhe. */
+  mustChangePassword?: boolean;
+  /**
+   * Senha provisória em texto plano, para o gestor repassar. Só vem no detalhe,
+   * e some (`null`) assim que a Maestra define a senha dela.
+   */
+  tempPassword?: string | null;
   login?: {
     password?: string;
     email?: string;
