@@ -75,6 +75,14 @@ describe('UserService', () => {
     req.flush({});
   });
 
+  it('setTempPassword chama PATCH /users/:id/temp-password', () => {
+    service.setTempPassword('u1', 'nova123').subscribe();
+    const req = http.expectOne(`${api}/u1/temp-password`);
+    expect(req.request.method).toBe('PATCH');
+    expect(req.request.body).toEqual({ password: 'nova123' });
+    req.flush(null);
+  });
+
   it('deleteUser chama DELETE /users/:id', () => {
     service.deleteUser('u1').subscribe();
     const req = http.expectOne(`${api}/u1`);

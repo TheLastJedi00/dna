@@ -80,7 +80,7 @@ describe('AnalystsManagement', () => {
     expect(component.status()).toBe('inactive');
   });
 
-  it('abrir o detalhe busca as Maestras vinculadas do analista', async () => {
+  it('abrir o detalhe busca as credenciais e as Maestras vinculadas', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
@@ -90,14 +90,52 @@ describe('AnalystsManagement', () => {
       fullName: 'Ana',
       isActive: true,
     });
-    const req = http.expectOne(`${api}/a1/maestras`);
-    req.flush([{ fullName: 'Maria', isActive: true }]);
+    // O e-mail e a senha provisória só existem no detalhe — nunca na listagem.
+    http.expectOne(`${api}/a1`).flush({
+      id: 'a1',
+      fullName: 'Ana',
+      isActive: true,
+      email: 'ana@dna.com',
+      mustChangePassword: true,
+      tempPassword: 'provisoria',
+    });
+    http.expectOne(`${api}/a1/maestras`).flush([
+      { fullName: 'Maria', isActive: true },
+    ]);
     await promise;
 
+    expect(component.selected()?.email).toBe('ana@dna.com');
+    expect(component.selected()?.tempPassword).toBe('provisoria');
     expect(component.linkedMaestras()).toEqual([
       { fullName: 'Maria', isActive: true },
     ]);
     expect(component.isLoadingMaestras()).toBeFalse();
+  });
+
+  it('gerar a senha temporária recarrega o detalhe e passa a exibi-la', async () => {
+    fixture.detectChanges();
+    flushList();
+    await fixture.whenStable();
+
+    component.selected.set({ id: 'a1', fullName: 'Ana', isActive: true });
+    const promise = component.generateTempPassword('nova123');
+
+    const patch = http.expectOne(`${api}/a1/temp-password`);
+    expect(patch.request.method).toBe('PATCH');
+    expect(patch.request.body).toEqual({ password: 'nova123' });
+    patch.flush(null);
+    await tick();
+
+    http.expectOne(`${api}/a1`).flush({
+      id: 'a1',
+      fullName: 'Ana',
+      isActive: true,
+      mustChangePassword: true,
+      tempPassword: 'nova123',
+    });
+    await promise;
+
+    expect(component.selected()?.tempPassword).toBe('nova123');
   });
 
   it('salvar em modo criação chama POST e recarrega a lista', async () => {
