@@ -14,6 +14,11 @@
         <p>{{ userData().birthDate }}</p>
         <p>{{ userData().birthTime }}</p>
         <p>{{ userData().birthPlace }}</p>
+        <!-- Quem cadastrou a Maestra: leitura, resolvido pelo backend -->
+        <p class="mt-2 text-sm">
+          <span class="text-black/50">Analista Responsável:</span>
+          {{ userData().createdByName || 'Não informado' }}
+        </p>
       </div>
       <app-icon-text-button
         (click)="router.navigate([`user-supply/${userData().id}`])"
