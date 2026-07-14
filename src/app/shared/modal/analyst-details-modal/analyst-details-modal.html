@@ -19,8 +19,20 @@
         </p>
       </div>
 
+      @if (isLoadingDetails()) {
+        <app-infinity></app-infinity>
+      } @else {
+        <app-temp-password-form
+          [mustChangePassword]="analyst().mustChangePassword ?? false"
+          [tempPassword]="analyst().tempPassword ?? null"
+          [expiresAt]="analyst().tempPasswordExpiresAt ?? null"
+          subject="o usuário"
+          (save)="generateTempPassword.emit($event)"
+        ></app-temp-password-form>
+      }
+
       <!-- Supervisão: só nome e status. Sem ações e sem link para o detalhe -->
-      <section class="border-t border-black/10 pt-3">
+      <section class="mt-3 border-t border-black/10 pt-3">
         <h2 class="text-sm font-semibold text-secondary">Maestras Vinculadas</h2>
         @if (isLoadingMaestras()) {
           <app-infinity></app-infinity>

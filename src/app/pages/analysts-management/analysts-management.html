@@ -97,6 +97,8 @@
     [isOpen]="true"
     [maestras]="linkedMaestras()"
     [isLoadingMaestras]="isLoadingMaestras()"
+    [isLoadingDetails]="isLoadingDetails()"
+    (generateTempPassword)="generateTempPassword($event)"
     (close)="closeDetails()"
     (edit)="startEdit()"
     (disable)="disableAnalyst()"
