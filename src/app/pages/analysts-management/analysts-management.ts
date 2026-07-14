@@ -54,6 +54,7 @@ export class AnalystsManagement implements OnInit {
   /** Carteira do Analista aberto (supervisão), carregada sob demanda. */
   linkedMaestras = signal<LinkedMaestra[]>([]);
   isLoadingMaestras = signal(false);
+  isLoadingDetails = signal(false);
   /** Analista em edição; null = o form está em modo criação. */
   editing = signal<AnalystData | null>(null);
   isFormOpen = signal(false);
@@ -106,25 +107,53 @@ export class AnalystsManagement implements OnInit {
     this.load();
   }
 
-  /** Abre o detalhe e busca a carteira do Analista (só ao abrir, não na lista). */
+  /**
+   * Abre o detalhe e busca, sob demanda, a carteira do Analista e o próprio
+   * detalhe — e-mail e senha provisória só existem no `GET /analysts/:id`, nunca
+   * na listagem.
+   */
   async openDetails(analyst: AnalystData) {
     this.selected.set(analyst);
     this.linkedMaestras.set([]);
     if (!analyst.id) return;
     this.isLoadingMaestras.set(true);
+    this.isLoadingDetails.set(true);
     try {
-      const maestras = await firstValueFrom(
-        this.analystService.findLinkedMaestras(analyst.id),
-      );
+      const [detail, maestras] = await Promise.all([
+        firstValueFrom(this.analystService.findAnalystById(analyst.id)),
+        firstValueFrom(this.analystService.findLinkedMaestras(analyst.id)),
+      ]);
       // Se o Manager fechou o modal enquanto a busca estava em voo, o resultado
       // já não interessa (e reabriria a supervisão do analista errado).
       if (this.selected()?.id === analyst.id) {
+        this.selected.set(detail);
         this.linkedMaestras.set(maestras);
       }
     } catch {
       // erro HTTP exibido pelo errorInterceptor global
     } finally {
       this.isLoadingMaestras.set(false);
+      this.isLoadingDetails.set(false);
+    }
+  }
+
+  /** Gera a senha provisória e recarrega o detalhe para exibi-la. */
+  async generateTempPassword(password: string) {
+    const analyst = this.selected();
+    if (!analyst?.id) return;
+    this.isLoadingDetails.set(true);
+    try {
+      await firstValueFrom(
+        this.analystService.setTempPassword(analyst.id, password),
+      );
+      const detail = await firstValueFrom(
+        this.analystService.findAnalystById(analyst.id),
+      );
+      this.selected.set(detail);
+    } catch {
+      // erro HTTP exibido pelo errorInterceptor global
+    } finally {
+      this.isLoadingDetails.set(false);
     }
   }
 

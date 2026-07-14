@@ -3,9 +3,8 @@ import { DetailedItem } from '../detailed-item/detailed-item';
 import { UserData } from '../../../core/models/userdata.model';
 
 /**
- * Componente dumb: recebe a lista pronta (`users`) e reemite `changed` quando
- * um item sofre uma ação (desativar/reativar/editar), para a página smart
- * recarregar. Sem injeção de serviço/HTTP.
+ * Componente dumb: recebe a lista pronta (`users`) e repassa a Maestra escolhida
+ * para a página smart, que busca o detalhe e executa as ações.
  */
 @Component({
   selector: 'app-detailed-list',
@@ -16,5 +15,5 @@ import { UserData } from '../../../core/models/userdata.model';
 })
 export class DetailedList {
   users = input<UserData[] | null>(null);
-  changed = output<void>();
+  select = output<UserData>();
 }

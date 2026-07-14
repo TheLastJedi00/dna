@@ -11,8 +11,8 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
 - **Sessão:** `LoginService` é o dono único da sessão — guarda o par
   **access/refresh token**, valida expiração e coordena o refresh. O
   `authInterceptor` renova o token em 401 (fila compartilhada) e desloga se o
-  refresh falhar. `authGuard`/`roleGuard`/`managerGuard`/`ownershipGuard`
-  protegem as rotas.
+  refresh falhar. `authGuard`/`roleGuard`/`managerGuard`/`passwordGuard`/
+  `ownershipGuard` protegem as rotas.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
 
 ## Plano Perfeito
@@ -55,6 +55,34 @@ O `roleGuard` libera a gestão de Maestras para ADMIN, MANAGER e ANALYST; o
 `managerGuard` restringe `/analysts` a ADMIN e MANAGER (espelha o
 `@Role(ADMIN, MANAGER)` do backend). Os guards são conveniência de navegação — a
 visibilidade e a posse de cada Maestra são impostas pela API.
+
+## Senha temporária e primeiro acesso
+
+A senha definida no cadastro (Maestra ou Analista) **já nasce provisória**. No primeiro
+login o usuário é obrigado a trocá-la; até lá, ela fica visível para quem o cadastrou.
+
+**Visão do gestor** — no modal de detalhe (`user-details-modal`, `analyst-details-modal`),
+o bloco `temp-password-form` tem dois estados:
+
+- **senha provisória pendente:** exibe a senha em texto plano, o aviso *"Esta senha é
+  temporária até … redefinir sua nova senha"* e **até quando ela vale** (a senha expira em
+  **72h**). Sem botão de gerar.
+- **senha já definida pelo usuário (ou provisória vencida):** exibe o botão **"Gerar senha
+  temporária"**, que abre o input para o gestor devolver o acesso a quem o perdeu. Senha
+  vencida some do detalhe — o backend não a devolve mais — e deixa de logar.
+
+E-mail e senha provisória **só vêm no detalhe** (`GET /users/:id`, `GET /analysts/:id`) —
+nunca na listagem. Por isso as pages `management` e `analysts-management` buscam o detalhe
+**ao abrir o modal**, e não reaproveitam o item da lista.
+
+**Visão do usuário** — rota `/change-password`, um **modal estático**: sem backdrop de
+fechar e sem "Voltar". A única saída sem trocar a senha é o logout.
+
+O bloqueio vive no `passwordGuard`, que lê o claim `mustChangePassword` **do JWT** (não de
+um estado em memória): enquanto ele for `true`, qualquer rota protegida devolve o usuário
+para `/change-password` — nem um F5 nem uma URL digitada à mão escapam. Ao salvar a senha,
+a API devolve um **par de tokens novo** (sem o claim) e o `LoginService` o regrava; sem
+isso o token antigo continuaria prendendo o usuário na tela de troca.
 
 ## Gestão de Analistas (CRUD)
 

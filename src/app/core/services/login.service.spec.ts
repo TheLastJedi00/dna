@@ -95,4 +95,39 @@ describe('LoginService', () => {
     expect(service.getAccessToken()).toBeNull();
     expect(service.getRefreshToken()).toBeNull();
   });
+
+  describe('senha temporária (spec 005)', () => {
+    it('mustChangePassword vem do claim do token', () => {
+      service.storeTokens({
+        access_token: fakeJwt({ id: '1', mustChangePassword: true }),
+      });
+      expect(service.mustChangePassword()).toBeTrue();
+    });
+
+    it('sem o claim, não há bloqueio', () => {
+      service.storeTokens({ access_token: fakeJwt({ id: '1' }) });
+      expect(service.mustChangePassword()).toBeFalse();
+    });
+
+    it('changePassword regrava o par de tokens devolvido pela API', () => {
+      service.storeTokens({
+        access_token: fakeJwt({ id: '1', mustChangePassword: true }),
+        refresh_token: 'velho',
+      });
+
+      service.changePassword('definitiva').subscribe();
+      const req = http.expectOne(`${auth}/change-password`);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual({ password: 'definitiva' });
+      req.flush({
+        access_token: fakeJwt({ id: '1', mustChangePassword: false }),
+        refresh_token: 'novo',
+      });
+
+      // Sem regravar o token, o claim antigo continuaria prendendo o usuário na
+      // tela de troca mesmo depois de ele já ter trocado a senha.
+      expect(service.mustChangePassword()).toBeFalse();
+      expect(service.getRefreshToken()).toBe('novo');
+    });
+  });
 });

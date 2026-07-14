@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
+import { TempPasswordForm } from '../../forms/temp-password-form/temp-password-form';
 import { Infinity } from '../../loading/infinity/infinity';
 import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
 
@@ -14,7 +15,7 @@ import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
  */
 @Component({
   selector: 'app-analyst-details-modal',
-  imports: [IconTextButton, Infinity],
+  imports: [IconTextButton, TempPasswordForm, Infinity],
   templateUrl: './analyst-details-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,9 +24,11 @@ export class AnalystDetailsModal {
   isOpen = input<boolean>(false);
   maestras = input<LinkedMaestra[]>([]);
   isLoadingMaestras = input<boolean>(false);
+  isLoadingDetails = input<boolean>(false);
 
   close = output<void>();
   edit = output<void>();
   disable = output<void>();
   reactivate = output<void>();
+  generateTempPassword = output<string>();
 }
