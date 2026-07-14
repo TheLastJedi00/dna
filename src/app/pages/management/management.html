@@ -56,7 +56,10 @@
       @if (isLoading()) {
         <app-infinity></app-infinity>
       } @else {
-        <app-detailed-list [users]="users()" (changed)="load()"></app-detailed-list>
+        <app-detailed-list
+          [users]="users()"
+          (select)="openDetails($event)"
+        ></app-detailed-list>
       }
     </div>
 
@@ -81,3 +84,27 @@
   </section>
 </main>
 <app-user-panel-footer></app-user-panel-footer>
+
+@if (selected(); as user) {
+  <app-user-details-modal
+    [userData]="user"
+    [isOpen]="true"
+    [isLoading]="isLoadingDetails()"
+    (close)="closeDetails()"
+    (edit)="startEdit()"
+    (disable)="disableUser()"
+    (reactivate)="reactivateUser()"
+    (openSupply)="openSupply()"
+    (generateTempPassword)="generateTempPassword($event)"
+  ></app-user-details-modal>
+
+  <!-- Edição: o mesmo form da criação, em modo prefill -->
+  <app-new-user-form
+    [user]="user"
+    [showTrigger]="false"
+    [open]="isEditing()"
+    (openChange)="isEditing.set($event)"
+    (saved)="onEditSaved()"
+    (modalClosed)="onEditCancelled()"
+  ></app-new-user-form>
+}

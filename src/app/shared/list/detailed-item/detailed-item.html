@@ -11,11 +11,6 @@
     icon="magnifying-glass"
     text="Detalhes"
     class="bg-primary text-white rounded-xl w-full"
-    (click)="openModal()"
+    (click)="select.emit(data())"
   ></app-icon-text-button>
 </div>
-<app-user-details-modal
-  (close)="onModalClosed($event)"
-  [isOpen]="isModalOpen()"
-  [userData]="data()"
-></app-user-details-modal>
