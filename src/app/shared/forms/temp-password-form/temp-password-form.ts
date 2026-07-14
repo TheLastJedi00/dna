@@ -6,6 +6,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 
@@ -22,7 +23,7 @@ import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button'
  */
 @Component({
   selector: 'app-temp-password-form',
-  imports: [IconTextButton, ReactiveFormsModule],
+  imports: [IconTextButton, ReactiveFormsModule, DatePipe],
   templateUrl: './temp-password-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,6 +32,8 @@ export class TempPasswordForm {
 
   mustChangePassword = input<boolean>(false);
   tempPassword = input<string | null>(null);
+  /** Até quando a senha vale (ISO 8601). O backend já omite as vencidas. */
+  expiresAt = input<string | null>(null);
   /** "usuária" (Maestra) x "usuário" (Analista) no texto do aviso. */
   subject = input<string>('o usuário');
 

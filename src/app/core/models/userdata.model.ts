@@ -21,6 +21,8 @@ export interface UserData {
    * e some (`null`) assim que a Maestra define a senha dela.
    */
   tempPassword?: string | null;
+  /** Até quando a senha provisória vale (ISO 8601). Vence em 72h. */
+  tempPasswordExpiresAt?: string | null;
   login?: {
     password?: string;
     email?: string;

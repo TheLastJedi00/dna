@@ -38,6 +38,26 @@ describe('TempPasswordForm', () => {
     expect(buttonWith('Gerar senha temporária')).toBeUndefined();
   });
 
+  it('informa ao gestor até quando a senha vale', () => {
+    fixture.componentRef.setInput('mustChangePassword', true);
+    fixture.componentRef.setInput('tempPassword', 'provisoria123');
+    fixture.componentRef.setInput('expiresAt', '2026-07-17T18:30:00.000Z');
+    fixture.detectChanges();
+
+    const text: string = fixture.nativeElement.textContent;
+    expect(text).toContain('Válida até');
+    expect(text).toContain('17/07/2026');
+  });
+
+  it('sem prazo gravado (registro antigo), não promete validade nenhuma', () => {
+    fixture.componentRef.setInput('mustChangePassword', true);
+    fixture.componentRef.setInput('tempPassword', 'provisoria123');
+    fixture.componentRef.setInput('expiresAt', null);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).not.toContain('Válida até');
+  });
+
   it('estado 1 (senha definida): oferece gerar uma senha temporária', () => {
     fixture.componentRef.setInput('mustChangePassword', false);
     fixture.componentRef.setInput('tempPassword', null);

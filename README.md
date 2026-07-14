@@ -64,10 +64,12 @@ login o usuário é obrigado a trocá-la; até lá, ela fica visível para quem 
 **Visão do gestor** — no modal de detalhe (`user-details-modal`, `analyst-details-modal`),
 o bloco `temp-password-form` tem dois estados:
 
-- **senha provisória pendente:** exibe a senha em texto plano e o aviso *"Esta senha é
-  temporária até … redefinir sua nova senha"*. Sem botão de gerar.
-- **senha já definida pelo usuário:** exibe o botão **"Gerar senha temporária"**, que abre
-  o input para o gestor devolver o acesso a quem o perdeu.
+- **senha provisória pendente:** exibe a senha em texto plano, o aviso *"Esta senha é
+  temporária até … redefinir sua nova senha"* e **até quando ela vale** (a senha expira em
+  **72h**). Sem botão de gerar.
+- **senha já definida pelo usuário (ou provisória vencida):** exibe o botão **"Gerar senha
+  temporária"**, que abre o input para o gestor devolver o acesso a quem o perdeu. Senha
+  vencida some do detalhe — o backend não a devolve mais — e deixa de logar.
 
 E-mail e senha provisória **só vêm no detalhe** (`GET /users/:id`, `GET /analysts/:id`) —
 nunca na listagem. Por isso as pages `management` e `analysts-management` buscam o detalhe

@@ -17,6 +17,8 @@ export interface AnalystData {
    * e some (`null`) assim que o Analista define a senha dele.
    */
   tempPassword?: string | null;
+  /** Até quando a senha provisória vale (ISO 8601). Vence em 72h. */
+  tempPasswordExpiresAt?: string | null;
   login?: {
     email?: string;
     password?: string;

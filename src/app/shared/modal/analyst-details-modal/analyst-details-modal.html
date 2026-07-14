@@ -25,6 +25,7 @@
         <app-temp-password-form
           [mustChangePassword]="analyst().mustChangePassword ?? false"
           [tempPassword]="analyst().tempPassword ?? null"
+          [expiresAt]="analyst().tempPasswordExpiresAt ?? null"
           subject="o usuário"
           (save)="generateTempPassword.emit($event)"
         ></app-temp-password-form>
