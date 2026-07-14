@@ -32,7 +32,12 @@ export class LoginForm {
     const form = this.loginForm.getRawValue()
     try {
       await firstValueFrom(this.loginService.login(form.email, form.password));
-      this.router.navigate([`/dashboard`]);
+      // Quem entrou com senha provisória vai para a troca obrigatória. O
+      // passwordGuard cobre as demais rotas; isto só evita o bounce visível.
+      const destination = this.loginService.mustChangePassword()
+        ? '/change-password'
+        : '/dashboard';
+      this.router.navigate([destination]);
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
         this.error.set(e.error.message);
