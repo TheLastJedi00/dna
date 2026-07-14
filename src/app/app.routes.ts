@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
+import { managerGuard } from './core/guards/manager-guard';
 import { ownershipGuard } from './core/guards/ownership-guard';
 import { roleGuard } from './core/guards/role-guard';
 
@@ -23,6 +24,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/management/management').then((m) => m.Management),
     canActivate: [authGuard, roleGuard],
+  },
+  {
+    path: 'analysts',
+    loadComponent: () =>
+      import('./pages/analysts-management/analysts-management').then(
+        (m) => m.AnalystsManagement,
+      ),
+    canActivate: [authGuard, managerGuard],
   },
   {
     path: 'dna-management',

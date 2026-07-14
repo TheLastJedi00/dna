@@ -8,6 +8,10 @@ export interface UserData {
   birthPlace: string;
   isActive?: boolean;
   roles?: UserRole[];
+  /** Id de quem cadastrou a Maestra (Analista ou Manager). */
+  createdBy?: string;
+  /** Nome do criador, resolvido pelo backend — o "Analista Responsável". */
+  createdByName?: string | null;
   login?: {
     password?: string;
     email?: string;

@@ -11,7 +11,8 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
 - **Sessão:** `LoginService` é o dono único da sessão — guarda o par
   **access/refresh token**, valida expiração e coordena o refresh. O
   `authInterceptor` renova o token em 401 (fila compartilhada) e desloga se o
-  refresh falhar. `authGuard`/`roleGuard`/`ownershipGuard` protegem as rotas.
+  refresh falhar. `authGuard`/`roleGuard`/`managerGuard`/`ownershipGuard`
+  protegem as rotas.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
 
 ## Plano Perfeito
@@ -37,6 +38,40 @@ Rota `management/:type` (painel de gestora). A página é **smart**: mantém o e
   Análises do DNA o ícone `book`.
 
 Layout **mobile-first**: listagem e modais empilham em coluna em telas pequenas.
+
+Cada Maestra fica vinculada a quem a cadastrou, e o `user-details-modal` mostra
+esse **Analista Responsável** (campo de leitura, resolvido pelo backend).
+
+## Papéis e visibilidade
+
+| Papel | Vê no painel | Alcance |
+| --- | --- | --- |
+| `ADMIN` | Maestras, Análises do DNA, Analistas | Super-usuário: vê **todas** as Maestras |
+| `MANAGER` | Maestras, Análises do DNA, Analistas | Só as Maestras que **ele** cadastrou |
+| `ANALYST` | Maestras, Análises do DNA | Só as Maestras que **ele** cadastrou; não acessa `/analysts` |
+| `USER` | Seus 3 pilares + Plano Perfeito | Só os próprios dados |
+
+O `roleGuard` libera a gestão de Maestras para ADMIN, MANAGER e ANALYST; o
+`managerGuard` restringe `/analysts` a ADMIN e MANAGER (espelha o
+`@Role(ADMIN, MANAGER)` do backend). Os guards são conveniência de navegação — a
+visibilidade e a posse de cada Maestra são impostas pela API.
+
+## Gestão de Analistas (CRUD)
+
+Rota `/analysts` (ADMIN e MANAGER). Mesma anatomia do CRUD de Maestras: a page
+`analysts-management` é **smart** (estado em signals e única a chamar o
+`AnalystService`); `analyst-list`/`analyst-item`, `analyst-form` e
+`analyst-details-modal` são **dumb** — o form emite o valor e a page é quem faz o
+POST/PATCH.
+
+- **Busca** por nome (com debounce), **filtro** Ativos / Inativos / Todos e
+  **paginação** (metadados nos headers `X-*`).
+- **Criar** pede nome + credenciais; **editar** altera só o nome (e-mail e senha
+  vivem no documento `auth`). **Desativar** é soft delete; **Reativar** restaura.
+- **Supervisão:** o detalhe do Analista lista as **Maestras Vinculadas** — apenas
+  nome e status, **sem ação e sem link** para o detalhe. O Manager acompanha a
+  carteira do Analista, mas não acessa os dados pessoais das clientes dele (a API
+  nem devolve o `id` dessas Maestras).
 
 ## Ambientes
 

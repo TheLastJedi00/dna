@@ -1,0 +1,105 @@
+<app-user-panel-header></app-user-panel-header>
+<main class="pt-header gradient-primary-to-secondary-85 min-h-[80vh]">
+  <section class="main-padding container mx-auto bg-white">
+    <div class="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+      <h1 class="text-xl font-merriweather text-primary">Gerir Analistas</h1>
+      <app-icon-text-button
+        icon="arrow-left"
+        text="Voltar"
+        (click)="router.navigate(['dashboard'])"
+      ></app-icon-text-button>
+    </div>
+
+    <!-- Controles: novo Analista, busca e filtro de status (empilham no mobile) -->
+    <div class="mt-4 grid gap-3 md:grid-cols-[1fr_1.5fr_auto] md:items-center">
+      <app-analyst-form
+        [analyst]="editing()"
+        [open]="isFormOpen()"
+        (openChange)="isFormOpen.set($event)"
+        (save)="onFormSaved($event)"
+        (modalClosed)="onFormClosed()"
+      ></app-analyst-form>
+
+      <input
+        type="search"
+        placeholder="Buscar por nome"
+        [ngModel]="search()"
+        (ngModelChange)="onSearchChange($event)"
+      />
+
+      <div class="grid grid-cols-3 gap-1 rounded-xl bg-primary/10 p-1">
+        <button
+          type="button"
+          class="rounded-lg py-1 text-sm"
+          [class.bg-primary]="status() === 'active'"
+          [class.text-white]="status() === 'active'"
+          (click)="setStatus('active')"
+        >
+          Ativos
+        </button>
+        <button
+          type="button"
+          class="rounded-lg py-1 text-sm"
+          [class.bg-primary]="status() === 'inactive'"
+          [class.text-white]="status() === 'inactive'"
+          (click)="setStatus('inactive')"
+        >
+          Inativos
+        </button>
+        <button
+          type="button"
+          class="rounded-lg py-1 text-sm"
+          [class.bg-primary]="status() === 'all'"
+          [class.text-white]="status() === 'all'"
+          (click)="setStatus('all')"
+        >
+          Todos
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-3 min-h-[55vh]">
+      @if (isLoading()) {
+        <app-infinity></app-infinity>
+      } @else {
+        <app-analyst-list
+          [analysts]="analysts()"
+          (select)="openDetails($event)"
+        ></app-analyst-list>
+      }
+    </div>
+
+    <!-- Paginação -->
+    @if (totalPages() > 1) {
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <app-icon-text-button
+          icon="arrow-left"
+          text="Anterior"
+          [disabled]="page() <= 1"
+          (click)="goToPage(page() - 1)"
+        ></app-icon-text-button>
+        <span class="text-sm text-secondary">Página {{ page() }} de {{ totalPages() }}</span>
+        <app-icon-text-button
+          icon="chevron-right"
+          text="Próxima"
+          [disabled]="page() >= totalPages()"
+          (click)="goToPage(page() + 1)"
+        ></app-icon-text-button>
+      </div>
+    }
+  </section>
+</main>
+<app-user-panel-footer></app-user-panel-footer>
+
+@if (selected(); as analyst) {
+  <app-analyst-details-modal
+    [analyst]="analyst"
+    [isOpen]="true"
+    [maestras]="linkedMaestras()"
+    [isLoadingMaestras]="isLoadingMaestras()"
+    (close)="closeDetails()"
+    (edit)="startEdit()"
+    (disable)="disableAnalyst()"
+    (reactivate)="reactivateAnalyst()"
+  ></app-analyst-details-modal>
+}
