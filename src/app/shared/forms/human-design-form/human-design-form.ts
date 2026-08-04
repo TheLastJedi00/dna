@@ -13,6 +13,16 @@ import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
 import { DnaStatus } from '../../../core/models/dna-status.model';
 import { PillarFormBase } from '../pillar-form.base';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  ANGULOS,
+  ANGULO_GRUPO_MAP,
+  Angulo,
+  QUARTOS_DE_CRUZ,
+  TIPOS_AURICOS,
+  TIPO_AURICO_MAP,
+  TipoAurico,
+} from '../../../core/models/human-design.constants';
 
 @Component({
   selector: 'app-human-design-form',
@@ -52,10 +62,46 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
     desenho_terra: this.fb.control('', [Validators.required]),
     desenho_lua: this.fb.control('', [Validators.required]),
     angulo: this.fb.control('', [Validators.required]),
+    grupo_de_destino: this.fb.control('', [Validators.required]),
     cruz: this.fb.control('', [Validators.required]),
     portoes: this.fb.control('', [Validators.required]),
     quarto_cruz: this.fb.control('', [Validators.required]),
   });
+
+  protected readonly tiposAuricos = TIPOS_AURICOS;
+  protected readonly quartosDeCruz = QUARTOS_DE_CRUZ;
+  protected readonly angulos = ANGULOS;
+
+  constructor() {
+    super();
+    this.dhForm.controls.tipo_aurico.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((tipo) => this.applyTipoAurico(tipo as TipoAurico));
+    this.dhForm.controls.angulo.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((angulo) => this.applyAngulo(angulo as Angulo));
+  }
+
+  /** Tipo Áurico preenche aura, energia, palavra-chave e estratégia. */
+  private applyTipoAurico(tipo: TipoAurico) {
+    const derivados = TIPO_AURICO_MAP[tipo];
+    this.dhForm.patchValue(
+      {
+        aura: derivados?.aura ?? '',
+        energia: derivados?.energia ?? '',
+        palavra_chave: derivados?.palavra_chave ?? '',
+        estrategia: derivados?.estrategia ?? '',
+      },
+      { emitEvent: false },
+    );
+  }
+
+  /** Ângulo da Cruz preenche o Grupo de Destino. */
+  private applyAngulo(angulo: Angulo) {
+    this.dhForm.controls.grupo_de_destino.setValue(ANGULO_GRUPO_MAP[angulo] ?? '', {
+      emitEvent: false,
+    });
+  }
 
   get canais() {
     return this.dhForm.get('canais') as FormArray;
@@ -120,6 +166,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
         },
         encarnacao: {
           angulo: form.angulo!,
+          grupo_de_destino: form.grupo_de_destino!,
           cruz: form.cruz!,
           portoes: form.portoes!,
           quarto_de_cruz: form.quarto_cruz!,
@@ -140,9 +187,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
   private async getHumanDesignData() {
     this.isLoading.set(true);
     try {
-      this.humanDesignData.set(
-        await firstValueFrom(this.hdService.getByUserId(this.maestraId())),
-      );
+      this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
     } catch (e) {
       console.error(e);
     } finally {
