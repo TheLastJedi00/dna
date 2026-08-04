@@ -180,30 +180,32 @@ $secondary-color: #826a3c;
 }
 
 @keyframes expand {
-  0%{
+  0% {
     transform: scale(0%);
     opacity: 0;
   }
-  100%{
+  100% {
     transform: scale(100%);
     opacity: 1;
   }
 }
 
 @keyframes collapse {
-  0%{
+  0% {
     transform: scale(100%);
     opacity: 1;
   }
-  100%{
+  100% {
     transform: scale(0%);
     opacity: 0;
   }
 }
 
-input {
+input,
+select {
   outline: none;
   border: none;
+  background-color: transparent;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.15);
   padding: 0.5rem;
   border-radius: 0.75rem;
@@ -214,10 +216,19 @@ input {
   &::placeholder {
     color: rgba(0, 0, 0, 0.7);
   }
-  &.ng-invalid.ng-touched, &.ng-invalid.ng-dirty {
+  &.ng-invalid.ng-touched,
+  &.ng-invalid.ng-dirty {
     box-shadow: 0px 0px 3px 1px red;
   }
 }
 
-
-
+// Campos preenchidos automaticamente a partir de outro campo: continuam
+// visíveis (e enviados), mas não são digitáveis.
+input[readonly] {
+  background-color: rgba(0, 0, 0, 0.04);
+  box-shadow: none;
+  cursor: default;
+  &:focus {
+    box-shadow: none;
+  }
+}
