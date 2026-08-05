@@ -15,6 +15,27 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
   `ownershipGuard` protegem as rotas.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
 
+## Formulário de Desenho Humano
+
+Três campos são `select` (as opções vivem em
+`core/models/human-design.constants.ts`, espelhando o `@IsIn` da API) e cinco são
+derivados deles — ficam `readonly` no formulário, mas continuam sendo enviados:
+
+| Escolha | Preenche |
+| --- | --- |
+| **Tipo Áurico** — Geradora · Geradora Manifestante · Projetora · Manifestadora · Refletora | Aura, Energia, Palavra Chave, Estratégia |
+| **Ângulo** — Ângulo Direito · Ângulo Esquerdo · Justa Posição | Grupo de Destino (Pessoal · Transpessoal · Justa Posição) |
+| **Quarto de Cruz** — Quarto 1 a 4 (Iniciação · Civilização · Dualidade · Mutação) | — |
+
+Mapeamento do Tipo Áurico:
+
+| Tipo | Aura | Energia | Palavra | Estratégia |
+| --- | --- | --- | --- | --- |
+| Geradora / Geradora Manifestante | Aberta e Envolvente | Gera Energia | Construtora | Responder à Vida |
+| Projetora | Focalizada e Absorvente | Não Energético | Guia | Aguardar os Convites |
+| Manifestadora | Fechada e Repelente | Inicia Energia | Guia | Informar Antes de Agir |
+| Refletora | Que Tira Amostras | Não Energético | Discernidora | Aguardar o Ciclo Lunar |
+
 ## Plano Perfeito
 
 Página `perfect-plain/:userId` (síntese dos 3 pilares, módulo único). O gatilho

@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { DataButton } from '../../../shared/buttons/data-button/data-button';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
-import { HumanDesignData } from '../../../core/models/dhdata.model';
+import { CruzEncarnacao, HumanDesignData } from '../../../core/models/dhdata.model';
 import { DhDataCard } from '../../../shared/cards/dh-data-card/dh-data-card';
 import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-card';
 import { HumanDesignService } from '../../../core/services/human-design.service';
@@ -111,13 +111,14 @@ export class HumanDesignHome implements OnInit {
     return stringList;
   }
 
-  encarnacaoToStringArray(encarnacao: any) {
+  encarnacaoToStringArray(encarnacao: CruzEncarnacao) {
     let stringList: string[] = [];
     let angulo = `Ângulo: ${encarnacao.angulo}`;
+    let grupo = `Grupo de Destino: ${encarnacao.grupo_de_destino ?? ''}`;
     let cruz = `${encarnacao.cruz}`;
     let portoes = `(${encarnacao.portoes})`;
     let quarto = `Quarto de Cruz: ${encarnacao.quarto_de_cruz}`;
-    stringList.push(angulo, cruz, portoes, quarto);
+    stringList.push(angulo, grupo, cruz, portoes, quarto);
     return stringList;
   }
 

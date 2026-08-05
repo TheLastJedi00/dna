@@ -22,6 +22,7 @@ export interface Ativacoes {
 
 export interface CruzEncarnacao {
   angulo: string;
+  grupo_de_destino: string;
   cruz: string;
   portoes: string;
   quarto_de_cruz: string;

@@ -33,6 +33,7 @@
       <div class="border-t border-black/70">
         <p><b>Encarnação:</b></p>
         <p><b>Ângulo:</b> {{ humanDesignData()?.encarnacao?.angulo }}</p>
+        <p><b>Grupo de Destino:</b> {{ humanDesignData()?.encarnacao?.grupo_de_destino }}</p>
         <p><b>Cruz:</b> {{ humanDesignData()?.encarnacao?.cruz }}</p>
         <p><b>Portões:</b> {{ humanDesignData()?.encarnacao?.portoes }}</p>
         <p><b>Quarto de Cruz:</b> {{ humanDesignData()?.encarnacao?.quarto_de_cruz }}</p>
@@ -56,11 +57,16 @@
   </div>
 } @else {
   <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
-    <input formControlName="tipo_aurico" type="text" placeholder="Tipo Áurico" />
-    <input formControlName="aura" type="text" placeholder="Aura" />
-    <input formControlName="energia" type="text" placeholder="Energia" />
-    <input formControlName="palavra_chave" type="text" placeholder="Palavra Chave" />
-    <input formControlName="estrategia" type="text" placeholder="Estratégia" />
+    <select formControlName="tipo_aurico">
+      <option value="" disabled>Tipo Áurico</option>
+      @for (tipo of tiposAuricos; track tipo) {
+        <option [value]="tipo">{{ tipo }}</option>
+      }
+    </select>
+    <input formControlName="aura" type="text" placeholder="Aura" readonly />
+    <input formControlName="energia" type="text" placeholder="Energia" readonly />
+    <input formControlName="palavra_chave" type="text" placeholder="Palavra Chave" readonly />
+    <input formControlName="estrategia" type="text" placeholder="Estratégia" readonly />
     <input formControlName="assinatura" type="text" placeholder="Assinatura" />
     <input formControlName="nao_ser" type="text" placeholder="Tema do Não-Ser" />
     <input formControlName="autoridade" type="text" placeholder="Autoridade" />
@@ -76,8 +82,8 @@
       @for (canal of canais.controls; track canal) {
         <div [formGroupName]="$index" class="flex gap-3 w-full">
           <div class="flex gap-3">
-            <input formControlName="id" type="text" placeholder="10-10" class="w-[4rem]"/>
-            <input formControlName="nome" type="text" placeholder="Nome do Canal" class="w-full"/>
+            <input formControlName="id" type="text" placeholder="10-10" class="w-[4rem]" />
+            <input formControlName="nome" type="text" placeholder="Nome do Canal" class="w-full" />
           </div>
           <app-icon-text-button
             (click)="removeCanal($index)"
@@ -116,11 +122,28 @@
       </div>
       <p>Encarnação</p>
       <div class="grid grid-cols-2 gap-3">
-        <input formControlName="angulo" type="text" placeholder="Ângulo" />
-        <input formControlName="cruz" type="text" placeholder="Cruz" />
+        <select formControlName="angulo">
+          <option value="" disabled>Ângulo</option>
+          @for (angulo of angulos; track angulo) {
+            <option [value]="angulo">{{ angulo }}</option>
+          }
+        </select>
+        <input
+          formControlName="grupo_de_destino"
+          type="text"
+          placeholder="Grupo de Destino"
+          readonly
+        />
 
+        <input formControlName="cruz" type="text" placeholder="Cruz" />
         <input formControlName="portoes" type="text" placeholder="Portões" />
-        <input formControlName="quarto_cruz" type="text" placeholder="Quarto de Cruz" />
+
+        <select formControlName="quarto_cruz" class="col-span-2">
+          <option value="" disabled>Quarto de Cruz</option>
+          @for (quarto of quartosDeCruz; track quarto) {
+            <option [value]="quarto">{{ quarto }}</option>
+          }
+        </select>
       </div>
     </div>
     <app-icon-text-button
