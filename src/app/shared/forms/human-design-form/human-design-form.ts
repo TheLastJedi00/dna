@@ -132,6 +132,50 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
     await this.getHumanDesignData();
   }
 
+  /** Repõe no formulário os dados já cadastrados, para a reedição. */
+  protected prefillForm(): void {
+    const data = this.humanDesignData();
+    if (!data) return;
+
+    // O FormArray de canais é reconstruído: a quantidade varia por Maestra.
+    this.canais.clear();
+    for (const canal of data.canais ?? []) {
+      this.canais.push(
+        this.fb.nonNullable.group({
+          id: [canal.id, Validators.required],
+          nome: [canal.nome, Validators.required],
+        }),
+      );
+    }
+    if (this.canais.length === 0) this.addCanal();
+
+    this.dhForm.patchValue({
+      tipo_aurico: data.tipo_aurico,
+      aura: data.aura,
+      energia: data.energia,
+      palavra_chave: data.palavra_chave,
+      estrategia: data.estrategia,
+      assinatura: data.assinatura,
+      nao_ser: data.tema_do_nao_ser,
+      autoridade: data.autoridade,
+      perfil: data.perfil,
+      centros_definidos: data.centros_energeticos?.definidos,
+      centros_indefinidos: data.centros_energeticos?.indefinidos,
+      centros_abertos: data.centros_energeticos?.abertos,
+      personalidade_sol: String(data.ativacoes?.personalidade?.sol ?? ''),
+      personalidade_terra: String(data.ativacoes?.personalidade?.terra ?? ''),
+      personalidade_lua: String(data.ativacoes?.personalidade?.lua ?? ''),
+      desenho_sol: String(data.ativacoes?.desenho?.sol ?? ''),
+      desenho_terra: String(data.ativacoes?.desenho?.terra ?? ''),
+      desenho_lua: String(data.ativacoes?.desenho?.lua ?? ''),
+      angulo: data.encarnacao?.angulo,
+      grupo_de_destino: data.encarnacao?.grupo_de_destino,
+      cruz: data.encarnacao?.cruz,
+      portoes: data.encarnacao?.portoes,
+      quarto_cruz: data.encarnacao?.quarto_de_cruz,
+    });
+  }
+
   async saveHumanDesignData() {
     this.isLoading.set(true);
     const form = this.dhForm.getRawValue();
@@ -173,7 +217,15 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
         },
         canais: form.canais as Canal[],
       };
-      await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
+      const docId = this.humanDesignData()?.id;
+      if (this.isEditing() && docId) {
+        // `id` só na URL: o ValidationPipe do backend recusa campos fora do DTO.
+        await firstValueFrom(this.hdService.updateHumanDesign(docId, dhData));
+        this.isEditing.set(false);
+        this.outdatedPillar.set(true);
+      } else {
+        await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
+      }
       this.dhForm.reset();
       this.getDnaStatus();
       this.getHumanDesignData();
