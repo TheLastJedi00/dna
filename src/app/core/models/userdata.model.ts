@@ -1,4 +1,5 @@
 import { UserRole } from '../../types/types';
+import { Pronoun } from '../utils/pronoun';
 
 export interface UserData {
   id?: string;
@@ -6,6 +7,10 @@ export interface UserData {
   birthDate: string;
   birthTime: string;
   birthPlace: string;
+  /** Ramo/segmento em que a empresa atua. Texto livre. */
+  businessArea?: string;
+  /** Ausente nos cadastros anteriores à spec 007 — assume-se `'feminino'`. */
+  pronoun?: Pronoun;
   isActive?: boolean;
   roles?: UserRole[];
   /** Id de quem cadastrou a Maestra (Analista ou Manager). */
