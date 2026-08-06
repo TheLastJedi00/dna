@@ -232,3 +232,17 @@ input[readonly] {
     box-shadow: none;
   }
 }
+
+// Aviso de conteúdo desatualizado, comum aos três formulários de pilar: os
+// dados do DNA foram reeditados depois da geração (spec 007).
+.outdated-warning {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background-color: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.5);
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 0.875rem;
+}
