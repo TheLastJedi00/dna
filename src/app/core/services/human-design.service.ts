@@ -18,4 +18,9 @@ export class HumanDesignService {
   createHumanDesignByUser(humanDesignData: HumanDesignData): Observable<HumanDesignData> {
     return this.http.post<HumanDesignData>(`${this.api}`, humanDesignData);
   }
+
+  /** Reedição dos dados já cadastrados. `id` é o do documento, não o do usuário. */
+  updateHumanDesign(id: string, humanDesignData: HumanDesignData): Observable<void> {
+    return this.http.patch<void>(`${this.api}/${id}`, humanDesignData);
+  }
 }
