@@ -2,7 +2,11 @@
 <main class="pt-header gradient-primary-to-secondary-85 min-h-[80vh]">
   <section class="main-padding container mx-auto bg-white">
     <div class="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-      <h1 class="capitalize text-xl font-merriweather text-primary">Gerir de {{ type() }}</h1>
+      <!--
+        Título coletivo: a listagem mistura pronomes, então não há flexão única
+        a aplicar aqui — o termo por pronome aparece no detalhe de cada cadastro.
+      -->
+      <h1 class="capitalize text-xl font-merriweather text-primary">{{ pageTitle() }}</h1>
       <app-icon-text-button
         icon="arrow-left"
         text="Voltar"

@@ -2,7 +2,7 @@
   <app-icon-text-button
     (click)="open.set(true)"
     icon="plus"
-    text="Nova Maestra"
+    [text]="newMaestraTerm()"
     class="w-full text-white bg-secondary text-center"
   ></app-icon-text-button>
 }
@@ -20,9 +20,46 @@
       (ngSubmit)="submit()"
     >
       <h3 class="font-merriweather text-center text-secondary text-xl">
-        {{ isEditing() ? 'Editar Maestra' : 'Adicionar Maestra' }}
+        {{ isEditing() ? 'Editar' : 'Adicionar' }} {{ maestraTerm() }}
       </h3>
       <input type="text" placeholder="Nome Completo" formControlName="fullName" />
+
+      <!-- Pronome de tratamento: flexiona a interface e orienta o material gerado -->
+      <div class="grid gap-1">
+        <div class="pronoun-toggle" role="group" aria-label="Pronome de tratamento">
+          <button
+            type="button"
+            class="pronoun-option"
+            [class.is-selected]="pronoun() === 'feminino'"
+            [class.bg-primary]="pronoun() === 'feminino'"
+            [class.text-white]="pronoun() === 'feminino'"
+            [attr.aria-pressed]="pronoun() === 'feminino'"
+            (click)="setPronoun('feminino')"
+          >
+            Feminino
+          </button>
+          <button
+            type="button"
+            class="pronoun-option"
+            [class.is-selected]="pronoun() === 'masculino'"
+            [class.bg-primary]="pronoun() === 'masculino'"
+            [class.text-white]="pronoun() === 'masculino'"
+            [attr.aria-pressed]="pronoun() === 'masculino'"
+            (click)="setPronoun('masculino')"
+          >
+            Masculino
+          </button>
+        </div>
+        <span class="info-hint">
+          ℹ️ Usado para personalizar o material gerado com maior precisão
+        </span>
+      </div>
+
+      <input
+        type="text"
+        placeholder="Área de atuação da empresa"
+        formControlName="businessArea"
+      />
       <input type="date" placeholder="Data de Nascimento" formControlName="birthDate" />
       <input type="time" placeholder="Hora do Nascimento" formControlName="birthTime" />
       <div class="grid gap-3">

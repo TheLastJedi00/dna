@@ -18,4 +18,9 @@ export class NumerologyService {
   createNumerologyByUser(numerologyData: NumerologyData): Observable<NumerologyData> {
     return this.http.post<NumerologyData>(`${this.api}`, numerologyData);
   }
+
+  /** Reedição dos dados já cadastrados. `id` é o do documento, não o do usuário. */
+  updateNumerology(id: string, numerologyData: NumerologyData): Observable<void> {
+    return this.http.patch<void>(`${this.api}/${id}`, numerologyData);
+  }
 }

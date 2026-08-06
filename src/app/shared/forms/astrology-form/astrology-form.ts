@@ -71,6 +71,43 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
     await this.getAstrologyData();
   }
 
+  /** Repõe no formulário os dados já cadastrados, para a reedição. */
+  protected prefillForm(): void {
+    const data = this.astrologyData();
+    if (!data) return;
+
+    this.astroForm.patchValue({
+      triade_sol_signo: data.triadeAstrologica?.sol?.signo,
+      triade_sol_casa: data.triadeAstrologica?.sol?.casaAstrologica,
+      triade_sol_planetas: data.triadeAstrologica?.sol?.planetas,
+
+      triade_ascendente_signo: data.triadeAstrologica?.ascendente?.signo,
+      triade_ascendente_casa: data.triadeAstrologica?.ascendente?.casaAstrologica,
+      triade_ascendente_planetas: data.triadeAstrologica?.ascendente?.planetas,
+
+      triade_lua_signo: data.triadeAstrologica?.lua?.signo,
+      triade_lua_casa: data.triadeAstrologica?.lua?.casaAstrologica,
+      triade_lua_planetas: data.triadeAstrologica?.lua?.planetas,
+
+      meio_ceu_signo: data.meioDoCeu?.signo,
+      meio_ceu_casa: data.meioDoCeu?.casaAstrologica,
+      meio_ceu_planetas: data.meioDoCeu?.planetas,
+
+      dinheiro_signo: data.dinheiro?.signo,
+      dinheiro_casa: data.dinheiro?.casaAstrologica,
+      dinheiro_planetas: data.dinheiro?.planetas,
+
+      comunicacao_signo: data.comunicacao?.signo,
+      comunicacao_casa: data.comunicacao?.casaAstrologica,
+      comunicacao_planetas: data.comunicacao?.planetas,
+
+      elementos_fogo: data.elementos?.fogo,
+      elementos_terra: data.elementos?.terra,
+      elementos_ar: data.elementos?.ar,
+      elementos_agua: data.elementos?.agua,
+    });
+  }
+
   async saveAstrologyData() {
     this.isLoading.set(true);
     const form = this.astroForm.getRawValue();
@@ -116,7 +153,15 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
           agua: form.elementos_agua!,
         },
       };
-      await firstValueFrom(this.astrologyService.createAstrologyByUser(astroData));
+      const docId = this.astrologyData()?.id;
+      if (this.isEditing() && docId) {
+        // `id` só na URL: o ValidationPipe do backend recusa campos fora do DTO.
+        await firstValueFrom(this.astrologyService.updateAstrology(docId, astroData));
+        this.isEditing.set(false);
+        this.outdatedPillar.set(true);
+      } else {
+        await firstValueFrom(this.astrologyService.createAstrologyByUser(astroData));
+      }
       this.astroForm.reset();
       this.getDnaStatus();
       this.getAstrologyData();

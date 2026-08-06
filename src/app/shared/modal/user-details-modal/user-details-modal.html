@@ -14,6 +14,14 @@
         <p>{{ userData().birthDate }}</p>
         <p>{{ userData().birthTime }}</p>
         <p>{{ userData().birthPlace }}</p>
+        @if (userData().businessArea) {
+          <p class="mt-2 text-sm">
+            <span class="text-black/50">Área de atuação:</span> {{ userData().businessArea }}
+          </p>
+        }
+        <p class="text-sm">
+          <span class="text-black/50">Pronome:</span> {{ pronounText() }}
+        </p>
         @if (userData().email) {
           <p class="mt-2 text-sm break-all">
             <span class="text-black/50">E-mail:</span> {{ userData().email }}
@@ -33,7 +41,7 @@
           [mustChangePassword]="userData().mustChangePassword ?? false"
           [tempPassword]="userData().tempPassword ?? null"
           [expiresAt]="userData().tempPasswordExpiresAt ?? null"
-          subject="a usuária"
+          [subject]="subject()"
           (save)="generateTempPassword.emit($event)"
         ></app-temp-password-form>
       }

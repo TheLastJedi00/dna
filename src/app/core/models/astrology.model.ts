@@ -18,6 +18,8 @@ export interface TriadeAstrologica {
 }
 
 export interface LeituraAstrologica {
+  /** Id do documento; vem no GET e é a chave do PATCH de edição. */
+  id?: string;
   userId?: string;
   triadeAstrologica: TriadeAstrologica;
   meioDoCeu: PontoAstrologico;

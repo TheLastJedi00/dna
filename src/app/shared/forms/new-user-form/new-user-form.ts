@@ -14,6 +14,12 @@ import { UserData } from '../../../core/models/userdata.model';
 import { UserService } from '../../../core/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
+import {
+  DEFAULT_PRONOUN,
+  Pronoun,
+  maestraLabel,
+  newMaestraLabel,
+} from '../../../core/utils/pronoun';
 
 /**
  * Form de Maestra reutilizado para **criar** e **editar**. Sem `user` é criação
@@ -45,8 +51,23 @@ export class NewUserForm {
   passwordInputType = signal<string>('password');
   isLoading = signal(false);
 
+  /**
+   * Pronome de tratamento. Fica em signal (e não em control) porque o template
+   * flexiona título e botão a cada troca — sob zoneless, ler `control.value`
+   * não dispararia re-render.
+   */
+  readonly pronoun = signal<Pronoun>(DEFAULT_PRONOUN);
+  /** Termos da UI que acompanham o toggle. */
+  readonly maestraTerm = computed(() => maestraLabel(this.pronoun()));
+  readonly newMaestraTerm = computed(() => newMaestraLabel(this.pronoun()));
+
+  setPronoun(pronoun: Pronoun) {
+    this.pronoun.set(pronoun);
+  }
+
   protected createUserForm = this.fb.nonNullable.group({
     fullName: ['', [Validators.required]],
+    businessArea: [''],
     birthDate: ['', [Validators.required]],
     birthTime: ['', [Validators.required]],
     birthCity: ['', [Validators.required]],
@@ -89,7 +110,9 @@ export class NewUserForm {
       birthTime: u.birthTime,
       birthCity: city,
       birthUf: uf,
+      businessArea: u.businessArea ?? '',
     });
+    this.pronoun.set(u.pronoun ?? DEFAULT_PRONOUN);
   }
 
   onCancel() {
@@ -116,6 +139,8 @@ export class NewUserForm {
       birthDate: form.birthDate,
       birthTime: form.birthTime,
       birthPlace: `${form.birthCity}-${form.birthUf}`,
+      businessArea: form.businessArea.trim(),
+      pronoun: this.pronoun(),
     };
     try {
       if (this.isEditing()) {
@@ -142,5 +167,6 @@ export class NewUserForm {
   private reset() {
     this.open.set(false);
     this.createUserForm.reset();
+    this.pronoun.set(DEFAULT_PRONOUN);
   }
 }

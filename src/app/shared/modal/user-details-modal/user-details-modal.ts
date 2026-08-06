@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+} from '@angular/core';
 import { UserData } from '../../../core/models/userdata.model';
+import { pronounLabel, userSubject } from '../../../core/utils/pronoun';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import { TempPasswordForm } from '../../forms/temp-password-form/temp-password-form';
 import { Infinity } from '../../loading/infinity/infinity';
@@ -21,6 +28,11 @@ export class UserDetailsModal {
   userData = input.required<UserData>();
   isOpen = input<boolean>(false);
   isLoading = input<boolean>(false);
+
+  /** "o usuário" / "a usuária" — sujeito das frases da senha provisória. */
+  readonly subject = computed(() => userSubject(this.userData().pronoun));
+  /** "Masculino" / "Feminino" — o pronome como rótulo legível. */
+  readonly pronounText = computed(() => pronounLabel(this.userData().pronoun));
 
   close = output<void>();
   edit = output<void>();

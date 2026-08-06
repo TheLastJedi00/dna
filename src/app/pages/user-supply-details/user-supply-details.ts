@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { IconTextButton } from '../../shared/buttons/icon-text-button/icon-text-button';
@@ -13,6 +13,7 @@ import { NumerologyForm } from '../../shared/forms/numerology-form/numerology-fo
 import { AstrologyForm } from '../../shared/forms/astrology-form/astrology-form';
 import { PerfectPlainTrigger } from '../../shared/perfect-plain-trigger/perfect-plain-trigger';
 import { FormModal } from '../../shared/modal/form-modal/form-modal';
+import { maestraLabel } from '../../core/utils/pronoun';
 
 type PanelModal = 'human-design' | 'numerology' | 'astrology' | 'perfect-plain';
 
@@ -42,6 +43,9 @@ export class UserSupplyDetails implements OnInit {
   service = inject(UserService);
   userData = signal<UserData | null>(null);
   isLoading = signal(false);
+
+  /** "Maestra"/"Maestro" conforme o pronome escolhido no cadastro. */
+  readonly maestraTerm = computed(() => maestraLabel(this.userData()?.pronoun));
 
   readonly openModal = signal<PanelModal | null>(null);
 

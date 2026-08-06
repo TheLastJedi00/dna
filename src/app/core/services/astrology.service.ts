@@ -18,4 +18,9 @@ export class AstrologyService {
   createAstrologyByUser(astrologyData: LeituraAstrologica): Observable<LeituraAstrologica> {
     return this.http.post<LeituraAstrologica>(`${this.api}`, astrologyData);
   }
+
+  /** Reedição dos dados já cadastrados. `id` é o do documento, não o do usuário. */
+  updateAstrology(id: string, astrologyData: LeituraAstrologica): Observable<void> {
+    return this.http.patch<void>(`${this.api}/${id}`, astrologyData);
+  }
 }
