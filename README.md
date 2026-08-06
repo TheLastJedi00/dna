@@ -36,6 +36,19 @@ Mapeamento do Tipo Áurico:
 | Manifestadora | Fechada e Repelente | Inicia Energia | Guia | Informar Antes de Agir |
 | Refletora | Que Tira Amostras | Não Energético | Discernidora | Aguardar o Ciclo Lunar |
 
+## Edição dos dados de DNA
+
+Os três formulários de pilar (`human-design`, `numerology`, `astrology`) mostram os
+dados em leitura depois de preenchidos. O botão **Editar dados** repõe o
+formulário com os valores atuais (`PillarFormBase.startEdit()` → `prefillForm()` de
+cada form) e o submit passa a chamar o `PATCH` do pilar em vez do `POST`; **Cancelar**
+sai sem salvar.
+
+Salva a edição, um banner avisa que o conteúdo já gerado pode estar desatualizado e
+oferece **Regenerar conteúdo** (o mesmo `createAllSupply()` de sempre). O aviso é
+**efêmero**: vive num signal, vale para a sessão em que a edição aconteceu e some
+quando o conteúdo é regerado — não é persistido.
+
 ## Plano Perfeito
 
 Página `perfect-plain/:userId` (síntese dos 3 pilares, módulo único). O gatilho
@@ -54,6 +67,14 @@ Rota `management/:type` (painel de gestora). A página é **smart**: mantém o e
   **Desativar** (ativas) e **Reativar** (inativas). Desativar é soft delete.
 - **Edição** reutiliza o `new-user-form` (modo edição: prefill + `updateUser`, sem
   os campos de acesso).
+- **Área de atuação** (texto livre) e **pronome de tratamento** (toggle
+  Feminino/Masculino) no cadastro. O pronome flexiona os termos referentes à
+  Maestra na interface — "Maestra/Maestro", "Nova Maestra/Novo Maestro",
+  "a usuária/o usuário" — via os helpers de `core/utils/pronoun.ts`, e vai para a
+  API, que o usa para orientar o material gerado. Cadastros anteriores não têm o
+  campo e assumem feminino. Os termos referentes ao **analista logado**
+  (ex.: "BEM-VINDA DE VOLTA") seguem fixos: dependem de um pronome no perfil do
+  Analista, que ainda não existe.
 - `dashboard-button` aceita `icon` (SVG via `IconsSwitch`) além de `imgSrc`,
   mantendo retrocompatibilidade; no painel, Maestras usa o ícone `users` e as
   Análises do DNA o ícone `book`.
