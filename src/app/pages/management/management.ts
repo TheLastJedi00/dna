@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom, Observable } from 'rxjs';
@@ -36,6 +36,14 @@ export class Management implements OnInit {
   router = inject(Router);
   private readonly userService = inject(UserService);
   type = input.required<string>();
+
+  /**
+   * "Gerir Maestras" para a listagem de Maestras (o "de" era um artefato do
+   * template genérico); demais tipos mantêm o formato antigo.
+   */
+  readonly pageTitle = computed(() =>
+    this.type() === 'maestras' ? 'Gerir Maestras' : `Gerir de ${this.type()}`,
+  );
 
   users = signal<UserData[]>([]);
   isLoading = signal(false);
