@@ -28,6 +28,29 @@ export abstract class PillarFormBase {
   readonly dnaStatus = signal<DnaStatus | null>(null);
   readonly isSupplyCreated = signal(false);
 
+  /** true enquanto o analista reedita os dados já cadastrados do pilar. */
+  readonly isEditing = signal(false);
+  /**
+   * Avisa que os dados do pilar mudaram depois do conteúdo ter sido gerado.
+   * É efêmero de propósito (spec 007): vale para a sessão em que a edição
+   * aconteceu e não é persistido.
+   */
+  readonly outdatedPillar = signal(false);
+
+  /** Entra em edição; cada form concreto preenche o formulário com os dados. */
+  startEdit(): void {
+    this.prefillForm();
+    this.isEditing.set(true);
+  }
+
+  /** Sai da edição sem salvar. */
+  cancelEdit(): void {
+    this.isEditing.set(false);
+  }
+
+  /** Preenche o formulário reativo com os dados já carregados do pilar. */
+  protected abstract prefillForm(): void;
+
   protected async initPillarForm(): Promise<void> {
     this.maestraId.set(this.route.snapshot.paramMap.get('maestraId') ?? '');
     await this.getDnaStatus();
@@ -76,6 +99,8 @@ export abstract class PillarFormBase {
       await firstValueFrom(
         this.supplyService.createFullPillar(this.pillar, this.maestraId()),
       );
+      // O conteúdo acabou de ser refeito com os dados atuais: o aviso caduca.
+      this.outdatedPillar.set(false);
       alert('Dados Gerados com Sucesso!');
     } catch (e) {
       console.error(e);
