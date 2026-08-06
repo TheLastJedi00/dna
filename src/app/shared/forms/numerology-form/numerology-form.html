@@ -1,6 +1,19 @@
-@if (dnaStatus()?.numerology) {
+@if (dnaStatus()?.numerology && !isEditing()) {
   <div class="bg-white dna-data">
-    <h3 class="text-secondary font-merriweather text-xl">Numerologia</h3>
+    @if (outdatedPillar()) {
+      <div class="outdated-warning">
+        <p>
+          ⚠️ Os dados de Numerologia foram alterados. O conteúdo gerado pode estar
+          desatualizado.
+        </p>
+        <app-icon-text-button
+          (click)="createAllSupply()"
+          icon="sparkles"
+          text="Regenerar conteúdo"
+          class="w-full bg-secondary text-white rounded-xl"
+        ></app-icon-text-button>
+      </div>
+    }
     <div>
       <p><b>Motivação:</b> {{ numerologyData()?.perfil?.motivacao }}</p>
       <p><b>Impressão:</b> {{ numerologyData()?.perfil?.impressao }}</p>
@@ -40,6 +53,12 @@
       <p><b>Respostas Subconscientes:</b> {{ numerologyData()?.extras?.respostas_subconscientes }}</p>
       <p><b>Números Favoráveis:</b> {{ numerologyData()?.extras?.numeros_favoraveis }}</p>
     </div>
+    <app-icon-text-button
+      (click)="startEdit()"
+      icon="pencil"
+      text="Editar dados"
+      class="w-full bg-white text-secondary rounded-xl shadow-sm"
+    ></app-icon-text-button>
     @if (isSupplyCreated()) {
       <app-icon-text-button
         (click)="router.navigate(['numerology', maestraId()])"
@@ -58,7 +77,6 @@
   </div>
 } @else {
   <form [formGroup]="numForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
-    <h3 class="text-secondary font-merriweather text-xl">Numerologia</h3>
     <input formControlName="motivacao" type="number" placeholder="Motivação" />
     <input formControlName="impressao" type="number" placeholder="Impressão" />
     <input formControlName="expressao" type="number" placeholder="Expressão" />
@@ -215,6 +233,15 @@
       text="Salvar Dados"
       class="bg-primary text-white rounded-xl w-full"
     ></app-icon-text-button>
+    @if (isEditing()) {
+      <app-icon-text-button
+        type="button"
+        (click)="cancelEdit()"
+        icon="arrow-left"
+        text="Cancelar"
+        class="bg-white text-primary rounded-xl w-full"
+      ></app-icon-text-button>
+    }
   </form>
 }
 

@@ -9,6 +9,8 @@ import { DecodedToken, UserRole } from '../../types/types';
 interface TokenPair {
   access_token: string;
   refresh_token?: string;
+  /** Estado da senha no login; a fonte de verdade do bloqueio é o claim do token. */
+  mustChangePassword?: boolean;
 }
 
 const ACCESS_TOKEN_KEY = 'access_token';
@@ -109,6 +111,26 @@ export class LoginService {
 
   getUserRole(): UserRole[] | null {
     return this.getDecodedToken()?.roles ?? null;
+  }
+
+  /**
+   * true enquanto a senha em uso for provisória. Lido do **claim do token**, não
+   * de um estado em memória — é o que impede burlar a troca obrigatória com um
+   * F5 ou uma URL direta.
+   */
+  mustChangePassword(): boolean {
+    return this.getDecodedToken()?.mustChangePassword === true;
+  }
+
+  /**
+   * Define a senha definitiva. A API devolve um **par de tokens novo** (sem o
+   * claim de troca obrigatória) e ele é gravado aqui — sem isso o usuário
+   * continuaria preso na tela de troca com o token antigo.
+   */
+  changePassword(password: string): Observable<TokenPair> {
+    return this.http
+      .post<TokenPair>(this.apiAuth + '/change-password', { password })
+      .pipe(tap((tokens) => this.storeTokens(tokens)));
   }
 
   get userId(): string {

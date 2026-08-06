@@ -11,6 +11,35 @@
   }
 }
 
+/* Toggle de pronome: dois segmentos, o selecionado ganha o fundo primário. */
+.pronoun-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.pronoun-option {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  transition: all 300ms;
+
+  &:hover:not(.is-selected) {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  /* O estado selecionado usa .bg-primary/.text-white globais (styles.scss). */
+}
+
+.info-hint {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 .show-pass {
   opacity: 90%;
   transition: all 300ms;

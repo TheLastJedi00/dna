@@ -10,6 +10,8 @@ export interface AnoPessoal {
 }
 
 export interface NumerologyData {
+  /** Id do documento; vem no GET e é a chave do PATCH de edição. */
+  id?: string;
   userId: string;
   perfil: {
     motivacao: number;

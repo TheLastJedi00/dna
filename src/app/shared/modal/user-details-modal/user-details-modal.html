@@ -2,44 +2,86 @@
   <section
     animate.enter="expand"
     animate.leave="collapse"
-    (click)="onClose()"
+    (click)="close.emit()"
     class="fixed z-10 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
   >
     <div
-      class="p-3 bg-white shadow-xl rounded-xl transition-all"
+      class="p-3 bg-white shadow-xl rounded-xl transition-all w-full max-w-[400px] mx-3 max-h-[90vh] overflow-y-auto"
       (click)="$event.stopPropagation()"
     >
-      <h1 class="text-primary font-merriweather">{{ userData().fullName }}</h1>
+      <h1 class="text-primary font-merriweather break-words">{{ userData().fullName }}</h1>
       <div class="text-black/70 py-3">
         <p>{{ userData().birthDate }}</p>
         <p>{{ userData().birthTime }}</p>
         <p>{{ userData().birthPlace }}</p>
+        @if (userData().businessArea) {
+          <p class="mt-2 text-sm">
+            <span class="text-black/50">Área de atuação:</span> {{ userData().businessArea }}
+          </p>
+        }
+        <p class="text-sm">
+          <span class="text-black/50">Pronome:</span> {{ pronounText() }}
+        </p>
+        @if (userData().email) {
+          <p class="mt-2 text-sm break-all">
+            <span class="text-black/50">E-mail:</span> {{ userData().email }}
+          </p>
+        }
+        <!-- Quem cadastrou a Maestra: leitura, resolvido pelo backend -->
+        <p class="text-sm">
+          <span class="text-black/50">Analista Responsável:</span>
+          {{ userData().createdByName || 'Não informado' }}
+        </p>
       </div>
+
+      @if (isLoading()) {
+        <app-infinity></app-infinity>
+      } @else {
+        <app-temp-password-form
+          [mustChangePassword]="userData().mustChangePassword ?? false"
+          [tempPassword]="userData().tempPassword ?? null"
+          [expiresAt]="userData().tempPasswordExpiresAt ?? null"
+          [subject]="subject()"
+          (save)="generateTempPassword.emit($event)"
+        ></app-temp-password-form>
+      }
+
       <app-icon-text-button
-        (click)="router.navigate([`user-supply/${userData().id}`])"
+        (click)="openSupply.emit()"
         icon="magnifying-glass"
         text="Detalhes"
-        class="bg-white rounded-xl text-secondary shadow-xl w-full"
+        class="mt-3 bg-white rounded-xl text-secondary shadow-xl w-full"
       ></app-icon-text-button>
+
       <div class="grid py-3 gap-3">
-        <div class="grid grid-cols-2 gap-3">
+        @if (userData().isActive === false) {
           <app-icon-text-button
-            icon="pencil"
-            text="Editar"
-            class="bg-secondary rounded-xl text-white"
+            (click)="reactivate.emit()"
+            icon="lock-open"
+            text="Reativar"
+            class="bg-secondary rounded-xl text-white w-full text-center"
           ></app-icon-text-button>
-          <app-icon-text-button
-            (click)="deleteUser()"
-            icon="lock-closed"
-            text="Desativar"
-            class="bg-[red] rounded-xl text-white"
-          ></app-icon-text-button>
-        </div>
+        } @else {
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <app-icon-text-button
+              (click)="edit.emit()"
+              icon="pencil"
+              text="Editar"
+              class="bg-secondary rounded-xl text-white"
+            ></app-icon-text-button>
+            <app-icon-text-button
+              (click)="disable.emit()"
+              icon="lock-closed"
+              text="Desativar"
+              class="bg-[red] rounded-xl text-white"
+            ></app-icon-text-button>
+          </div>
+        }
         <app-icon-text-button
           icon="arrow-left"
           text="Voltar"
           class="bg-primary rounded-xl text-white w-full text-center"
-          (click)="onClose()"
+          (click)="close.emit()"
         ></app-icon-text-button>
       </div>
     </div>

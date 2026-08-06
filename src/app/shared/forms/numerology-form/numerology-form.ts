@@ -121,6 +121,83 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
     await this.getNumerologyData();
   }
 
+  /** Repõe no formulário os dados já cadastrados, para a reedição. */
+  protected prefillForm(): void {
+    const data = this.numerologyData();
+    if (!data) return;
+
+    // Os três blocos de período são arrays no model e controls achatados no
+    // formulário (ciclo1_*, ciclo2_*, ...), daí o mapeamento por índice.
+    const [ciclo1, ciclo2, ciclo3] = data.ciclos_de_vida ?? [];
+    const [desafio1, desafio2, desafio3] = data.desafios ?? [];
+    const [momento1, momento2, momento3, momento4] = data.momentos_decisivos ?? [];
+
+    this.numForm.patchValue({
+      motivacao: data.perfil?.motivacao,
+      impressao: data.perfil?.impressao,
+      expressao: data.perfil?.expressao,
+      destino: data.perfil?.destino,
+      missao: data.perfil?.missao,
+      data_natalicia: data.perfil?.data_natalicia,
+      numero_psiquico: data.perfil?.numero_psiquico,
+      talento_oculto: data.perfil?.talento_oculto,
+
+      ciclo1_inicio: ciclo1?.inicio,
+      ciclo1_fim: ciclo1?.fim,
+      ciclo1_numero: ciclo1?.numero,
+      ciclo2_inicio: ciclo2?.inicio,
+      ciclo2_fim: ciclo2?.fim,
+      ciclo2_numero: ciclo2?.numero,
+      ciclo3_inicio: ciclo3?.inicio,
+      ciclo3_fim: ciclo3?.fim,
+      ciclo3_numero: ciclo3?.numero,
+
+      desafio1_inicio: desafio1?.inicio,
+      desafio1_fim: desafio1?.fim,
+      desafio1_numero: desafio1?.numero,
+      desafio2_inicio: desafio2?.inicio,
+      desafio2_fim: desafio2?.fim,
+      desafio2_numero: desafio2?.numero,
+      desafio3_inicio: desafio3?.inicio,
+      desafio3_fim: desafio3?.fim,
+      desafio3_numero: desafio3?.numero,
+
+      momento1_inicio: momento1?.inicio,
+      momento1_fim: momento1?.fim,
+      momento1_numero: momento1?.numero,
+      momento2_inicio: momento2?.inicio,
+      momento2_fim: momento2?.fim,
+      momento2_numero: momento2?.numero,
+      momento3_inicio: momento3?.inicio,
+      momento3_fim: momento3?.fim,
+      momento3_numero: momento3?.numero,
+      momento4_inicio: momento4?.inicio,
+      momento4_fim: momento4?.fim,
+      momento4_numero: momento4?.numero,
+
+      ano_atual_numero: data.ano_pessoal?.atual?.numero,
+      ano_atual_validade: data.ano_pessoal?.atual?.validade,
+      ano_proximo_numero: data.ano_pessoal?.proximo?.numero,
+      ano_proximo_validade: data.ano_pessoal?.proximo?.validade,
+
+      respostas_subconscientes: data.extras?.respostas_subconscientes,
+    });
+
+    // FormArrays reconstruídos: a quantidade de itens varia por Maestra.
+    this.fillNumberArray(this.tendenciasOcultas, data.extras?.tendencias_ocultas);
+    this.fillNumberArray(this.numerosFavoraveis, data.extras?.numeros_favoraveis);
+  }
+
+  private fillNumberArray(array: FormArray, values?: number[]) {
+    array.clear();
+    for (const value of values ?? []) {
+      array.push(this.fb.control<number | null>(value, [Validators.required]));
+    }
+    if (array.length === 0) {
+      array.push(this.fb.control<number | null>(null, [Validators.required]));
+    }
+  }
+
   async saveNumerologyData() {
     this.isLoading.set(true);
     const form = this.numForm.getRawValue();
@@ -163,7 +240,15 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
           numeros_favoraveis: form.numeros_favoraveis as number[],
         },
       };
-      await firstValueFrom(this.numService.createNumerologyByUser(numData));
+      const docId = this.numerologyData()?.id;
+      if (this.isEditing() && docId) {
+        // `id` só na URL: o ValidationPipe do backend recusa campos fora do DTO.
+        await firstValueFrom(this.numService.updateNumerology(docId, numData));
+        this.isEditing.set(false);
+        this.outdatedPillar.set(true);
+      } else {
+        await firstValueFrom(this.numService.createNumerologyByUser(numData));
+      }
       this.numForm.reset();
       this.getDnaStatus();
       this.getNumerologyData();

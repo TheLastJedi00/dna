@@ -1,6 +1,19 @@
-@if (dnaStatus()?.astrology) {
+@if (dnaStatus()?.astrology && !isEditing()) {
   <div class="bg-white dna-data">
-    <h3 class="text-secondary font-merriweather text-xl">Astrologia</h3>
+    @if (outdatedPillar()) {
+      <div class="outdated-warning">
+        <p>
+          ⚠️ Os dados de Astrologia foram alterados. O conteúdo gerado pode estar
+          desatualizado.
+        </p>
+        <app-icon-text-button
+          (click)="createAllSupply()"
+          icon="sparkles"
+          text="Regenerar conteúdo"
+          class="w-full bg-secondary text-white rounded-xl"
+        ></app-icon-text-button>
+      </div>
+    }
     <div>
       <p><b>Tríade Astrológica</b></p>
     </div>
@@ -50,6 +63,12 @@
       <p><b>Ar:</b> {{ astrologyData()?.elementos?.ar }}</p>
       <p><b>Água:</b> {{ astrologyData()?.elementos?.agua }}</p>
     </div>
+    <app-icon-text-button
+      (click)="startEdit()"
+      icon="pencil"
+      text="Editar dados"
+      class="w-full bg-white text-secondary rounded-xl shadow-sm"
+    ></app-icon-text-button>
     @if (isSupplyCreated()) {
       <app-icon-text-button
         (click)="router.navigate(['astrology', maestraId()])"
@@ -68,8 +87,6 @@
   </div>
 } @else {
   <form [formGroup]="astroForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
-    <h3 class="text-secondary font-merriweather text-xl">Astrologia</h3>
-
     <p>Tríade Astrológica</p>
     <div class="pl-5 grid gap-3">
       <p>Sol</p>
@@ -131,6 +148,15 @@
       text="Salvar Dados"
       class="bg-primary text-white rounded-xl w-full"
     ></app-icon-text-button>
+    @if (isEditing()) {
+      <app-icon-text-button
+        type="button"
+        (click)="cancelEdit()"
+        icon="arrow-left"
+        text="Cancelar"
+        class="bg-white text-primary rounded-xl w-full"
+      ></app-icon-text-button>
+    }
   </form>
 }
 

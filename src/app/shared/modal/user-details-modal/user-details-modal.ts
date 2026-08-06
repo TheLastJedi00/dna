@@ -1,43 +1,43 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+} from '@angular/core';
 import { UserData } from '../../../core/models/userdata.model';
+import { pronounLabel, userSubject } from '../../../core/utils/pronoun';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
-import { Router } from '@angular/router';
-import { UserService } from '../../../core/services/user.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { TempPasswordForm } from '../../forms/temp-password-form/temp-password-form';
+import { Infinity } from '../../loading/infinity/infinity';
 
+/**
+ * Detalhe da Maestra: dados, quem a cadastrou, credenciais e as ações.
+ *
+ * Dumb (spec 005): não injeta mais `UserService` nem `Router` — só emite a
+ * intenção. Quem busca o detalhe (`GET /users/:id`, único lugar de onde vem a
+ * senha provisória) e executa as ações é a page `management`.
+ */
 @Component({
   selector: 'app-user-details-modal',
-  imports: [IconTextButton],
+  imports: [IconTextButton, TempPasswordForm, Infinity],
   templateUrl: './user-details-modal.html',
-  styleUrl: './user-details-modal.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserDetailsModal {
-  private readonly userService = inject(UserService);
-  isLoading = signal(false);
   userData = input.required<UserData>();
   isOpen = input<boolean>(false);
-  close = output();
-  router = inject(Router);
+  isLoading = input<boolean>(false);
 
-  onClose() {
-    this.close.emit();
-  }
+  /** "o usuário" / "a usuária" — sujeito das frases da senha provisória. */
+  readonly subject = computed(() => userSubject(this.userData().pronoun));
+  /** "Masculino" / "Feminino" — o pronome como rótulo legível. */
+  readonly pronounText = computed(() => pronounLabel(this.userData().pronoun));
 
-  async deleteUser() {
-    this.isLoading.set(true);
-    try {
-      if (!this.userData()) {
-        alert('ID do usuário não encontrado.');
-        throw new Error('UserData está indefinido.');
-      }
-      const deleted = await firstValueFrom(this.userService.deleteUser(this.userData().id!)) ;
-      alert(`${deleted.fullName} foi excluída com sucesso`);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-      this.close.emit()
-    }
-  }
+  close = output<void>();
+  edit = output<void>();
+  disable = output<void>();
+  reactivate = output<void>();
+  openSupply = output<void>();
+  generateTempPassword = output<string>();
 }

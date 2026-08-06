@@ -22,12 +22,15 @@ export interface Ativacoes {
 
 export interface CruzEncarnacao {
   angulo: string;
+  grupo_de_destino: string;
   cruz: string;
   portoes: string;
   quarto_de_cruz: string;
 }
 
 export interface HumanDesignData {
+  /** Id do documento; vem no GET e é a chave do PATCH de edição. */
+  id?: string;
   userId?: string;
   tipo_aurico: string;
   aura: string;

@@ -1,0 +1,9 @@
+@if (analysts().length) {
+  <section class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    @for (analyst of analysts(); track analyst.id) {
+      <app-analyst-item [data]="analyst" (select)="select.emit($event)"></app-analyst-item>
+    }
+  </section>
+} @else {
+  <p class="py-6 text-center text-black/50">Nenhum analista encontrado.</p>
+}

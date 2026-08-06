@@ -1,36 +1,19 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { DetailedItem } from '../detailed-item/detailed-item';
-import { UserService } from '../../../core/services/user.service';
-import { firstValueFrom } from 'rxjs';
 import { UserData } from '../../../core/models/userdata.model';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Infinity } from '../../loading/infinity/infinity';
-import { NewUserForm } from '../../forms/new-user-form/new-user-form';
 
+/**
+ * Componente dumb: recebe a lista pronta (`users`) e repassa a Maestra escolhida
+ * para a página smart, que busca o detalhe e executa as ações.
+ */
 @Component({
   selector: 'app-detailed-list',
-  imports: [DetailedItem, Infinity, NewUserForm],
+  imports: [DetailedItem],
   templateUrl: './detailed-list.html',
   styleUrl: './detailed-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailedList implements OnInit {
-  private readonly userService = inject(UserService);
-
-  async ngOnInit() {
-    this.userList.set(await this.getAllActiveUsersFirstPage());
-  }
-  userList = signal<UserData[] | null>(null);
-  isLoading = signal<boolean>(false);
-  type = input.required<string>();
-
-  async getAllActiveUsersFirstPage() {
-    this.isLoading.set(true);
-    try {
-      return await firstValueFrom(this.userService.getAllActiveUsers('fullName', 'asc', 1));
-    } catch (e) {
-      throw new Error('Erro desconhecido');
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
+export class DetailedList {
+  users = input<UserData[] | null>(null);
+  select = output<UserData>();
 }

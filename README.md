@@ -11,14 +11,137 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
 - **Sessão:** `LoginService` é o dono único da sessão — guarda o par
   **access/refresh token**, valida expiração e coordena o refresh. O
   `authInterceptor` renova o token em 401 (fila compartilhada) e desloga se o
-  refresh falhar. `authGuard`/`roleGuard`/`ownershipGuard` protegem as rotas.
+  refresh falhar. `authGuard`/`roleGuard`/`managerGuard`/`passwordGuard`/
+  `ownershipGuard` protegem as rotas.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
+
+## Formulário de Desenho Humano
+
+Três campos são `select` (as opções vivem em
+`core/models/human-design.constants.ts`, espelhando o `@IsIn` da API) e cinco são
+derivados deles — ficam `readonly` no formulário, mas continuam sendo enviados:
+
+| Escolha | Preenche |
+| --- | --- |
+| **Tipo Áurico** — Geradora · Geradora Manifestante · Projetora · Manifestadora · Refletora | Aura, Energia, Palavra Chave, Estratégia |
+| **Ângulo** — Ângulo Direito · Ângulo Esquerdo · Justa Posição | Grupo de Destino (Pessoal · Transpessoal · Justa Posição) |
+| **Quarto de Cruz** — Quarto 1 a 4 (Iniciação · Civilização · Dualidade · Mutação) | — |
+
+Mapeamento do Tipo Áurico:
+
+| Tipo | Aura | Energia | Palavra | Estratégia |
+| --- | --- | --- | --- | --- |
+| Geradora / Geradora Manifestante | Aberta e Envolvente | Gera Energia | Construtora | Responder à Vida |
+| Projetora | Focalizada e Absorvente | Não Energético | Guia | Aguardar os Convites |
+| Manifestadora | Fechada e Repelente | Inicia Energia | Guia | Informar Antes de Agir |
+| Refletora | Que Tira Amostras | Não Energético | Discernidora | Aguardar o Ciclo Lunar |
+
+## Edição dos dados de DNA
+
+Os três formulários de pilar (`human-design`, `numerology`, `astrology`) mostram os
+dados em leitura depois de preenchidos. O botão **Editar dados** repõe o
+formulário com os valores atuais (`PillarFormBase.startEdit()` → `prefillForm()` de
+cada form) e o submit passa a chamar o `PATCH` do pilar em vez do `POST`; **Cancelar**
+sai sem salvar.
+
+Salva a edição, um banner avisa que o conteúdo já gerado pode estar desatualizado e
+oferece **Regenerar conteúdo** (o mesmo `createAllSupply()` de sempre). O aviso é
+**efêmero**: vive num signal, vale para a sessão em que a edição aconteceu e some
+quando o conteúdo é regerado — não é persistido.
 
 ## Plano Perfeito
 
 Página `perfect-plain/:userId` (síntese dos 3 pilares, módulo único). O gatilho
 "Gerar/Ver Plano Perfeito" fica no painel admin (`user-supply-details`), onde cada
 pilar é um botão no padrão do dashboard que abre o respectivo form/gatilho em modal.
+
+## Gestão de Maestras (CRUD)
+
+Rota `management/:type` (painel de gestora). A página é **smart**: mantém o estado
+(lista, paginação, busca e filtro de status) e é a única a chamar o `UserService`;
+`detailed-list`/`detailed-item` são **dumb** (recebem os dados prontos).
+
+- **Busca** por nome (com debounce) e **filtro** Ativas / Inativas / Todas.
+- **Paginação** via `UserService.listUsers` (metadados lidos dos headers `X-*`).
+- Ações por Maestra no `user-details-modal`, condicionais ao status: **Editar** +
+  **Desativar** (ativas) e **Reativar** (inativas). Desativar é soft delete.
+- **Edição** reutiliza o `new-user-form` (modo edição: prefill + `updateUser`, sem
+  os campos de acesso).
+- **Área de atuação** (texto livre) e **pronome de tratamento** (toggle
+  Feminino/Masculino) no cadastro. O pronome flexiona os termos referentes à
+  Maestra na interface — "Maestra/Maestro", "Nova Maestra/Novo Maestro",
+  "a usuária/o usuário" — via os helpers de `core/utils/pronoun.ts`, e vai para a
+  API, que o usa para orientar o material gerado. Cadastros anteriores não têm o
+  campo e assumem feminino. Os termos referentes ao **analista logado**
+  (ex.: "BEM-VINDA DE VOLTA") seguem fixos: dependem de um pronome no perfil do
+  Analista, que ainda não existe.
+- `dashboard-button` aceita `icon` (SVG via `IconsSwitch`) além de `imgSrc`,
+  mantendo retrocompatibilidade; no painel, Maestras usa o ícone `users` e as
+  Análises do DNA o ícone `book`.
+
+Layout **mobile-first**: listagem e modais empilham em coluna em telas pequenas.
+
+Cada Maestra fica vinculada a quem a cadastrou, e o `user-details-modal` mostra
+esse **Analista Responsável** (campo de leitura, resolvido pelo backend).
+
+## Papéis e visibilidade
+
+| Papel | Vê no painel | Alcance |
+| --- | --- | --- |
+| `ADMIN` | Maestras, Análises do DNA, Analistas | Super-usuário: vê **todas** as Maestras |
+| `MANAGER` | Maestras, Análises do DNA, Analistas | Só as Maestras que **ele** cadastrou |
+| `ANALYST` | Maestras, Análises do DNA | Só as Maestras que **ele** cadastrou; não acessa `/analysts` |
+| `USER` | Seus 3 pilares + Plano Perfeito | Só os próprios dados |
+
+O `roleGuard` libera a gestão de Maestras para ADMIN, MANAGER e ANALYST; o
+`managerGuard` restringe `/analysts` a ADMIN e MANAGER (espelha o
+`@Role(ADMIN, MANAGER)` do backend). Os guards são conveniência de navegação — a
+visibilidade e a posse de cada Maestra são impostas pela API.
+
+## Senha temporária e primeiro acesso
+
+A senha definida no cadastro (Maestra ou Analista) **já nasce provisória**. No primeiro
+login o usuário é obrigado a trocá-la; até lá, ela fica visível para quem o cadastrou.
+
+**Visão do gestor** — no modal de detalhe (`user-details-modal`, `analyst-details-modal`),
+o bloco `temp-password-form` tem dois estados:
+
+- **senha provisória pendente:** exibe a senha em texto plano, o aviso *"Esta senha é
+  temporária até … redefinir sua nova senha"* e **até quando ela vale** (a senha expira em
+  **72h**). Sem botão de gerar.
+- **senha já definida pelo usuário (ou provisória vencida):** exibe o botão **"Gerar senha
+  temporária"**, que abre o input para o gestor devolver o acesso a quem o perdeu. Senha
+  vencida some do detalhe — o backend não a devolve mais — e deixa de logar.
+
+E-mail e senha provisória **só vêm no detalhe** (`GET /users/:id`, `GET /analysts/:id`) —
+nunca na listagem. Por isso as pages `management` e `analysts-management` buscam o detalhe
+**ao abrir o modal**, e não reaproveitam o item da lista.
+
+**Visão do usuário** — rota `/change-password`, um **modal estático**: sem backdrop de
+fechar e sem "Voltar". A única saída sem trocar a senha é o logout.
+
+O bloqueio vive no `passwordGuard`, que lê o claim `mustChangePassword` **do JWT** (não de
+um estado em memória): enquanto ele for `true`, qualquer rota protegida devolve o usuário
+para `/change-password` — nem um F5 nem uma URL digitada à mão escapam. Ao salvar a senha,
+a API devolve um **par de tokens novo** (sem o claim) e o `LoginService` o regrava; sem
+isso o token antigo continuaria prendendo o usuário na tela de troca.
+
+## Gestão de Analistas (CRUD)
+
+Rota `/analysts` (ADMIN e MANAGER). Mesma anatomia do CRUD de Maestras: a page
+`analysts-management` é **smart** (estado em signals e única a chamar o
+`AnalystService`); `analyst-list`/`analyst-item`, `analyst-form` e
+`analyst-details-modal` são **dumb** — o form emite o valor e a page é quem faz o
+POST/PATCH.
+
+- **Busca** por nome (com debounce), **filtro** Ativos / Inativos / Todos e
+  **paginação** (metadados nos headers `X-*`).
+- **Criar** pede nome + credenciais; **editar** altera só o nome (e-mail e senha
+  vivem no documento `auth`). **Desativar** é soft delete; **Reativar** restaura.
+- **Supervisão:** o detalhe do Analista lista as **Maestras Vinculadas** — apenas
+  nome e status, **sem ação e sem link** para o detalhe. O Manager acompanha a
+  carteira do Analista, mas não acessa os dados pessoais das clientes dele (a API
+  nem devolve o `id` dessas Maestras).
 
 ## Ambientes
 

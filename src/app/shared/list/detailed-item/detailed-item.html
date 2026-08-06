@@ -1,11 +1,16 @@
-<div class="shadow-lg p-3 rounded-xl">
-  <h3 class="text-lg text-secondary font-semibold my-3">{{ data().fullName }}</h3>
+<div class="shadow-lg p-3 rounded-xl flex flex-col gap-2">
+  <div class="flex items-center justify-between gap-2">
+    <h3 class="text-lg text-secondary font-semibold">{{ data().fullName }}</h3>
+    @if (data().isActive === false) {
+      <span class="text-xs rounded-full bg-[red]/10 text-[red] px-2 py-0.5">Inativa</span>
+    } @else {
+      <span class="text-xs rounded-full bg-primary/10 text-primary px-2 py-0.5">Ativa</span>
+    }
+  </div>
   <app-icon-text-button
     icon="magnifying-glass"
     text="Detalhes"
     class="bg-primary text-white rounded-xl w-full"
-    (click)="openModal()"
+    (click)="select.emit(data())"
   ></app-icon-text-button>
 </div>
-<app-user-details-modal (close)="closeModal()" [isOpen]="isModalOpen()" [userData]="data()"></app-user-details-modal>
-
