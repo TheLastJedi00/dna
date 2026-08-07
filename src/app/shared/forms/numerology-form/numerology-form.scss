@@ -1,7 +1,8 @@
 .dna-data {
   display: grid;
   gap: 0.75rem;
-  div {
+  // `div` solto pegava tambem o .outdated-warning aninhado.
+  div:not(.outdated-warning) {
     padding-top: 0.75rem;
     display: grid;
     gap: 0.75rem;
