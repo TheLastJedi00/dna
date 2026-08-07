@@ -48,7 +48,7 @@
                     Ativa
                   </span>
                 } @else {
-                  <span class="text-xs rounded-full bg-[red]/10 text-[red] px-2 py-0.5 w-fit">
+                  <span class="text-xs rounded-full bg-danger-soft text-danger px-2 py-0.5 w-fit">
                     Inativa
                   </span>
                 }
@@ -56,7 +56,7 @@
             }
           </ul>
         } @else {
-          <p class="mt-2 text-sm text-black/50">Nenhuma Maestra cadastrada por este Analista.</p>
+          <p class="mt-2 text-sm text-muted">Nenhuma Maestra cadastrada por este Analista.</p>
         }
       </section>
 
@@ -81,7 +81,7 @@
               (click)="disable.emit()"
               icon="lock-closed"
               text="Desativar"
-              class="bg-[red] rounded-xl text-white"
+              class="bg-danger rounded-xl text-white"
             ></app-icon-text-button>
           </div>
         }

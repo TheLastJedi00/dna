@@ -16,20 +16,20 @@
         <p>{{ userData().birthPlace }}</p>
         @if (userData().businessArea) {
           <p class="mt-2 text-sm">
-            <span class="text-black/50">Área de atuação:</span> {{ userData().businessArea }}
+            <span class="text-muted">Área de atuação:</span> {{ userData().businessArea }}
           </p>
         }
         <p class="text-sm">
-          <span class="text-black/50">Pronome:</span> {{ pronounText() }}
+          <span class="text-muted">Pronome:</span> {{ pronounText() }}
         </p>
         @if (userData().email) {
           <p class="mt-2 text-sm break-all">
-            <span class="text-black/50">E-mail:</span> {{ userData().email }}
+            <span class="text-muted">E-mail:</span> {{ userData().email }}
           </p>
         }
         <!-- Quem cadastrou a Maestra: leitura, resolvido pelo backend -->
         <p class="text-sm">
-          <span class="text-black/50">Analista Responsável:</span>
+          <span class="text-muted">Analista Responsável:</span>
           {{ userData().createdByName || 'Não informado' }}
         </p>
       </div>
@@ -75,7 +75,7 @@
               (click)="disable.emit()"
               icon="lock-closed"
               text="Desativar"
-              class="bg-[red] rounded-xl text-white"
+              class="bg-danger rounded-xl text-white"
             ></app-icon-text-button>
           </div>
         }

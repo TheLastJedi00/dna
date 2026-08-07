@@ -50,6 +50,12 @@ $secondary-color: #826a3c;
   background-color: var(--color-danger);
 }
 
+// Fundo do selo "Inativa/Inativo" — o texto continua em --color-danger, que
+// mantém 4.5:1 sobre este tom.
+.bg-danger-soft {
+  background-color: rgba(179, 38, 30, 0.12);
+}
+
 // Foco visível em tudo que recebe teclado. A regra global de `input` abaixo
 // anula o `outline` nativo; sem isto a navegação por Tab fica sem indicador.
 :where(button, a, input, select, textarea, [tabindex]):focus-visible {

@@ -19,7 +19,7 @@
     placeholder="Senha"
   />
   @if (error()) {
-    <span class="text-center text-[red]">{{ error() }}</span>
+    <span class="text-center text-danger">{{ error() }}</span>
   }
   <app-button variant="flat"
     [disabled]="!loginForm.valid"
