@@ -57,6 +57,39 @@ $secondary-color: #826a3c;
   outline-offset: 2px;
 }
 
+// Controle segmentado — filtros de status da gestão e toggle de pronome do
+// cadastro. Os chips traziam `py-1` sem padding horizontal nenhum: em 360px
+// "Inativas"/"Todas" encostavam na borda. O segmento não selecionado também não
+// declarava cor, herdando o preto do `<button>`.
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--control-radius);
+  background-color: rgba(78, 46, 19, 0.08);
+}
+
+.segment {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: calc(var(--control-radius) - 0.25rem);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  transition: all 200ms;
+  cursor: pointer;
+
+  &:hover:not(.is-selected) {
+    background-color: rgba(78, 46, 19, 0.06);
+  }
+
+  &.is-selected {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
+}
+
 .main-padding {
   padding: 2rem 1.25rem;
   border: 1px solid rgba(128, 128, 128, 0.2);
