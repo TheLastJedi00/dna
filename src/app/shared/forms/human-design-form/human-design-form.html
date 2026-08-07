@@ -11,6 +11,7 @@
           icon="sparkles"
           text="Regenerar conteúdo"
           class="w-full bg-secondary text-white rounded-xl"
+          align="center"
         ></app-icon-text-button>
       </div>
     }
@@ -58,6 +59,7 @@
       icon="pencil"
       text="Editar dados"
       class="w-full bg-white text-secondary rounded-xl shadow-sm"
+      align="center"
     ></app-icon-text-button>
     @if (isSupplyCreated()) {
       <app-icon-text-button
@@ -65,6 +67,7 @@
         class="w-full bg-secondary text-white rounded-xl"
         icon="magnifying-glass"
         text="Ver Análise do DNA"
+        align="center"
       ></app-icon-text-button>
     } @else {
       <app-icon-text-button
@@ -72,11 +75,12 @@
         icon="sparkles"
         text="Gerar Análise do DNA"
         class="w-full bg-secondary text-white rounded-xl"
+        align="center"
       ></app-icon-text-button>
     }
   </div>
 } @else {
-  <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] input:input text-black/70">
+  <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] text-muted">
     <select formControlName="tipo_aurico">
       <option value="" disabled>Tipo Áurico</option>
       @for (tipo of tiposAuricos; track tipo) {
@@ -100,9 +104,12 @@
     <p>Canais</p>
     <div formArrayName="canais" class="grid gap-3">
       @for (canal of canais.controls; track canal) {
-        <div [formGroupName]="$index" class="flex gap-3 w-full">
-          <div class="flex gap-3">
-            <input formControlName="id" type="text" placeholder="10-10" class="w-[4rem]" />
+        <!-- `min-w-0` para o par de inputs poder encolher: sem ele a linha
+             estourava a largura em 360px. -->
+        <div [formGroupName]="$index" class="flex gap-3 w-full items-start">
+          <div class="flex gap-3 flex-1 min-w-0">
+            <!-- 5.5rem, não 4: o padding do token não deixava "10-10" caber. -->
+            <input formControlName="id" type="text" placeholder="10-10" class="w-[5.5rem] shrink-0" />
             <input formControlName="nome" type="text" placeholder="Nome do Canal" class="w-full" />
           </div>
           <app-icon-text-button
@@ -110,7 +117,8 @@
             [disabled]="canais.controls.length <= 1 ? true : false"
             icon="trash"
             text=""
-            class="bg-[red]/70 text-white rounded-xl"
+            ariaLabel="Remover canal"
+            class="bg-danger text-white rounded-xl"
           ></app-icon-text-button>
         </div>
       }
@@ -121,9 +129,10 @@
       icon="plus"
       text="Novo Canal"
       class="text-secondary shadow-sm rounded-xl w-full"
+      align="center"
     ></app-icon-text-button>
     <div class="grid gap-3">
-      <p for="">Ativações</p>
+      <p>Ativações</p>
       <div class="pl-5 grid gap-3">
         <p>Personalidade</p>
         <div class="grid grid-cols-3 gap-3">
@@ -172,6 +181,7 @@
       icon="plus"
       text="Salvar Dados"
       class="bg-primary text-white rounded-xl w-full"
+      align="center"
     ></app-icon-text-button>
     @if (isEditing()) {
       <app-icon-text-button
@@ -180,6 +190,7 @@
         icon="arrow-left"
         text="Cancelar"
         class="bg-white text-primary rounded-xl w-full"
+        align="center"
       ></app-icon-text-button>
     }
   </form>

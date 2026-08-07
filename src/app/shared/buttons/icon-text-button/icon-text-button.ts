@@ -1,7 +1,7 @@
-import { Component, input, output } from '@angular/core';
-import { IconsSwitch } from "../../icons/icons-switch/icons-switch";
-import { NgClass } from "@angular/common"
-import { RouterLink } from "@angular/router";
+import { Component, computed, input, output } from '@angular/core';
+import { IconsSwitch } from '../../icons/icons-switch/icons-switch';
+import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-icon-text-button',
@@ -10,16 +10,23 @@ import { RouterLink } from "@angular/router";
   styleUrl: './icon-text-button.scss',
 })
 export class IconTextButton {
-  disabled = input(false)
-  icon = input("heart")
-  text = input("Text")
-  click = output<void>()
-  class = input<string>('')
-  type = input('button')
-  routerLink = input<string|null>(null)
+  disabled = input(false);
+  icon = input('heart');
+  text = input('Text');
+  click = output<void>();
+  class = input<string>('');
+  type = input('button');
+  routerLink = input<string | null>(null);
+  /** `center` para CTAs de largura total; `start` (padrão) para ações em linha. */
+  align = input<'start' | 'center'>('start');
+  /** Nome acessível quando não há texto visível. */
+  ariaLabel = input<string>('');
 
-  onClick(event: Event){
-    event.stopPropagation()
+  /** Sem texto o botão vira alvo quadrado de 44px, não um retângulo apertado. */
+  isIconOnly = computed(() => this.text().trim() === '');
+
+  onClick(event: Event) {
+    event.stopPropagation();
     this.click.emit();
   }
 }

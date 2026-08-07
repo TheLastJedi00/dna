@@ -1,18 +1,12 @@
+// As opacidades daqui só voltavam a 100% no `:hover` — que não existe no
+// mobile, onde o cartão ficava permanentemente a 70%.
 button {
   h4 {
-    opacity: 70%;
+    color: var(--color-secondary);
     transition: all 300ms;
   }
   p {
-    opacity: 70%;
+    color: var(--color-text);
     transition: all 300ms;
-  }
-  &:hover {
-    h4 {
-      opacity: 100%;
-    }
-    p {
-      opacity: 100%;
-    }
   }
 }

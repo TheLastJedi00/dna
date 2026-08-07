@@ -1,9 +1,10 @@
 <button
   [disabled]="disabled()"
   (click)="onClick($event)"
-  [ngClass]="class() ? class() : 'text-secondary'"
+  [ngClass]="[class() ? class() : 'text-secondary', align() === 'center' ? 'is-center' : '', isIconOnly() ? 'is-icon-only' : '']"
   [type]="type()"
   [routerLink]="routerLink()"
+  [attr.aria-label]="isIconOnly() ? ariaLabel() : null"
 >
   <app-icons-switch [icon]="icon()"></app-icons-switch>
   {{ text() }}

@@ -15,6 +15,47 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
   `ownershipGuard` protegem as rotas.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
 
+## Sistema visual
+
+`src/styles.scss` é a única folha global e concentra os **tokens** usados por
+todo o app. Ao estilizar qualquer coisa nova, partir daqui em vez de inventar
+valores locais.
+
+**Cor** — variáveis em `:root`, todas escolhidas para passar WCAG 2.1 AA no uso
+a que se destinam (4.5:1 texto, 3:1 elemento não-textual):
+
+| Token | Papel |
+|---|---|
+| `--color-primary` / `--color-secondary` | marca |
+| `--color-text` | texto padrão |
+| `--color-text-muted` | texto secundário — **use no lugar de `opacity` ou `text-black/50`**, que derrubam o contraste junto com a ênfase (classe `.text-muted`) |
+| `--color-danger` | erros e ações destrutivas — **use no lugar de `red` puro**, que só dá 4:1 (classes `.text-danger`, `.bg-danger`, `.bg-danger-soft`) |
+| `--color-border` | bordas de campo |
+| `--color-surface-muted` / `--color-surface-disabled` | fundo de campo e de campo desabilitado |
+
+**Espaçamento de controle** — `--control-padding-y/x`, `--control-radius` e
+`--control-min-height` (44px, alvo de toque no mobile). Input, select e as três
+variantes de `app-button` compartilham esses valores, então ficam com a mesma
+altura quando lado a lado.
+
+**Campos** — há **um só** estilo de `input`/`select`, na regra global. Não criar
+classes de campo por tela.
+
+**Botões** — `app-button` (`elevated`/`flat`/`text`) para texto puro;
+`app-icon-text-button` para ícone + texto. Neste último, CTA de largura total
+pede `align="center"`, e botão sem texto (`text=""`) vira alvo quadrado de 44px
+e exige `ariaLabel`.
+
+**Controle segmentado** — `.segmented` + `.segment` (com `.is-selected`) para
+filtros de status e toggles binários.
+
+**Foco** — `:focus-visible` global; não anular `outline` sem repor um indicador.
+
+**Mobile-first** — usar `w-full` e `min-h-dvh`, nunca `w-screen`/`100vw` (inclui
+a barra de rolagem e gera scroll horizontal) nem `h-screen` (não acompanha a
+barra de endereço no mobile). Padding deve crescer com o breakpoint, nunca
+diminuir.
+
 ## Formulário de Desenho Humano
 
 Três campos são `select` (as opções vivem em

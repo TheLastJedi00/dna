@@ -1,12 +1,14 @@
 .dna-data {
   display: grid;
   gap: 0.75rem;
-  div {
+  // `div` solto pegava tambem o .outdated-warning aninhado.
+  div:not(.outdated-warning) {
     padding-top: 0.75rem;
     display: grid;
     gap: 0.75rem;
   }
+  // O bloco inteiro de leitura ficava a 70% de opacidade.
   p {
-    opacity: 0.7;
+    color: var(--color-text);
   }
 }

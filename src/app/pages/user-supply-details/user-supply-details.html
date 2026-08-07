@@ -11,11 +11,11 @@
     </div>
     <div>
       <h2 class="text-primary text-xl">{{ userData()?.fullName }}</h2>
-      <p class="text-sm text-black/60">
+      <p class="text-sm text-muted">
         {{ maestraTerm() }} · {{ userData()?.birthPlace }}
       </p>
       @if (userData()?.businessArea) {
-        <p class="text-sm text-black/60">{{ userData()?.businessArea }}</p>
+        <p class="text-sm text-muted">{{ userData()?.businessArea }}</p>
       }
     </div>
   </section>

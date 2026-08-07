@@ -4,6 +4,7 @@
     icon="plus"
     text="Novo Analista"
     class="w-full text-white bg-secondary text-center"
+    align="center"
   ></app-icon-text-button>
 }
 @if (open()) {
@@ -11,7 +12,7 @@
     (click)="onCancel()"
     animate.enter="expand"
     animate.leave="collapse"
-    class="fixed h-screen w-screen flex top-0 left-0 z-10 items-center justify-center bg-white/20 backdrop-blur-[2px]"
+    class="fixed inset-0 h-dvh flex z-10 items-start justify-center overflow-y-auto py-6 bg-white/20 backdrop-blur-[2px]"
   >
     <form
       class="grid p-3 rounded-xl shadow-xl gap-3 bg-white w-full max-w-[400px] h-min mx-3"
@@ -47,12 +48,14 @@
           icon="plus"
           text="Salvar"
           class="w-full text-white bg-primary rounded-xl"
+          align="center"
         ></app-icon-text-button>
         <app-icon-text-button
           (click)="onCancel()"
           icon="arrow-left"
           text="Voltar"
           class="w-full text-primary bg-white rounded-xl"
+          align="center"
         ></app-icon-text-button>
       </div>
     </form>
