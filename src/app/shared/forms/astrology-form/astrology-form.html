@@ -11,6 +11,7 @@
           icon="sparkles"
           text="Regenerar conteúdo"
           class="w-full bg-secondary text-white rounded-xl"
+          align="center"
         ></app-icon-text-button>
       </div>
     }
@@ -68,6 +69,7 @@
       icon="pencil"
       text="Editar dados"
       class="w-full bg-white text-secondary rounded-xl shadow-sm"
+      align="center"
     ></app-icon-text-button>
     @if (isSupplyCreated()) {
       <app-icon-text-button
@@ -75,6 +77,7 @@
         class="w-full bg-secondary text-white rounded-xl"
         icon="magnifying-glass"
         text="Ver Análise do DNA"
+        align="center"
       ></app-icon-text-button>
     } @else {
       <app-icon-text-button
@@ -82,6 +85,7 @@
         icon="sparkles"
         text="Gerar Análise do DNA"
         class="w-full bg-secondary text-white rounded-xl"
+        align="center"
       ></app-icon-text-button>
     }
   </div>
@@ -147,6 +151,7 @@
       icon="plus"
       text="Salvar Dados"
       class="bg-primary text-white rounded-xl w-full"
+      align="center"
     ></app-icon-text-button>
     @if (isEditing()) {
       <app-icon-text-button
@@ -155,6 +160,7 @@
         icon="arrow-left"
         text="Cancelar"
         class="bg-white text-primary rounded-xl w-full"
+        align="center"
       ></app-icon-text-button>
     }
   </form>

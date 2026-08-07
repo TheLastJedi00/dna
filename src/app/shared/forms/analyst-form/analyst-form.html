@@ -4,6 +4,7 @@
     icon="plus"
     text="Novo Analista"
     class="w-full text-white bg-secondary text-center"
+    align="center"
   ></app-icon-text-button>
 }
 @if (open()) {
@@ -47,12 +48,14 @@
           icon="plus"
           text="Salvar"
           class="w-full text-white bg-primary rounded-xl"
+          align="center"
         ></app-icon-text-button>
         <app-icon-text-button
           (click)="onCancel()"
           icon="arrow-left"
           text="Voltar"
           class="w-full text-primary bg-white rounded-xl"
+          align="center"
         ></app-icon-text-button>
       </div>
     </form>
