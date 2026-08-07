@@ -7,6 +7,56 @@
 $primary-color: #4e2e13;
 $secondary-color: #826a3c;
 
+// ---------------------------------------------------------------------------
+// Tokens (spec 008). Fonte única de cor, espaçamento de controle e foco.
+//
+// Cor: todo valor abaixo passa WCAG 2.1 AA no uso a que se destina — texto
+// normal 4.5:1, elemento não-textual 3:1. Antes da 008 a hierarquia visual era
+// feita com `opacity` / `text-black/50`, que derruba o contraste junto com a
+// ênfase; `--color-text-muted` faz o mesmo papel sem sair do AA.
+//
+// `red` puro (usado como `bg-[red]` / `text-[red]`) dá só 4:1 contra branco e
+// falhava nos dois sentidos — `--color-danger` passa a 6.5:1 tanto como texto
+// sobre branco quanto como fundo de texto branco.
+// ---------------------------------------------------------------------------
+:root {
+  --color-primary: #{$primary-color}; // 11.0:1 sobre branco
+  --color-secondary: #{$secondary-color}; //  4.9:1 sobre branco
+  --color-danger: #b3261e; //  6.5:1 nos dois sentidos
+  --color-text: #252525; // 14.8:1 sobre branco
+  --color-text-muted: #5c5245; //  7.6:1 sobre branco (e AA sobre os cremes)
+  --color-border: #9a8b78; //  3.3:1 sobre branco (não-texto)
+  --color-surface-muted: #{color.scale($primary-color, $lightness: 85%)};
+  --color-surface-disabled: #{color.scale($primary-color, $lightness: 95%)};
+
+  // Espaçamento de controle: um único conjunto para input, select e botão, para
+  // que os três tenham a mesma altura quando lado a lado. 2.75rem = 44px, o
+  // alvo de toque mínimo no mobile.
+  --control-padding-y: 0.625rem;
+  --control-padding-x: 1rem;
+  --control-radius: 0.75rem;
+  --control-min-height: 2.75rem;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.bg-danger {
+  background-color: var(--color-danger);
+}
+
+// Foco visível em tudo que recebe teclado. A regra global de `input` abaixo
+// anula o `outline` nativo; sem isto a navegação por Tab fica sem indicador.
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .main-padding {
   padding: 2rem 1.25rem;
   border: 1px solid rgba(128, 128, 128, 0.2);
