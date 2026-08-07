@@ -101,7 +101,21 @@ $secondary-color: #826a3c;
   border: 1px solid rgba(128, 128, 128, 0.2);
 }
 
+// O salto ia direto de 1.25rem para 15vw: no tablet o conteúdo já aparecia
+// espremido pelas margens do desktop.
+@media (min-width: 640px) {
+  .main-padding {
+    padding: 2rem 2.5rem;
+  }
+}
+
 @media (min-width: 768px) {
+  .main-padding {
+    padding: 2rem 6vw;
+  }
+}
+
+@media (min-width: 1024px) {
   .main-padding {
     padding: 2rem 15vw;
   }
