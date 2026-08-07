@@ -8,11 +8,13 @@
   padding: 0.75rem;
   border-radius: 10px;
 
+  // O título vinha a 65% de opacidade e só chegava a 100% no `:hover`, que não
+  // existe no mobile.
   .title-div {
     display: flex;
     justify-content: left;
     gap: 0.5rem;
-    opacity: 0.65;
+    color: var(--color-secondary);
     transition: all 200ms;
   }
 
@@ -22,7 +24,7 @@
     text-align: left;
     justify-content: left;
     gap: 0.5rem;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--color-text);
   }
 
   b {
@@ -30,17 +32,7 @@
     text-align: left;
   }
 
-  &:hover {
-    .title-div {
-      opacity: 1;
-    }
-  }
-
   &:disabled {
-    .title-div {
-      opacity: 1;
-    }
-
     .chevron-div {
       opacity: 0;
     }
