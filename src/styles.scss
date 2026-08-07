@@ -7,12 +7,130 @@
 $primary-color: #4e2e13;
 $secondary-color: #826a3c;
 
+// ---------------------------------------------------------------------------
+// Tokens (spec 008). Fonte única de cor, espaçamento de controle e foco.
+//
+// Cor: todo valor abaixo passa WCAG 2.1 AA no uso a que se destina — texto
+// normal 4.5:1, elemento não-textual 3:1. Antes da 008 a hierarquia visual era
+// feita com `opacity` / `text-black/50`, que derruba o contraste junto com a
+// ênfase; `--color-text-muted` faz o mesmo papel sem sair do AA.
+//
+// `red` puro (usado como `bg-[red]` / `text-[red]`) dá só 4:1 contra branco e
+// falhava nos dois sentidos — `--color-danger` passa a 6.5:1 tanto como texto
+// sobre branco quanto como fundo de texto branco.
+// ---------------------------------------------------------------------------
+:root {
+  --color-primary: #{$primary-color}; // 11.0:1 sobre branco
+  --color-secondary: #{$secondary-color}; //  4.9:1 sobre branco
+  --color-danger: #b3261e; //  6.5:1 nos dois sentidos
+  --color-text: #252525; // 14.8:1 sobre branco
+  --color-text-muted: #5c5245; //  7.6:1 sobre branco (e AA sobre os cremes)
+  --color-border: #9a8b78; //  3.3:1 sobre branco (não-texto)
+  --color-surface-muted: #{color.scale($primary-color, $lightness: 85%)};
+  --color-surface-disabled: #{color.scale($primary-color, $lightness: 95%)};
+
+  // Espaçamento de controle: um único conjunto para input, select e botão, para
+  // que os três tenham a mesma altura quando lado a lado. 2.75rem = 44px, o
+  // alvo de toque mínimo no mobile.
+  --control-padding-y: 0.625rem;
+  --control-padding-x: 1rem;
+  --control-radius: 0.75rem;
+  --control-min-height: 2.75rem;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.bg-danger {
+  background-color: var(--color-danger);
+}
+
+// Fundo do selo "Inativa/Inativo" — o texto continua em --color-danger, que
+// mantém 4.5:1 sobre este tom.
+.bg-danger-soft {
+  background-color: rgba(179, 38, 30, 0.12);
+}
+
+// Foco visível em tudo que recebe teclado. A regra global de `input` abaixo
+// anula o `outline` nativo; sem isto a navegação por Tab fica sem indicador.
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// Controle segmentado — filtros de status da gestão e toggle de pronome do
+// cadastro. Os chips traziam `py-1` sem padding horizontal nenhum: em 360px
+// "Inativas"/"Todas" encostavam na borda. O segmento não selecionado também não
+// declarava cor, herdando o preto do `<button>`.
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--control-radius);
+  background-color: rgba(78, 46, 19, 0.08);
+}
+
+.segment {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: calc(var(--control-radius) - 0.25rem);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  transition: all 200ms;
+  cursor: pointer;
+
+  &:hover:not(.is-selected) {
+    background-color: rgba(78, 46, 19, 0.06);
+  }
+
+  &.is-selected {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
+}
+
+// "Exibir Senha" do cadastro de Maestra e de Analista. Global porque o
+// analyst-form não tem folha própria e usa a mesma classe.
+.show-pass {
+  min-height: 2.25rem; // era 24px de altura
+  width: fit-content;
+  opacity: 0.9;
+  transition: all 300ms;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    opacity: 0.5;
+  }
+}
+
 .main-padding {
   padding: 2rem 1.25rem;
   border: 1px solid rgba(128, 128, 128, 0.2);
 }
 
+// O salto ia direto de 1.25rem para 15vw: no tablet o conteúdo já aparecia
+// espremido pelas margens do desktop.
+@media (min-width: 640px) {
+  .main-padding {
+    padding: 2rem 2.5rem;
+  }
+}
+
 @media (min-width: 768px) {
+  .main-padding {
+    padding: 2rem 6vw;
+  }
+}
+
+@media (min-width: 1024px) {
   .main-padding {
     padding: 2rem 15vw;
   }
@@ -89,33 +207,6 @@ $secondary-color: #826a3c;
 
 .h-header {
   height: 70px;
-}
-
-.input-primary-light {
-  background-color: color.scale($primary-color, $lightness: 85%);
-  color: $primary-color;
-  padding: 0.75rem 1rem;
-  border-radius: 2.5em;
-  transition: all 0.3s;
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 2px 1px $primary-color;
-  }
-
-  &:disabled {
-    background-color: color.scale($primary-color, $lightness: 95%);
-    cursor: not-allowed;
-  }
-
-  &::placeholder {
-    color: $secondary-color;
-    transition: all 0.3s;
-
-    &:focus {
-      color: transparent;
-    }
-  }
 }
 
 .gradient-primary-to-secondary-85 {
@@ -201,35 +292,77 @@ $secondary-color: #826a3c;
   }
 }
 
-input,
-select {
-  outline: none;
-  border: none;
-  background-color: transparent;
-  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.15);
-  padding: 0.5rem;
-  border-radius: 0.75rem;
-  transition: all 300ms;
-  &:focus {
-    box-shadow: 0px 0px 3px 2px sienna;
-  }
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.7);
-  }
-  &.ng-invalid.ng-touched,
-  &.ng-invalid.ng-dirty {
-    box-shadow: 0px 0px 3px 1px red;
-  }
-}
+// Estilo único de campo (spec 008). Antes existiam dois sistemas em paralelo —
+// esta regra global (fundo transparente + sombra difusa) e a classe
+// `.input-primary-light` (pílula creme), usada só no login e na troca de senha,
+// o que fazia as duas telas parecerem outro aplicativo. Ficou o preenchimento
+// creme (melhor afordância de "campo") com o raio 0.75rem que os cartões já
+// usam, e a borda sólida garante os 3:1 de contraste de elemento não-textual
+// que a sombra difusa não entregava.
+//
+// Em `@layer base` de propósito: regra sem camada vence utility do Tailwind
+// (que vive em `@layer utilities`) por mais específica que a utility seja. Sem
+// a camada, esta regra anulava `w-[4rem]`, `w-full` e afins nos templates.
+@layer base {
+  input,
+  select {
+    min-height: var(--control-min-height);
+    padding: var(--control-padding-y) var(--control-padding-x);
+    border: 1px solid var(--color-border);
+    border-radius: var(--control-radius);
+    background-color: var(--color-surface-muted);
+    color: var(--color-text);
+    outline: none;
+    transition:
+      border-color 200ms,
+      box-shadow 200ms,
+      background-color 200ms;
 
-// Campos preenchidos automaticamente a partir de outro campo: continuam
-// visíveis (e enviados), mas não são digitáveis.
-input[readonly] {
-  background-color: rgba(0, 0, 0, 0.04);
-  box-shadow: none;
-  cursor: default;
-  &:focus {
-    box-shadow: none;
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(78, 46, 19, 0.25);
+    }
+
+    &::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    &:disabled {
+      background-color: var(--color-surface-disabled);
+      cursor: not-allowed;
+    }
+
+    &.ng-invalid.ng-touched,
+    &.ng-invalid.ng-dirty {
+      border-color: var(--color-danger);
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(179, 38, 30, 0.25);
+      }
+    }
+  }
+
+  // Seta nativa do select tem altura própria e destoa dos inputs vizinhos; a de
+  // baixo é desenhada e acompanha o padding do resto.
+  select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%235c5245' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 7.5 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25rem;
+  }
+
+  // Campos preenchidos automaticamente a partir de outro campo: continuam
+  // visíveis (e enviados), mas não são digitáveis. Mantêm a moldura — sem ela o
+  // campo deixava de se parecer com um campo.
+  input[readonly] {
+    background-color: var(--color-surface-disabled);
+    border-style: dashed;
+    cursor: default;
+    &:focus {
+      border-color: var(--color-border);
+      box-shadow: none;
+    }
   }
 }
 

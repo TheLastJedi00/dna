@@ -10,7 +10,6 @@
     name="email"
     type="email"
     placeholder="Email"
-    class="input-primary-light"
   />
   <input
     formControlName="password"
@@ -18,10 +17,9 @@
     name="password"
     type="password"
     placeholder="Senha"
-    class="input-primary-light"
   />
   @if (error()) {
-    <span class="text-center text-[red]">{{ error() }}</span>
+    <span class="text-center text-danger">{{ error() }}</span>
   }
   <app-button variant="flat"
     [disabled]="!loginForm.valid"

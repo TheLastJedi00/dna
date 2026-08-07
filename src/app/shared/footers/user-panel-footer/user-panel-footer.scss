@@ -3,22 +3,24 @@ footer {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
   section {
     display: grid;
-    grid-template-columns: repeat(2, 2fr);
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
     place-items: center;
       gap: 0.5rem;
 
     width: 100%;
     a {
-      color: rgba(0, 0, 0, 0.5);
+      color: var(--color-text-muted);
       cursor: pointer;
       transition: all 0.2s;
+      text-decoration: underline;
+      text-underline-offset: 3px;
       &:hover {
-        text-decoration: underline;
+        color: var(--color-primary);
       }
     }
   }
   h4 {
     text-align: center;
-    margin-top: 4rem;
+    margin-top: 2rem;
   }
 }

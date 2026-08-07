@@ -3,7 +3,7 @@
     animate.enter="expand"
     animate.leave="collapse"
     (click)="close.emit()"
-    class="fixed z-10 h-screen w-screen top-0 left-0 flex items-center justify-center backdrop-blur-[2px] bg-white/20"
+    class="fixed z-10 inset-0 h-dvh flex items-center justify-center backdrop-blur-[2px] bg-white/20"
   >
     <div
       class="p-3 bg-white shadow-xl rounded-xl transition-all w-full max-w-[400px] mx-3 max-h-[90vh] overflow-y-auto"
@@ -16,20 +16,20 @@
         <p>{{ userData().birthPlace }}</p>
         @if (userData().businessArea) {
           <p class="mt-2 text-sm">
-            <span class="text-black/50">Área de atuação:</span> {{ userData().businessArea }}
+            <span class="text-muted">Área de atuação:</span> {{ userData().businessArea }}
           </p>
         }
         <p class="text-sm">
-          <span class="text-black/50">Pronome:</span> {{ pronounText() }}
+          <span class="text-muted">Pronome:</span> {{ pronounText() }}
         </p>
         @if (userData().email) {
           <p class="mt-2 text-sm break-all">
-            <span class="text-black/50">E-mail:</span> {{ userData().email }}
+            <span class="text-muted">E-mail:</span> {{ userData().email }}
           </p>
         }
         <!-- Quem cadastrou a Maestra: leitura, resolvido pelo backend -->
         <p class="text-sm">
-          <span class="text-black/50">Analista Responsável:</span>
+          <span class="text-muted">Analista Responsável:</span>
           {{ userData().createdByName || 'Não informado' }}
         </p>
       </div>
@@ -51,6 +51,7 @@
         icon="magnifying-glass"
         text="Detalhes"
         class="mt-3 bg-white rounded-xl text-secondary shadow-xl w-full"
+        align="center"
       ></app-icon-text-button>
 
       <div class="grid py-3 gap-3">
@@ -60,6 +61,7 @@
             icon="lock-open"
             text="Reativar"
             class="bg-secondary rounded-xl text-white w-full text-center"
+            align="center"
           ></app-icon-text-button>
         } @else {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -73,7 +75,7 @@
               (click)="disable.emit()"
               icon="lock-closed"
               text="Desativar"
-              class="bg-[red] rounded-xl text-white"
+              class="bg-danger rounded-xl text-white"
             ></app-icon-text-button>
           </div>
         }
@@ -82,6 +84,7 @@
           text="Voltar"
           class="bg-primary rounded-xl text-white w-full text-center"
           (click)="close.emit()"
+          align="center"
         ></app-icon-text-button>
       </div>
     </div>

@@ -5,7 +5,7 @@
   </p>
 
   @if (!ready()) {
-    <p class="text-black/50">
+    <p class="text-muted">
       Preencha os dados dos 3 pilares para habilitar a geração.
     </p>
   } @else if (isCreated()) {
@@ -14,6 +14,7 @@
       icon="magnifying-glass"
       text="Ver Plano Perfeito"
       class="w-full bg-secondary text-white rounded-xl"
+      align="center"
     ></app-icon-text-button>
   } @else {
     <app-icon-text-button
@@ -21,6 +22,7 @@
       icon="sparkles"
       text="Gerar Plano Perfeito"
       class="w-full bg-secondary text-white rounded-xl"
+      align="center"
     ></app-icon-text-button>
   }
 </div>
