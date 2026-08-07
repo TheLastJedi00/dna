@@ -1,19 +1,37 @@
 button {
-    display: flex;
-    gap: 0.5rem;
-    transition: all 300ms;
-    padding: 0.5rem;
-    border-radius: 0.75rem;
-    &:hover {
-        opacity: 0.8;
-        background-color: rgba(128, 128, 128, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--control-min-height);
+  padding: var(--control-padding-y) var(--control-padding-x);
+  border-radius: var(--control-radius);
+  transition: all 200ms;
 
-    }
-    &:active {
-        opacity: 0.5;
-        background-color: rgba(128, 128, 128, 0.3);
-    }
-    &:disabled {
-        opacity: 20%;
-    }
+  &:hover {
+    opacity: 0.8;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+  &:active {
+    opacity: 0.5;
+    background-color: rgba(128, 128, 128, 0.3);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// Antes o botão era sempre `justify-content: left`, então o `text-center` que
+// vários chamadores passavam não fazia nada e os CTAs de largura total ficavam
+// com o texto colado à esquerda.
+button.is-center {
+  justify-content: center;
+}
+
+// Botão só de ícone (remover canal/ciclo/desafio): sem isto o alvo de toque
+// ficava em ~32px, abaixo do mínimo de 44px no mobile.
+button.is-icon-only {
+  justify-content: center;
+  min-width: var(--control-min-height);
+  padding: var(--control-padding-y);
 }
