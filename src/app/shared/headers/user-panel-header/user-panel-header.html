@@ -1,5 +1,11 @@
 <header class="fixed flex items-center justify-between h-header py-1 px-5 bg-white/95 w-full md:px-[10rem] z-10">
-    <button (click)="returnToHome()" class="cursor-pointer">
+    <!--
+        Sem `h-full` no botão o `h-full` do logo resolvia contra uma altura
+        automática e o SVG (que só tem viewBox) ficava com 0px — o logo não
+        aparecia no painel. No landing-header o mesmo logo funciona porque é
+        filho direto do <header>, que tem altura fixa.
+    -->
+    <button (click)="returnToHome()" class="cursor-pointer h-full">
         <app-logo class="h-full flex"></app-logo>
     </button>
     <app-user-header-menu></app-user-header-menu>
