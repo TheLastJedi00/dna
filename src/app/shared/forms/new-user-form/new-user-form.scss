@@ -1,35 +1,13 @@
-
-.toggle-button {
-  padding: 0.5rem 0.75rem;
-  transition: all 300ms;
-  &:hover {
-    background-color: rgba(128, 128, 128, 0.2);
-    opacity: 70%;
-  }
-  &:active {
-    opacity: 20%;
-  }
-}
-
 /* Toggle de pronome: usa `.segmented`/`.segment` de styles.scss, o mesmo
-   controle dos filtros de status da gestão. */
+   controle dos filtros de status da gestão.
+   `.show-pass` também vive em styles.scss — o analyst-form usa a mesma classe
+   e não tem folha própria. */
 
 .info-hint {
   font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
-.show-pass {
-  opacity: 90%;
-  transition: all 300ms;
-  &:hover {
-    text-decoration: underline;
-  }
-  &:active {
-    opacity: 20%;
-  }
-}
-
 label {
-    color: var(--color-text-muted);
+  color: var(--color-text-muted);
 }
