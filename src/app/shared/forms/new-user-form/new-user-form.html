@@ -60,11 +60,21 @@
         placeholder="Área de atuação da empresa"
         formControlName="businessArea"
       />
-      <input type="date" placeholder="Data de Nascimento" formControlName="birthDate" />
-      <input type="time" placeholder="Hora do Nascimento" formControlName="birthTime" />
+      <!--
+        `date` e `time` ignoram o placeholder: sem rótulo visível o campo aparece
+        como "dd/mm/aaaa" solto, sem dizer do que se trata.
+      -->
+      <div class="grid gap-1">
+        <label class="text-sm text-muted" for="birth-date">Data de Nascimento</label>
+        <input id="birth-date" type="date" formControlName="birthDate" />
+      </div>
+      <div class="grid gap-1">
+        <label class="text-sm text-muted" for="birth-time">Hora do Nascimento</label>
+        <input id="birth-time" type="time" formControlName="birthTime" />
+      </div>
       <div class="grid gap-3">
         <hr class="opacity-20" />
-        <label for="">Local de Nascimento</label>
+        <label>Local de Nascimento</label>
         <div class="grid grid-cols-[3fr_1fr] gap-3">
           <input type="text" placeholder="Cidade" formControlName="birthCity" />
           <input type="text" placeholder="UF" class="w-[100%]" formControlName="birthUf" />
@@ -73,7 +83,7 @@
       @if (!isEditing()) {
         <div class="grid gap-3">
           <hr class="opacity-20" />
-          <label for="">Acessos</label>
+          <label>Acessos</label>
           <input type="text" placeholder="email@email.com" formControlName="email" />
           <div class="grid w-full">
             <button
