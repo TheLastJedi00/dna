@@ -10,12 +10,14 @@ import { AstrologyService } from '../../../core/services/astrology.service';
 import { LeituraAstrologica } from '../../../core/models/astrology.model';
 import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
+import { Skeleton } from '../../feedback/skeleton/skeleton';
+import { LoadError } from '../../feedback/load-error/load-error';
 import { DnaStatus } from '../../../core/models/dna-status.model';
 import { PillarFormBase } from '../pillar-form.base';
 
 @Component({
   selector: 'app-astrology-form',
-  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity],
+  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity, Skeleton, LoadError],
   templateUrl: './astrology-form.html',
   styleUrl: './astrology-form.scss',
 })
