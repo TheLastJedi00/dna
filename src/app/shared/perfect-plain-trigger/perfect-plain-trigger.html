@@ -4,7 +4,18 @@
     Astrologia já preenchidos.
   </p>
 
-  @if (!ready()) {
+  @if (check.status() === 'loading') {
+    <div role="status" aria-busy="true">
+      <span class="sr-only">Verificando os pilares…</span>
+      <app-skeleton height="var(--control-min-height)" />
+    </div>
+  } @else if (check.status() === 'error') {
+    <app-load-error
+      [compact]="true"
+      [message]="check.error() ?? ''"
+      (retry)="check.load()"
+    />
+  } @else if (!ready()) {
     <p class="text-muted">
       Preencha os dados dos 3 pilares para habilitar a geração.
     </p>
