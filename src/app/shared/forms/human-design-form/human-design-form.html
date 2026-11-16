@@ -1,201 +1,219 @@
-@if (dnaStatus()?.human_design && !isEditing()) {
-  <div class="bg-white dna-data">
-    @if (outdatedPillar()) {
-      <div class="outdated-warning">
-        <p>
-          ⚠️ Os dados de Desenho Humano foram alterados. O conteúdo gerado pode estar
-          desatualizado.
-        </p>
+@switch (initState.status()) {
+  @case ('loading') {
+    <div class="flex flex-col gap-3 max-w-[400px]" role="status" aria-busy="true">
+      <span class="sr-only">Carregando dados do Desenho Humano…</span>
+      @for (i of [0, 1, 2, 3, 4, 5]; track i) {
+        <app-skeleton height="var(--control-min-height)" />
+      }
+    </div>
+  }
+  @case ('error') {
+    <app-load-error
+      title="Não foi possível carregar o Desenho Humano"
+      [message]="initState.error() ?? ''"
+      (retry)="reload()"
+    />
+  }
+  @default {
+    @if (dnaStatus()?.human_design && !isEditing()) {
+      <div class="bg-white dna-data">
+        @if (outdatedPillar()) {
+          <div class="outdated-warning">
+            <p>
+              ⚠️ Os dados de Desenho Humano foram alterados. O conteúdo gerado pode estar
+              desatualizado.
+            </p>
+            <app-icon-text-button
+              (click)="createAllSupply()"
+              icon="sparkles"
+              text="Regenerar conteúdo"
+              class="w-full bg-secondary text-white rounded-xl"
+              align="center"
+            ></app-icon-text-button>
+          </div>
+        }
+        <div>
+          <p><b>Aura:</b> {{ humanDesignData()?.aura }}</p>
+          <p><b>Energia:</b> {{ humanDesignData()?.energia }}</p>
+          <p><b>Palavra Chave:</b> {{ humanDesignData()?.palavra_chave }}</p>
+          <p><b>Estratégia:</b> {{ humanDesignData()?.estrategia }}</p>
+          <p><b>Assinatura:</b> {{ humanDesignData()?.assinatura }}</p>
+          <p><b>Tema do Não-Ser:</b> {{ humanDesignData()?.tema_do_nao_ser }}</p>
+          <p><b>Autoridade:</b> {{ humanDesignData()?.autoridade }}</p>
+          <p><b>Perfil:</b> {{ humanDesignData()?.perfil }}</p>
+          <p><b>Canais:</b></p>
+          @for (canal of humanDesignData()?.canais; track canal.id) {
+            <p>{{ canal.id }}: {{ canal.nome }}</p>
+          }
+
+          <div class="border-t border-black/70">
+            <p><b>Centros:</b></p>
+            <p><b>Definidos:</b> {{ humanDesignData()?.centros_energeticos?.definidos }}</p>
+            <p><b>Indefinidos:</b> {{ humanDesignData()?.centros_energeticos?.indefinidos }}</p>
+            <p><b>Abertos:</b> {{ humanDesignData()?.centros_energeticos?.abertos }}</p>
+          </div>
+          <div class="border-t border-black/70">
+            <p><b>Ativações da Personalidade:</b></p>
+            <p><b>Sol:</b> {{ humanDesignData()?.ativacoes?.personalidade?.sol }}</p>
+            <p><b>Terra:</b> {{ humanDesignData()?.ativacoes?.personalidade?.terra }}</p>
+            <p><b>Lua:</b> {{ humanDesignData()?.ativacoes?.personalidade?.lua }}</p>
+            <p><b>Ativações do Desenho:</b></p>
+            <p><b>Sol:</b> {{ humanDesignData()?.ativacoes?.desenho?.sol }}</p>
+            <p><b>Terra:</b> {{ humanDesignData()?.ativacoes?.desenho?.terra }}</p>
+            <p><b>Lua:</b> {{ humanDesignData()?.ativacoes?.desenho?.lua }}</p>
+          </div>
+          <div class="border-t border-black/70">
+            <p><b>Encarnação:</b></p>
+            <p><b>Ângulo:</b> {{ humanDesignData()?.encarnacao?.angulo }}</p>
+            <p><b>Grupo de Destino:</b> {{ humanDesignData()?.encarnacao?.grupo_de_destino }}</p>
+            <p><b>Cruz:</b> {{ humanDesignData()?.encarnacao?.cruz }}</p>
+            <p><b>Portões:</b> {{ humanDesignData()?.encarnacao?.portoes }}</p>
+            <p><b>Quarto de Cruz:</b> {{ humanDesignData()?.encarnacao?.quarto_de_cruz }}</p>
+          </div>
+        </div>
         <app-icon-text-button
-          (click)="createAllSupply()"
-          icon="sparkles"
-          text="Regenerar conteúdo"
-          class="w-full bg-secondary text-white rounded-xl"
+          (click)="startEdit()"
+          icon="pencil"
+          text="Editar dados"
+          class="w-full bg-white text-secondary rounded-xl shadow-sm"
           align="center"
         ></app-icon-text-button>
-      </div>
-    }
-    <div>
-      <p><b>Aura:</b> {{ humanDesignData()?.aura }}</p>
-      <p><b>Energia:</b> {{ humanDesignData()?.energia }}</p>
-      <p><b>Palavra Chave:</b> {{ humanDesignData()?.palavra_chave }}</p>
-      <p><b>Estratégia:</b> {{ humanDesignData()?.estrategia }}</p>
-      <p><b>Assinatura:</b> {{ humanDesignData()?.assinatura }}</p>
-      <p><b>Tema do Não-Ser:</b> {{ humanDesignData()?.tema_do_nao_ser }}</p>
-      <p><b>Autoridade:</b> {{ humanDesignData()?.autoridade }}</p>
-      <p><b>Perfil:</b> {{ humanDesignData()?.perfil }}</p>
-      <p><b>Canais:</b></p>
-      @for (canal of humanDesignData()?.canais; track canal.id) {
-        <p>{{ canal.id }}: {{ canal.nome }}</p>
-      }
-
-      <div class="border-t border-black/70">
-        <p><b>Centros:</b></p>
-        <p><b>Definidos:</b> {{ humanDesignData()?.centros_energeticos?.definidos }}</p>
-        <p><b>Indefinidos:</b> {{ humanDesignData()?.centros_energeticos?.indefinidos }}</p>
-        <p><b>Abertos:</b> {{ humanDesignData()?.centros_energeticos?.abertos }}</p>
-      </div>
-      <div class="border-t border-black/70">
-        <p><b>Ativações da Personalidade:</b></p>
-        <p><b>Sol:</b> {{ humanDesignData()?.ativacoes?.personalidade?.sol }}</p>
-        <p><b>Terra:</b> {{ humanDesignData()?.ativacoes?.personalidade?.terra }}</p>
-        <p><b>Lua:</b> {{ humanDesignData()?.ativacoes?.personalidade?.lua }}</p>
-        <p><b>Ativações do Desenho:</b></p>
-        <p><b>Sol:</b> {{ humanDesignData()?.ativacoes?.desenho?.sol }}</p>
-        <p><b>Terra:</b> {{ humanDesignData()?.ativacoes?.desenho?.terra }}</p>
-        <p><b>Lua:</b> {{ humanDesignData()?.ativacoes?.desenho?.lua }}</p>
-      </div>
-      <div class="border-t border-black/70">
-        <p><b>Encarnação:</b></p>
-        <p><b>Ângulo:</b> {{ humanDesignData()?.encarnacao?.angulo }}</p>
-        <p><b>Grupo de Destino:</b> {{ humanDesignData()?.encarnacao?.grupo_de_destino }}</p>
-        <p><b>Cruz:</b> {{ humanDesignData()?.encarnacao?.cruz }}</p>
-        <p><b>Portões:</b> {{ humanDesignData()?.encarnacao?.portoes }}</p>
-        <p><b>Quarto de Cruz:</b> {{ humanDesignData()?.encarnacao?.quarto_de_cruz }}</p>
-      </div>
-    </div>
-    <app-icon-text-button
-      (click)="startEdit()"
-      icon="pencil"
-      text="Editar dados"
-      class="w-full bg-white text-secondary rounded-xl shadow-sm"
-      align="center"
-    ></app-icon-text-button>
-    @if (isSupplyCreated()) {
-      <app-icon-text-button
-        (click)="router.navigate(['human-design', maestraId()])"
-        class="w-full bg-secondary text-white rounded-xl"
-        icon="magnifying-glass"
-        text="Ver Análise do DNA"
-        align="center"
-      ></app-icon-text-button>
-    } @else {
-      <app-icon-text-button
-        (click)="createAllSupply()"
-        icon="sparkles"
-        text="Gerar Análise do DNA"
-        class="w-full bg-secondary text-white rounded-xl"
-        align="center"
-      ></app-icon-text-button>
-    }
-  </div>
-} @else {
-  <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] text-muted">
-    <select formControlName="tipo_aurico">
-      <option value="" disabled>Tipo Áurico</option>
-      @for (tipo of tiposAuricos; track tipo) {
-        <option [value]="tipo">{{ tipo }}</option>
-      }
-    </select>
-    <input formControlName="aura" type="text" placeholder="Aura" readonly />
-    <input formControlName="energia" type="text" placeholder="Energia" readonly />
-    <input formControlName="palavra_chave" type="text" placeholder="Palavra Chave" readonly />
-    <input formControlName="estrategia" type="text" placeholder="Estratégia" readonly />
-    <input formControlName="assinatura" type="text" placeholder="Assinatura" />
-    <input formControlName="nao_ser" type="text" placeholder="Tema do Não-Ser" />
-    <input formControlName="autoridade" type="text" placeholder="Autoridade" />
-    <input formControlName="perfil" type="text" placeholder="Perfil" />
-    <hr class="opacity-30 mt-3" />
-    <p>Centros Energéticos</p>
-    <input formControlName="centros_definidos" type="text" placeholder="Centros Definidos" />
-    <input formControlName="centros_indefinidos" type="text" placeholder="Centros Indefinidos" />
-    <input formControlName="centros_abertos" type="text" placeholder="Centros Abertos" />
-    <hr class="opacity-30 mt-3" />
-    <p>Canais</p>
-    <div formArrayName="canais" class="grid gap-3">
-      @for (canal of canais.controls; track canal) {
-        <!-- `min-w-0` para o par de inputs poder encolher: sem ele a linha
-             estourava a largura em 360px. -->
-        <div [formGroupName]="$index" class="flex gap-3 w-full items-start">
-          <div class="flex gap-3 flex-1 min-w-0">
-            <!-- 5.5rem, não 4: o padding do token não deixava "10-10" caber. -->
-            <input formControlName="id" type="text" placeholder="10-10" class="w-[5.5rem] shrink-0" />
-            <input formControlName="nome" type="text" placeholder="Nome do Canal" class="w-full" />
-          </div>
+        @if (isSupplyCreated()) {
           <app-icon-text-button
-            (click)="removeCanal($index)"
-            [disabled]="canais.controls.length <= 1 ? true : false"
-            icon="trash"
-            text=""
-            ariaLabel="Remover canal"
-            class="bg-danger text-white rounded-xl"
+            (click)="router.navigate(['human-design', maestraId()])"
+            class="w-full bg-secondary text-white rounded-xl"
+            icon="magnifying-glass"
+            text="Ver Análise do DNA"
+            align="center"
           ></app-icon-text-button>
-        </div>
-      }
-    </div>
-    <app-icon-text-button
-      type="button"
-      (click)="addCanal()"
-      icon="plus"
-      text="Novo Canal"
-      class="text-secondary shadow-sm rounded-xl w-full"
-      align="center"
-    ></app-icon-text-button>
-    <div class="grid gap-3">
-      <p>Ativações</p>
-      <div class="pl-5 grid gap-3">
-        <p>Personalidade</p>
-        <div class="grid grid-cols-3 gap-3">
-          <input formControlName="personalidade_sol" type="text" placeholder="Sol" />
-          <input formControlName="personalidade_terra" type="text" placeholder="Terra" />
-          <input formControlName="personalidade_lua" type="text" placeholder="Lua" />
-        </div>
+        } @else {
+          <app-icon-text-button
+            (click)="createAllSupply()"
+            icon="sparkles"
+            text="Gerar Análise do DNA"
+            class="w-full bg-secondary text-white rounded-xl"
+            align="center"
+          ></app-icon-text-button>
+        }
       </div>
-      <div class="pl-5 grid gap-3">
-        <p>Desenho</p>
-        <div class="grid grid-cols-3 gap-3">
-          <input formControlName="desenho_sol" type="text" placeholder="Sol" />
-          <input formControlName="desenho_terra" type="text" placeholder="Terra" />
-          <input formControlName="desenho_lua" type="text" placeholder="Lua" />
-        </div>
-      </div>
-      <p>Encarnação</p>
-      <div class="grid grid-cols-2 gap-3">
-        <select formControlName="angulo">
-          <option value="" disabled>Ângulo</option>
-          @for (angulo of angulos; track angulo) {
-            <option [value]="angulo">{{ angulo }}</option>
+    } @else {
+      <form [formGroup]="dhForm" class="grid gap-3 max-w-[400px] text-muted">
+        <select formControlName="tipo_aurico">
+          <option value="" disabled>Tipo Áurico</option>
+          @for (tipo of tiposAuricos; track tipo) {
+            <option [value]="tipo">{{ tipo }}</option>
           }
         </select>
-        <input
-          formControlName="grupo_de_destino"
-          type="text"
-          placeholder="Grupo de Destino"
-          readonly
-        />
-
-        <input formControlName="cruz" type="text" placeholder="Cruz" />
-        <input formControlName="portoes" type="text" placeholder="Portões" />
-
-        <select formControlName="quarto_cruz" class="col-span-2">
-          <option value="" disabled>Quarto de Cruz</option>
-          @for (quarto of quartosDeCruz; track quarto) {
-            <option [value]="quarto">{{ quarto }}</option>
+        <input formControlName="aura" type="text" placeholder="Aura" readonly />
+        <input formControlName="energia" type="text" placeholder="Energia" readonly />
+        <input formControlName="palavra_chave" type="text" placeholder="Palavra Chave" readonly />
+        <input formControlName="estrategia" type="text" placeholder="Estratégia" readonly />
+        <input formControlName="assinatura" type="text" placeholder="Assinatura" />
+        <input formControlName="nao_ser" type="text" placeholder="Tema do Não-Ser" />
+        <input formControlName="autoridade" type="text" placeholder="Autoridade" />
+        <input formControlName="perfil" type="text" placeholder="Perfil" />
+        <hr class="opacity-30 mt-3" />
+        <p>Centros Energéticos</p>
+        <input formControlName="centros_definidos" type="text" placeholder="Centros Definidos" />
+        <input formControlName="centros_indefinidos" type="text" placeholder="Centros Indefinidos" />
+        <input formControlName="centros_abertos" type="text" placeholder="Centros Abertos" />
+        <hr class="opacity-30 mt-3" />
+        <p>Canais</p>
+        <div formArrayName="canais" class="grid gap-3">
+          @for (canal of canais.controls; track canal) {
+            <!-- `min-w-0` para o par de inputs poder encolher: sem ele a linha
+                 estourava a largura em 360px. -->
+            <div [formGroupName]="$index" class="flex gap-3 w-full items-start">
+              <div class="flex gap-3 flex-1 min-w-0">
+                <!-- 5.5rem, não 4: o padding do token não deixava "10-10" caber. -->
+                <input formControlName="id" type="text" placeholder="10-10" class="w-[5.5rem] shrink-0" />
+                <input formControlName="nome" type="text" placeholder="Nome do Canal" class="w-full" />
+              </div>
+              <app-icon-text-button
+                (click)="removeCanal($index)"
+                [disabled]="canais.controls.length <= 1 ? true : false"
+                icon="trash"
+                text=""
+                ariaLabel="Remover canal"
+                class="bg-danger text-white rounded-xl"
+              ></app-icon-text-button>
+            </div>
           }
-        </select>
-      </div>
-    </div>
-    <app-icon-text-button
-      [disabled]="!dhForm.valid"
-      (click)="saveHumanDesignData()"
-      icon="plus"
-      text="Salvar Dados"
-      class="bg-primary text-white rounded-xl w-full"
-      align="center"
-    ></app-icon-text-button>
-    @if (isEditing()) {
-      <app-icon-text-button
-        type="button"
-        (click)="cancelEdit()"
-        icon="arrow-left"
-        text="Cancelar"
-        class="bg-white text-primary rounded-xl w-full"
-        align="center"
-      ></app-icon-text-button>
+        </div>
+        <app-icon-text-button
+          type="button"
+          (click)="addCanal()"
+          icon="plus"
+          text="Novo Canal"
+          class="text-secondary shadow-sm rounded-xl w-full"
+          align="center"
+        ></app-icon-text-button>
+        <div class="grid gap-3">
+          <p>Ativações</p>
+          <div class="pl-5 grid gap-3">
+            <p>Personalidade</p>
+            <div class="grid grid-cols-3 gap-3">
+              <input formControlName="personalidade_sol" type="text" placeholder="Sol" />
+              <input formControlName="personalidade_terra" type="text" placeholder="Terra" />
+              <input formControlName="personalidade_lua" type="text" placeholder="Lua" />
+            </div>
+          </div>
+          <div class="pl-5 grid gap-3">
+            <p>Desenho</p>
+            <div class="grid grid-cols-3 gap-3">
+              <input formControlName="desenho_sol" type="text" placeholder="Sol" />
+              <input formControlName="desenho_terra" type="text" placeholder="Terra" />
+              <input formControlName="desenho_lua" type="text" placeholder="Lua" />
+            </div>
+          </div>
+          <p>Encarnação</p>
+          <div class="grid grid-cols-2 gap-3">
+            <select formControlName="angulo">
+              <option value="" disabled>Ângulo</option>
+              @for (angulo of angulos; track angulo) {
+                <option [value]="angulo">{{ angulo }}</option>
+              }
+            </select>
+            <input
+              formControlName="grupo_de_destino"
+              type="text"
+              placeholder="Grupo de Destino"
+              readonly
+            />
+
+            <input formControlName="cruz" type="text" placeholder="Cruz" />
+            <input formControlName="portoes" type="text" placeholder="Portões" />
+
+            <select formControlName="quarto_cruz" class="col-span-2">
+              <option value="" disabled>Quarto de Cruz</option>
+              @for (quarto of quartosDeCruz; track quarto) {
+                <option [value]="quarto">{{ quarto }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <app-icon-text-button
+          [disabled]="!dhForm.valid"
+          (click)="saveHumanDesignData()"
+          icon="plus"
+          text="Salvar Dados"
+          class="bg-primary text-white rounded-xl w-full"
+          align="center"
+        ></app-icon-text-button>
+        @if (isEditing()) {
+          <app-icon-text-button
+            type="button"
+            (click)="cancelEdit()"
+            icon="arrow-left"
+            text="Cancelar"
+            class="bg-white text-primary rounded-xl w-full"
+            align="center"
+          ></app-icon-text-button>
+        }
+      </form>
     }
-  </form>
+  }
 }
-
 @if (isLoading()) {
   <app-infinity [message]="loadingMessage()"></app-infinity>
 }

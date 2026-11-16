@@ -9,7 +9,8 @@ import { UserData } from '../../../core/models/userdata.model';
 import { pronounLabel, userSubject } from '../../../core/utils/pronoun';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import { TempPasswordForm } from '../../forms/temp-password-form/temp-password-form';
-import { Infinity } from '../../loading/infinity/infinity';
+import { Skeleton } from '../../feedback/skeleton/skeleton';
+import { LoadError } from '../../feedback/load-error/load-error';
 
 /**
  * Detalhe da Maestra: dados, quem a cadastrou, credenciais e as ações.
@@ -20,14 +21,17 @@ import { Infinity } from '../../loading/infinity/infinity';
  */
 @Component({
   selector: 'app-user-details-modal',
-  imports: [IconTextButton, TempPasswordForm, Infinity],
+  imports: [IconTextButton, TempPasswordForm, Skeleton, LoadError],
   templateUrl: './user-details-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserDetailsModal {
   userData = input.required<UserData>();
   isOpen = input<boolean>(false);
+  /** Detalhe (`GET /users/:id`) em voo: e-mail e credenciais em skeleton. */
   isLoading = input<boolean>(false);
+  /** Falha ao buscar o detalhe; o modal mostra o erro no lugar das credenciais. */
+  error = input<string | null>(null);
 
   /** "o usuário" / "a usuária" — sujeito das frases da senha provisória. */
   readonly subject = computed(() => userSubject(this.userData().pronoun));
@@ -40,4 +44,6 @@ export class UserDetailsModal {
   reactivate = output<void>();
   openSupply = output<void>();
   generateTempPassword = output<string>();
+  /** Tentar buscar o detalhe de novo. */
+  retry = output<void>();
 }

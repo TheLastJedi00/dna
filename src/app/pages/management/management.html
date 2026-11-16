@@ -57,18 +57,28 @@
     </div>
 
     <div class="mt-3 min-h-[55vh]">
-      @if (isLoading()) {
-        <app-infinity></app-infinity>
-      } @else {
-        <app-detailed-list
-          [users]="users()"
-          (select)="openDetails($event)"
-        ></app-detailed-list>
+      @switch (list.status()) {
+        @case ('loading') {
+          <app-skeleton-list [count]="pageSize()" />
+        }
+        @case ('error') {
+          <app-load-error
+            title="Não foi possível carregar as Maestras"
+            [message]="list.error() ?? ''"
+            (retry)="load()"
+          />
+        }
+        @default {
+          <app-detailed-list
+            [users]="users()"
+            (select)="openDetails($event)"
+          ></app-detailed-list>
+        }
       }
     </div>
 
     <!-- Paginação -->
-    @if (totalPages() > 1) {
+    @if (list.status() === 'success' && totalPages() > 1) {
       <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
         <app-icon-text-button
           icon="arrow-left"
@@ -88,12 +98,17 @@
   </section>
 </main>
 <app-user-panel-footer></app-user-panel-footer>
+@if (isActionRunning()) {
+  <app-infinity></app-infinity>
+}
 
 @if (selected(); as user) {
   <app-user-details-modal
     [userData]="user"
     [isOpen]="true"
-    [isLoading]="isLoadingDetails()"
+    [isLoading]="detail.isLoading()"
+    [error]="detail.error()"
+    (retry)="loadDetail()"
     (close)="closeDetails()"
     (edit)="startEdit()"
     (disable)="disableUser()"

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import { TempPasswordForm } from '../../forms/temp-password-form/temp-password-form';
-import { Infinity } from '../../loading/infinity/infinity';
+import { Skeleton } from '../../feedback/skeleton/skeleton';
+import { LoadError } from '../../feedback/load-error/load-error';
 import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
 
 /**
@@ -15,7 +16,7 @@ import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
  */
 @Component({
   selector: 'app-analyst-details-modal',
-  imports: [IconTextButton, TempPasswordForm, Infinity],
+  imports: [IconTextButton, TempPasswordForm, Skeleton, LoadError],
   templateUrl: './analyst-details-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,10 +26,15 @@ export class AnalystDetailsModal {
   maestras = input<LinkedMaestra[]>([]);
   isLoadingMaestras = input<boolean>(false);
   isLoadingDetails = input<boolean>(false);
+  /** Falhas independentes: uma não esconde a outra parte do modal. */
+  detailsError = input<string | null>(null);
+  maestrasError = input<string | null>(null);
 
   close = output<void>();
   edit = output<void>();
   disable = output<void>();
   reactivate = output<void>();
   generateTempPassword = output<string>();
+  retryDetails = output<void>();
+  retryMaestras = output<void>();
 }

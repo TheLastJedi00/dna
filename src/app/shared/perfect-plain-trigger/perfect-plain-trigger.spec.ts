@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PerfectPlainTrigger } from './perfect-plain-trigger';
 import { SupplyService } from '../../core/services/supply.service';
 import { DnaStatusService } from '../../core/services/dna-status.service';
@@ -43,6 +44,8 @@ describe('PerfectPlainTrigger', () => {
     fixture.componentRef.setInput('maestraId', 'u1');
     fixture.detectChanges();
     await fixture.whenStable();
+    // A checagem encadeia status → supply; deixa as microtasks assentarem.
+    await new Promise((resolve) => setTimeout(resolve, 0));
     return fixture.componentInstance;
   }
 
@@ -61,6 +64,16 @@ describe('PerfectPlainTrigger', () => {
     const cmp = await build(true, true, true);
     await cmp.generate();
     expect(supply.createFullPillar).toHaveBeenCalledWith('perfect-plain', 'u1');
+  });
+
+  it('falha na checagem fica em erro (com tentar novamente), não em "não habilitado"', async () => {
+    const cmp = await build(true, true, true);
+    dna.getStatusByUserId.and.returnValue(
+      throwError(() => new HttpErrorResponse({ status: 503 })),
+    );
+    await cmp.check.load();
+    expect(cmp.check.status()).toBe('error');
+    expect(cmp.check.error()).toContain('instabilidade');
   });
 
   it('view navega para /perfect-plain/:userId', async () => {

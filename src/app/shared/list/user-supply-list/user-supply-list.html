@@ -1,8 +1,25 @@
 <section class="p-3">
-  @for (user of usersList(); track $index) {
-    <app-user-supply-item (click)="router.navigate([`user-supply/${user.id}`])" [userData]="user" [index]="$index + 1"></app-user-supply-item>
+  @switch (list.status()) {
+    @case ('loading') {
+      <app-skeleton-list variant="row" [count]="8" />
+    }
+    @case ('error') {
+      <app-load-error
+        title="Não foi possível carregar as Maestras"
+        [message]="list.error() ?? ''"
+        (retry)="list.load()"
+      />
+    }
+    @default {
+      @for (user of usersList(); track user.id ?? $index) {
+        <app-user-supply-item
+          (click)="router.navigate([`user-supply/${user.id}`])"
+          [userData]="user"
+          [index]="$index + 1"
+        ></app-user-supply-item>
+      } @empty {
+        <p class="py-6 text-center text-muted">Nenhuma Maestra ativa encontrada.</p>
+      }
+    }
   }
 </section>
-@if (isLoading()) {
-  <app-infinity></app-infinity>
-}

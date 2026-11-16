@@ -1,5 +1,12 @@
 <div class="mx-auto container bg-white main-padding">
-  @if (numData() && userData()) {
+  <app-pillar-load
+    [status]="view.status()"
+    [error]="view.error()"
+    pillar="a Numerologia"
+    emptyMessage="A Numerologia ainda não foi cadastrada. Ela aparece aqui assim que a análise for concluída."
+    (retry)="view.retry()"
+  />
+  @if (view.status() === 'success') {
     @defer (on viewport) {
       <div animate.enter="fade-in">
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
@@ -97,6 +104,3 @@
     }
   }
 </div>
-@if (isLoading()) {
-  <app-infinity></app-infinity>
-}

@@ -11,6 +11,8 @@ import { HumanDesignService } from '../../../core/services/human-design.service'
 import { Canal, HumanDesignData } from '../../../core/models/dhdata.model';
 import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
+import { Skeleton } from '../../feedback/skeleton/skeleton';
+import { LoadError } from '../../feedback/load-error/load-error';
 import { DnaStatus } from '../../../core/models/dna-status.model';
 import { PillarFormBase } from '../pillar-form.base';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,7 +28,7 @@ import {
 
 @Component({
   selector: 'app-human-design-form',
-  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity],
+  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity, Skeleton, LoadError],
   templateUrl: './human-design-form.html',
   styleUrl: './human-design-form.scss',
 })
@@ -129,7 +131,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    await this.getHumanDesignData();
+    this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -227,21 +229,9 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
         await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
       }
       this.dhForm.reset();
-      this.getDnaStatus();
-      this.getHumanDesignData();
+      this.reload();
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async getHumanDesignData() {
-    this.isLoading.set(true);
-    try {
-      this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
-    } catch (e) {
-      console.error(e);
     } finally {
       this.isLoading.set(false);
     }

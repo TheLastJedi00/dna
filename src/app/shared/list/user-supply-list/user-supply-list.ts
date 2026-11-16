@@ -1,36 +1,28 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { UserService } from '../../../core/services/user.service';
-import { UserData } from '../../../core/models/userdata.model';
-import { firstValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Infinity } from '../../loading/infinity/infinity';
-import { UserSupplyItem } from '../user-supply-item/user-supply-item';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../../../core/services/user.service';
+import { loadState } from '../../../core/utils/load-state';
+import { UserSupplyItem } from '../user-supply-item/user-supply-item';
+import { SkeletonList } from '../../feedback/skeleton-list/skeleton-list';
+import { LoadError } from '../../feedback/load-error/load-error';
 
 @Component({
   selector: 'app-user-supply-list',
-  imports: [Infinity, UserSupplyItem],
+  imports: [UserSupplyItem, SkeletonList, LoadError],
   templateUrl: './user-supply-list.html',
   styleUrl: './user-supply-list.scss',
 })
 export class UserSupplyList implements OnInit {
-  async ngOnInit() {
-    await this.getUsers();
-  }
-
   private readonly service = inject(UserService);
   router = inject(Router);
-  usersList = signal<UserData[] | null>(null);
-  isLoading = signal(false);
 
-  async getUsers() {
-    this.isLoading.set(true);
-    try {
-      this.usersList.set(await firstValueFrom(this.service.getAllActiveUsers('fullName', 'asc')));
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
+  /** Maestras ativas, em ordem alfabética (mesma consulta da antiga `getAllActiveUsers`). */
+  readonly list = loadState(() =>
+    this.service.listUsers({ orderBy: 'fullName', direction: 'asc', status: 'active' }),
+  );
+  readonly usersList = computed(() => this.list.data()?.items ?? []);
+
+  ngOnInit() {
+    this.list.load();
   }
 }

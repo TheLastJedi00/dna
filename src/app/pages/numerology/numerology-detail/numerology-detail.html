@@ -1,23 +1,21 @@
-@if (isLoading()) {
-  <app-infinity></app-infinity>
-} @else {
-  <section class="container mx-auto bg-white main-padding">
-    @defer (on viewport) {
-      <div animate.enter="slide-in">
-        <app-intro-card
-          [title]="moduleTitle()"
-        ></app-intro-card>
-        @if (error()) {
-          <div class="text-center text-muted py-10">
-            <p>{{ error() }}</p>
-          </div>
-        }
-        @if (topics()) {
-          <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
-        }
-      </div>
-    } @placeholder {
-      <div class="h-[800px]"></div>
-    }
-  </section>
-}
+<section class="container mx-auto bg-white main-padding">
+  <app-intro-card [title]="moduleTitle()"></app-intro-card>
+  <div class="mt-4">
+    <app-pillar-load
+      [status]="content.status()"
+      [error]="content.error()"
+      pillar="este conteúdo"
+      [emptyMessage]="emptyMessage()"
+      variant="detail"
+      [cards]="4"
+      cardHeight="10rem"
+      gridClass="grid-cols-1 md:grid-cols-2"
+      (retry)="content.load()"
+    />
+  </div>
+  @if (content.status() === 'success') {
+    <div animate.enter="slide-in">
+      <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+    </div>
+  }
+</section>

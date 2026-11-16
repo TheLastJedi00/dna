@@ -61,7 +61,26 @@ describe('AnalystsManagement', () => {
 
     expect(component.analysts().length).toBe(1);
     expect(component.total()).toBe(1);
-    expect(component.isLoading()).toBeFalse();
+    expect(component.list.status()).toBe('success');
+  });
+
+  it('falha na listagem mostra o erro inline com tentar novamente', async () => {
+    fixture.detectChanges();
+    http
+      .expectOne((r) => r.url === api && r.method === 'GET')
+      .flush(null, { status: 500, statusText: 'Server Error' });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('[role="alert"]')?.textContent).toContain('instabilidade');
+    const retry = [...el.querySelectorAll('button')].find((b) =>
+      b.textContent?.includes('Tentar novamente'),
+    )!;
+    retry.click();
+    flushList([{ id: 'a1', fullName: 'Ana', isActive: true }]);
+    await fixture.whenStable();
+    expect(component.analysts().length).toBe(1);
   });
 
   it('trocar o filtro de status volta para a página 1 e recarrega', async () => {
@@ -109,7 +128,24 @@ describe('AnalystsManagement', () => {
     expect(component.linkedMaestras()).toEqual([
       { fullName: 'Maria', isActive: true },
     ]);
-    expect(component.isLoadingMaestras()).toBeFalse();
+    expect(component.maestrasState.isLoading()).toBeFalse();
+  });
+
+  it('falha nas Maestras vinculadas não impede o detalhe', async () => {
+    fixture.detectChanges();
+    flushList();
+    await fixture.whenStable();
+
+    const promise = component.openDetails({ id: 'a1', fullName: 'Ana', isActive: true });
+    http.expectOne(`${api}/a1`).flush({ id: 'a1', fullName: 'Ana', email: 'ana@dna.com' });
+    http
+      .expectOne(`${api}/a1/maestras`)
+      .flush(null, { status: 403, statusText: 'Forbidden' });
+    await promise;
+
+    expect(component.selected()?.email).toBe('ana@dna.com');
+    expect(component.detail.error()).toBeNull();
+    expect(component.maestrasState.error()).toContain('permissão');
   });
 
   it('gerar a senha temporária recarrega o detalhe e passa a exibi-la', async () => {

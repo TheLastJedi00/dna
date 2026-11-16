@@ -17,14 +17,21 @@
     [backLink]="backLink()"
   ></app-intro-card>
 
-  @if (topics()) {
-    <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
-  } @else if (error()) {
-    <p class="text-black/70 py-6">{{ error() }}</p>
-  }
+  <div class="mt-4">
+    <app-pillar-load
+      [status]="content.status()"
+      [error]="content.error()"
+      pillar="o Plano Perfeito"
+      emptyMessage="Conteúdo ainda não disponível."
+      variant="detail"
+      [cards]="4"
+      cardHeight="10rem"
+      gridClass="grid-cols-1 md:grid-cols-2"
+      (retry)="content.load()"
+    />
+    @if (content.status() === 'success') {
+      <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+    }
+  </div>
 </main>
 <app-user-panel-footer></app-user-panel-footer>
-
-@if (isLoading()) {
-  <app-infinity></app-infinity>
-}
