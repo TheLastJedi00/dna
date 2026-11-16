@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, Subject, throwError } from 'rxjs';
-import { loadState } from './load-state';
+import { combineLoad, loadState } from './load-state';
 
 describe('loadState', () => {
   it('nasce em loading por padrão e em idle quando pedido', () => {
@@ -79,5 +79,38 @@ describe('loadState', () => {
     s.reset();
     expect(s.status()).toBe('idle');
     expect(s.data()).toBeNull();
+  });
+
+  describe('combineLoad', () => {
+    it('erro tem prioridade e o retry refaz só o que falhou', async () => {
+      let calls = 0;
+      let fail = true;
+      const ok = loadState(() => {
+        calls++;
+        return of('ok');
+      });
+      const bad = loadState(() =>
+        fail ? throwError(() => new HttpErrorResponse({ status: 503 })) : of('ok'),
+      );
+      const view = combineLoad(ok, bad);
+      expect(view.status()).toBe('loading');
+      await view.load();
+      expect(view.status()).toBe('error');
+      expect(view.error()).toContain('instabilidade');
+      fail = false;
+      await view.retry();
+      expect(calls).toBe(1);
+      expect(view.status()).toBe('success');
+    });
+
+    it('vazio aparece quando nenhuma falhou', async () => {
+      const a = loadState(() => of(1));
+      const b = loadState(() => throwError(() => new HttpErrorResponse({ status: 404 })), {
+        emptyOn404: true,
+      });
+      const view = combineLoad(a, b);
+      await view.load();
+      expect(view.status()).toBe('empty');
+    });
   });
 });

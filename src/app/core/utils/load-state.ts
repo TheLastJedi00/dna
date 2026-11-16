@@ -99,3 +99,39 @@ export function loadState<T>(
     },
   };
 }
+
+export interface CombinedLoad {
+  /** `error` > `loading` > `empty` > `success` (e `idle` se todas estiverem idle). */
+  readonly status: Signal<LoadStatus>;
+  /** Mensagem da primeira leitura que falhou. */
+  readonly error: Signal<string | null>;
+  /** Dispara todas as leituras em paralelo. */
+  load(): Promise<void>;
+  /** "Tentar novamente": refaz só as leituras que falharam. */
+  retry(): Promise<void>;
+}
+
+/**
+ * Junta leituras de uma mesma tela que só fazem sentido juntas (ex.: dados do
+ * pilar + perfil): um skeleton, um erro e um "Tentar novamente".
+ */
+export function combineLoad(...states: LoadState<unknown>[]): CombinedLoad {
+  const status = computed<LoadStatus>(() => {
+    const all = states.map((s) => s.status());
+    if (all.includes('error')) return 'error';
+    if (all.includes('loading')) return 'loading';
+    if (all.every((s) => s === 'idle')) return 'idle';
+    if (all.includes('empty')) return 'empty';
+    return 'success';
+  });
+  return {
+    status,
+    error: computed(() => states.find((s) => s.status() === 'error')?.error() ?? null),
+    async load() {
+      await Promise.all(states.map((s) => s.load()));
+    },
+    async retry() {
+      await Promise.all(states.filter((s) => s.status() === 'error').map((s) => s.load()));
+    },
+  };
+}

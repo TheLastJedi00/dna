@@ -1,19 +1,17 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DataButton } from '../../../shared/buttons/data-button/data-button';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { LeituraAstrologica } from '../../../core/models/astrology.model';
 import { UserDataCard } from '../../../shared/cards/user-data-card/user-data-card';
 import { AstrologyService } from '../../../core/services/astrology.service';
-import { firstValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../core/services/user.service';
-import { UserData } from '../../../core/models/userdata.model';
-import { Infinity } from '../../../shared/loading/infinity/infinity';
+import { combineLoad, loadState } from '../../../core/utils/load-state';
+import { PillarLoad } from '../../../shared/feedback/pillar-load/pillar-load';
 
 @Component({
   selector: 'app-astrology-home',
-  imports: [DataButton, NgClass, UserDataCard, Infinity],
+  imports: [DataButton, NgClass, UserDataCard, PillarLoad],
   templateUrl: './astrology-home.html',
   styleUrl: './astrology-home.scss',
 })
@@ -23,9 +21,15 @@ export class AstrologyHome implements OnInit {
   private readonly astrologyService = inject(AstrologyService);
   private readonly userService = inject(UserService);
   readonly userId = signal('');
-  isLoading = signal(false);
-  astrologyData = signal<LeituraAstrologica | null>(null);
-  userData = signal<UserData | null>(null);
+  /** Dados do pilar; 404 = ainda não cadastrado (vazio, não erro). */
+  readonly pillar = loadState(() => this.astrologyService.getByUserId(this.userId()), {
+    emptyOn404: true,
+  });
+  readonly user = loadState(() => this.userService.findMe(this.userId()));
+  /** Um skeleton, um erro e um "Tentar novamente" para as duas leituras. */
+  readonly view = combineLoad(this.pillar, this.user);
+  readonly astrologyData = computed(() => this.pillar.data());
+  readonly userData = computed(() => this.user.data());
   buttonGroupClasses = 'p-3 text-center gradient-primary-to-secondary-85 rounded-xl';
   titleButtonGroupClasses = 'text-primary font-merriweather font-normal text-xl';
   gridButtonGroupClasses = 'grid grid-cols-1 auto-rows-fr gap-2 mt-3';
@@ -33,36 +37,11 @@ export class AstrologyHome implements OnInit {
   async ngOnInit() {
     const userId = this.route.snapshot.parent!.paramMap.get('userId') ?? '';
     this.userId.set(userId);
-    await this.getAstrologyData();
-    await this.getUserData();
+    await this.view.load();
   }
 
   navigateTo(path: string) {
     this.router.navigate([`astrology/${this.userId()}/${path}`]);
-  }
-
-  async getAstrologyData() {
-    this.isLoading.set(true);
-    try {
-      const data = await firstValueFrom(this.astrologyService.getByUserId(this.userId()));
-      this.astrologyData.set(data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  async getUserData() {
-    this.isLoading.set(true);
-    try {
-      const user = await firstValueFrom(this.userService.findMe(this.userId()));
-      this.userData.set(user);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
   }
 
   pontoToStringArray(ponto: any): string[] {
