@@ -106,7 +106,9 @@
   <app-user-details-modal
     [userData]="user"
     [isOpen]="true"
-    [isLoading]="isLoadingDetails()"
+    [isLoading]="detail.isLoading()"
+    [error]="detail.error()"
+    (retry)="loadDetail()"
     (close)="closeDetails()"
     (edit)="startEdit()"
     (disable)="disableUser()"

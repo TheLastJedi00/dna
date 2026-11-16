@@ -70,7 +70,10 @@ export class Management implements OnInit {
 
   /** Maestra aberta no modal (com o detalhe já carregado); null = fechado. */
   selected = signal<UserData | null>(null);
-  isLoadingDetails = signal(false);
+  /** Detalhe da Maestra aberta (e-mail e senha provisória só vêm daqui). */
+  readonly detail = loadState(() => this.userService.findUserById(this.selected()!.id!), {
+    initial: 'idle',
+  });
   isEditing = signal(false);
 
   private searchDebounce?: ReturnType<typeof setTimeout>;
@@ -112,22 +115,24 @@ export class Management implements OnInit {
   async openDetails(user: UserData) {
     this.selected.set(user);
     if (!user.id) return;
-    this.isLoadingDetails.set(true);
-    try {
-      const detail = await firstValueFrom(this.userService.findUserById(user.id));
-      // Se o modal já foi fechado (ou trocado), o detalhe em voo não interessa.
-      if (this.selected()?.id === user.id) {
-        this.selected.set(detail);
-      }
-    } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-    } finally {
-      this.isLoadingDetails.set(false);
+    await this.loadDetail();
+  }
+
+  /** Busca o detalhe da Maestra aberta (também é o "Tentar novamente" do modal). */
+  async loadDetail() {
+    const id = this.selected()?.id;
+    if (!id) return;
+    await this.detail.load();
+    const detail = this.detail.data();
+    // Se o modal já foi fechado (ou trocado), o detalhe em voo não interessa.
+    if (detail && this.selected()?.id === id) {
+      this.selected.set(detail);
     }
   }
 
   closeDetails() {
     this.selected.set(null);
+    this.detail.reset();
   }
 
   startEdit() {
@@ -151,17 +156,16 @@ export class Management implements OnInit {
   async generateTempPassword(password: string) {
     const user = this.selected();
     if (!user?.id) return;
-    this.isLoadingDetails.set(true);
+    this.isActionRunning.set(true);
     try {
       await firstValueFrom(this.userService.setTempPassword(user.id, password));
-      // Recarrega o detalhe: a senha provisória agora aparece no lugar do botão.
-      const detail = await firstValueFrom(this.userService.findUserById(user.id));
-      this.selected.set(detail);
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
+      return; // erro de ação exibido pelo modal global (errorInterceptor)
     } finally {
-      this.isLoadingDetails.set(false);
+      this.isActionRunning.set(false);
     }
+    // Recarrega o detalhe: a senha provisória agora aparece no lugar do botão.
+    await this.loadDetail();
   }
 
   async disableUser() {
