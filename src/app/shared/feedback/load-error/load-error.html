@@ -1,0 +1,18 @@
+<div
+  role="alert"
+  class="flex flex-col items-center text-center w-full rounded-xl bg-white/80"
+  [class]="compact() ? 'gap-2 p-3' : 'gap-3 p-5 shadow-sm'"
+>
+  @if (!compact()) {
+    <span class="text-danger w-8 h-8 flex"><app-icons-switch icon="exclamation-triangle" /></span>
+    <h2 class="text-primary font-merriweather text-lg">{{ title() }}</h2>
+  }
+  <p class="text-muted" [class.text-sm]="compact()">{{ message() }}</p>
+  <app-icon-text-button
+    icon="arrow-path"
+    text="Tentar novamente"
+    align="center"
+    class="bg-primary text-white rounded-xl w-full max-w-xs"
+    (click)="retry.emit()"
+  />
+</div>
