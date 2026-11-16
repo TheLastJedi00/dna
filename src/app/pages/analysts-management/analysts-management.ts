@@ -66,10 +66,16 @@ export class AnalystsManagement implements OnInit {
 
   /** Analista aberto no modal de detalhes; null = modal fechado. */
   selected = signal<AnalystData | null>(null);
+  /** Detalhe do Analista aberto (e-mail e senha provisória só vêm daqui). */
+  readonly detail = loadState(() => this.analystService.findAnalystById(this.selected()!.id!), {
+    initial: 'idle',
+  });
   /** Carteira do Analista aberto (supervisão), carregada sob demanda. */
-  linkedMaestras = signal<LinkedMaestra[]>([]);
-  isLoadingMaestras = signal(false);
-  isLoadingDetails = signal(false);
+  readonly maestrasState = loadState(
+    () => this.analystService.findLinkedMaestras(this.selected()!.id!),
+    { initial: 'idle' },
+  );
+  readonly linkedMaestras = computed(() => this.maestrasState.data() ?? []);
   /** Analista em edição; null = o form está em modo criação. */
   editing = signal<AnalystData | null>(null);
   isFormOpen = signal(false);
@@ -107,32 +113,26 @@ export class AnalystsManagement implements OnInit {
   }
 
   /**
-   * Abre o detalhe e busca, sob demanda, a carteira do Analista e o próprio
-   * detalhe — e-mail e senha provisória só existem no `GET /analysts/:id`, nunca
-   * na listagem.
+   * Abre o detalhe e busca, sob demanda e em paralelo, o próprio detalhe —
+   * e-mail e senha provisória só existem no `GET /analysts/:id`, nunca na
+   * listagem — e a carteira do Analista. Cada parte tem skeleton e erro próprios.
    */
   async openDetails(analyst: AnalystData) {
     this.selected.set(analyst);
-    this.linkedMaestras.set([]);
     if (!analyst.id) return;
-    this.isLoadingMaestras.set(true);
-    this.isLoadingDetails.set(true);
-    try {
-      const [detail, maestras] = await Promise.all([
-        firstValueFrom(this.analystService.findAnalystById(analyst.id)),
-        firstValueFrom(this.analystService.findLinkedMaestras(analyst.id)),
-      ]);
-      // Se o Manager fechou o modal enquanto a busca estava em voo, o resultado
-      // já não interessa (e reabriria a supervisão do analista errado).
-      if (this.selected()?.id === analyst.id) {
-        this.selected.set(detail);
-        this.linkedMaestras.set(maestras);
-      }
-    } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-    } finally {
-      this.isLoadingMaestras.set(false);
-      this.isLoadingDetails.set(false);
+    await Promise.all([this.loadDetail(), this.maestrasState.load()]);
+  }
+
+  /** Busca o detalhe do Analista aberto (também é o "Tentar novamente"). */
+  async loadDetail() {
+    const id = this.selected()?.id;
+    if (!id) return;
+    await this.detail.load();
+    const detail = this.detail.data();
+    // Se o Manager fechou o modal enquanto a busca estava em voo, o resultado
+    // já não interessa (e reabriria a supervisão do analista errado).
+    if (detail && this.selected()?.id === id) {
+      this.selected.set(detail);
     }
   }
 
@@ -140,25 +140,21 @@ export class AnalystsManagement implements OnInit {
   async generateTempPassword(password: string) {
     const analyst = this.selected();
     if (!analyst?.id) return;
-    this.isLoadingDetails.set(true);
+    this.isActionRunning.set(true);
     try {
-      await firstValueFrom(
-        this.analystService.setTempPassword(analyst.id, password),
-      );
-      const detail = await firstValueFrom(
-        this.analystService.findAnalystById(analyst.id),
-      );
-      this.selected.set(detail);
+      await firstValueFrom(this.analystService.setTempPassword(analyst.id, password));
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
+      return; // erro de ação exibido pelo modal global (errorInterceptor)
     } finally {
-      this.isLoadingDetails.set(false);
+      this.isActionRunning.set(false);
     }
+    await this.loadDetail();
   }
 
   closeDetails() {
     this.selected.set(null);
-    this.linkedMaestras.set([]);
+    this.detail.reset();
+    this.maestrasState.reset();
   }
 
   /** Detalhes → Editar: fecha o modal e reabre o form já preenchido. */
