@@ -1,12 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../core/services/supply.service';
 import { LoginService } from '../../core/services/login.service';
 import { Topic } from '../../core/models/supply.model';
 import { IntroCard } from '../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../shared/grid/lists-card-grid/lists-card-grid';
-import { Infinity } from '../../shared/loading/infinity/infinity';
+import { loadState } from '../../core/utils/load-state';
+import { fetchSupplyTopics } from '../../core/utils/supply-topics';
+import { PillarLoad } from '../../shared/feedback/pillar-load/pillar-load';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { DnaTitleCard } from "../../shared/cards/dna-title-card/dna-title-card";
@@ -17,7 +18,7 @@ import { DnaDescriptionCard } from "../../shared/cards/dna-description-card/dna-
   imports: [
     IntroCard,
     ListsCardGrid,
-    Infinity,
+    PillarLoad,
     UserPanelHeader,
     UserPanelFooter,
     DnaTitleCard,
@@ -32,9 +33,12 @@ export class PerfectPlain implements OnInit {
   private readonly loginService = inject(LoginService);
 
   readonly userId = signal('');
-  readonly topics = signal<Topic[] | null>(null);
-  readonly isLoading = signal(true);
-  readonly error = signal<string | null>(null);
+  /** Plano ainda não gerado (404 ou sem tópicos) = vazio, não erro. */
+  readonly content = loadState(
+    () => fetchSupplyTopics([() => this.supplyService.getPerfectPlain(this.userId())]),
+    { isEmpty: (topics) => topics.length === 0 },
+  );
+  readonly topics = computed(() => this.content.data());
 
   /**
    * Destino do "Voltar": o admin volta para o painel do usuário (user-supply);
@@ -50,25 +54,7 @@ export class PerfectPlain implements OnInit {
   async ngOnInit() {
     const userId = this.route.snapshot.paramMap.get('userId') ?? '';
     this.userId.set(userId);
-    await this.load(userId);
-  }
-
-  private async load(userId: string) {
-    try {
-      const supply = await firstValueFrom(
-        this.supplyService.getPerfectPlain(userId),
-      );
-      if (supply?.topics?.length) {
-        this.topics.set(supply.topics);
-      } else {
-        this.error.set('Conteúdo ainda não disponível.');
-      }
-    } catch (e) {
-      console.error(e);
-      this.error.set('Conteúdo ainda não disponível.');
-    } finally {
-      this.isLoading.set(false);
-    }
+    await this.content.load();
   }
 
   perfectPlainIntro(){
