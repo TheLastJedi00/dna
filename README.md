@@ -56,6 +56,33 @@ a barra de rolagem e gera scroll horizontal) nem `h-screen` (não acompanha a
 barra de endereço no mobile). Padding deve crescer com o breakpoint, nunca
 diminuir.
 
+## Carregamento e erros
+
+Duas formas de "carregando", cada uma com seu papel:
+
+| Situação | O que aparece | Onde |
+|---|---|---|
+| **Leitura** (listas, detalhes, perfil, pilares) | Skeleton no formato do conteúdo | `shared/feedback/skeleton*`, `pillar-load` |
+| **Ação** (salvar, login, gerar com IA, senha provisória, desativar/reativar) | Overlay de tela cheia | `shared/loading/infinity` |
+
+**Estado de leitura** — `core/utils/load-state.ts`: `loadState(() => service.x())` devolve
+signals `status` (`idle`/`loading`/`success`/`empty`/`error`), `data`, `error` e `load()`.
+`emptyOn404` trata "ainda não cadastrado" como **vazio**, não como falha. `combineLoad`
+junta leituras da mesma tela (um skeleton, um erro, um "Tentar novamente").
+
+**Erros** — `core/utils/http-error-message.ts` traduz o status em frase clara (sem
+conexão, sessão expirada, sem permissão, não encontrado, instabilidade).
+
+- Leitura (`GET`): erro **inline** no lugar do skeleton (`app-load-error`), com
+  "Tentar novamente". **Não** abre o modal global.
+- Ação (`POST`/`PATCH`/`PUT`/`DELETE`): modal global; 4xx mostra a mensagem do backend,
+  rede/5xx mostram a frase traduzida.
+- Para forçar o contrário numa requisição: `HttpContext` com `SHOW_ERROR_MODAL`.
+
+**Usuário logado** — `CurrentUserService` busca `/users/me/:id` uma vez por sessão e
+abastece o menu lateral e o dashboard. Sem perfil em `users` (Manager → 404), o nome
+exibido é o e-mail do token. O cache é limpo quando a sessão encerra.
+
 ## Formulário de Desenho Humano
 
 Três campos são `select` (as opções vivem em
