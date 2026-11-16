@@ -11,12 +11,14 @@ import { NumerologyService } from '../../../core/services/numerology.service';
 import { NumerologyData } from '../../../core/models/numdata.model';
 import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
+import { Skeleton } from '../../feedback/skeleton/skeleton';
+import { LoadError } from '../../feedback/load-error/load-error';
 import { DnaStatus } from '../../../core/models/dna-status.model';
 import { PillarFormBase } from '../pillar-form.base';
 
 @Component({
   selector: 'app-numerology-form',
-  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity],
+  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity, Skeleton, LoadError],
   templateUrl: './numerology-form.html',
   styleUrl: './numerology-form.scss',
 })
@@ -118,7 +120,7 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    await this.getNumerologyData();
+    this.numerologyData.set(await firstValueFrom(this.numService.getByUserId(this.maestraId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -250,23 +252,9 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
         await firstValueFrom(this.numService.createNumerologyByUser(numData));
       }
       this.numForm.reset();
-      this.getDnaStatus();
-      this.getNumerologyData();
+      this.reload();
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async getNumerologyData() {
-    this.isLoading.set(true);
-    try {
-      this.numerologyData.set(
-        await firstValueFrom(this.numService.getByUserId(this.maestraId())),
-      );
-    } catch (e) {
-      console.error(e);
     } finally {
       this.isLoading.set(false);
     }

@@ -10,12 +10,14 @@ import { AstrologyService } from '../../../core/services/astrology.service';
 import { LeituraAstrologica } from '../../../core/models/astrology.model';
 import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
+import { Skeleton } from '../../feedback/skeleton/skeleton';
+import { LoadError } from '../../feedback/load-error/load-error';
 import { DnaStatus } from '../../../core/models/dna-status.model';
 import { PillarFormBase } from '../pillar-form.base';
 
 @Component({
   selector: 'app-astrology-form',
-  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity],
+  imports: [IconTextButton, ɵInternalFormsSharedModule, ReactiveFormsModule, Infinity, Skeleton, LoadError],
   templateUrl: './astrology-form.html',
   styleUrl: './astrology-form.scss',
 })
@@ -68,7 +70,7 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    await this.getAstrologyData();
+    this.astrologyData.set(await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -163,23 +165,9 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
         await firstValueFrom(this.astrologyService.createAstrologyByUser(astroData));
       }
       this.astroForm.reset();
-      this.getDnaStatus();
-      this.getAstrologyData();
+      this.reload();
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async getAstrologyData() {
-    this.isLoading.set(true);
-    try {
-      this.astrologyData.set(
-        await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())),
-      );
-    } catch (e) {
-      console.error(e);
     } finally {
       this.isLoading.set(false);
     }

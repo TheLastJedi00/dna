@@ -1,0 +1,30 @@
+// Tons derivados de --color-primary (tokens da spec 008) para o skeleton
+// combinar com os fundos creme do app em vez de um cinza neutro.
+:host {
+  display: block;
+  flex-shrink: 0;
+  max-width: 100%;
+  background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 100%
+    )
+    no-repeat,
+    rgba(78, 46, 19, 0.1);
+  background-size: 200% 100%, 100% 100%;
+  background-position: -150% 0, 0 0;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    background-position: 250% 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    animation: none;
+  }
+}

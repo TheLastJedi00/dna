@@ -11,6 +11,9 @@ import { UserDetailsModal } from '../../shared/modal/user-details-modal/user-det
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { UserService } from '../../core/services/user.service';
 import { UserData, UserStatusFilter } from '../../core/models/userdata.model';
+import { loadState } from '../../core/utils/load-state';
+import { SkeletonList } from '../../shared/feedback/skeleton-list/skeleton-list';
+import { LoadError } from '../../shared/feedback/load-error/load-error';
 
 /**
  * Página smart de gestão de Maestras: dona do estado (lista, paginação, busca,
@@ -27,6 +30,8 @@ import { UserData, UserStatusFilter } from '../../core/models/userdata.model';
     NewUserForm,
     UserDetailsModal,
     Infinity,
+    SkeletonList,
+    LoadError,
     FormsModule,
   ],
   templateUrl: './management.html',
@@ -45,18 +50,30 @@ export class Management implements OnInit {
     this.type() === 'maestras' ? 'Gerir Maestras' : `Gerir de ${this.type()}`,
   );
 
-  users = signal<UserData[]>([]);
-  isLoading = signal(false);
-  total = signal(0);
+  /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */
+  readonly list = loadState(() =>
+    this.userService.listUsers({
+      page: this.page(),
+      pageSize: this.pageSize(),
+      name: this.search().trim() || undefined,
+      status: this.status(),
+    }),
+  );
+  readonly users = computed(() => this.list.data()?.items ?? []);
+  readonly totalPages = computed(() => Math.max(1, this.list.data()?.totalPages ?? 1));
   page = signal(1);
   pageSize = signal(9);
-  totalPages = signal(1);
+  /** Ação em curso (desativar/reativar/senha provisória): overlay de tela cheia. */
+  isActionRunning = signal(false);
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
   /** Maestra aberta no modal (com o detalhe já carregado); null = fechado. */
   selected = signal<UserData | null>(null);
-  isLoadingDetails = signal(false);
+  /** Detalhe da Maestra aberta (e-mail e senha provisória só vêm daqui). */
+  readonly detail = loadState(() => this.userService.findUserById(this.selected()!.id!), {
+    initial: 'idle',
+  });
   isEditing = signal(false);
 
   private searchDebounce?: ReturnType<typeof setTimeout>;
@@ -65,24 +82,8 @@ export class Management implements OnInit {
     this.load();
   }
 
-  async load() {
-    this.isLoading.set(true);
-    try {
-      const res = await firstValueFrom(
-        this.userService.listUsers({
-          page: this.page(),
-          pageSize: this.pageSize(),
-          name: this.search().trim() || undefined,
-          status: this.status(),
-        }),
-      );
-      this.users.set(res.items);
-      this.total.set(res.total);
-      this.totalPages.set(Math.max(1, res.totalPages));
-      this.page.set(res.page);
-    } finally {
-      this.isLoading.set(false);
-    }
+  load() {
+    return this.list.load();
   }
 
   onSearchChange(value: string) {
@@ -114,22 +115,24 @@ export class Management implements OnInit {
   async openDetails(user: UserData) {
     this.selected.set(user);
     if (!user.id) return;
-    this.isLoadingDetails.set(true);
-    try {
-      const detail = await firstValueFrom(this.userService.findUserById(user.id));
-      // Se o modal já foi fechado (ou trocado), o detalhe em voo não interessa.
-      if (this.selected()?.id === user.id) {
-        this.selected.set(detail);
-      }
-    } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-    } finally {
-      this.isLoadingDetails.set(false);
+    await this.loadDetail();
+  }
+
+  /** Busca o detalhe da Maestra aberta (também é o "Tentar novamente" do modal). */
+  async loadDetail() {
+    const id = this.selected()?.id;
+    if (!id) return;
+    await this.detail.load();
+    const detail = this.detail.data();
+    // Se o modal já foi fechado (ou trocado), o detalhe em voo não interessa.
+    if (detail && this.selected()?.id === id) {
+      this.selected.set(detail);
     }
   }
 
   closeDetails() {
     this.selected.set(null);
+    this.detail.reset();
   }
 
   startEdit() {
@@ -153,17 +156,16 @@ export class Management implements OnInit {
   async generateTempPassword(password: string) {
     const user = this.selected();
     if (!user?.id) return;
-    this.isLoadingDetails.set(true);
+    this.isActionRunning.set(true);
     try {
       await firstValueFrom(this.userService.setTempPassword(user.id, password));
-      // Recarrega o detalhe: a senha provisória agora aparece no lugar do botão.
-      const detail = await firstValueFrom(this.userService.findUserById(user.id));
-      this.selected.set(detail);
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
+      return; // erro de ação exibido pelo modal global (errorInterceptor)
     } finally {
-      this.isLoadingDetails.set(false);
+      this.isActionRunning.set(false);
     }
+    // Recarrega o detalhe: a senha provisória agora aparece no lugar do botão.
+    await this.loadDetail();
   }
 
   async disableUser() {
@@ -177,14 +179,15 @@ export class Management implements OnInit {
   private async runAction(action: (id: string) => Observable<unknown>) {
     const user = this.selected();
     if (!user?.id) return;
-    this.isLoading.set(true);
+    this.isActionRunning.set(true);
     try {
       await firstValueFrom(action(user.id));
       this.closeDetails();
       await this.load();
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-      this.isLoading.set(false);
+      // erro de ação exibido pelo modal global (errorInterceptor)
+    } finally {
+      this.isActionRunning.set(false);
     }
   }
 }

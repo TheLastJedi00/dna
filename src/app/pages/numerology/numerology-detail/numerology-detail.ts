@@ -1,12 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
 import { SupplyService } from '../../../core/services/supply.service';
 import { Topic } from '../../../core/models/supply.model';
 import { IntroCard } from '../../../shared/cards/intro-card/intro-card';
 import { ListsCardGrid } from '../../../shared/grid/lists-card-grid/lists-card-grid';
-import { Infinity } from '../../../shared/loading/infinity/infinity';
-import { HttpErrorResponse } from '@angular/common/http';
+import { loadState } from '../../../core/utils/load-state';
+import { fetchSupplyTopics } from '../../../core/utils/supply-topics';
+import { PillarLoad } from '../../../shared/feedback/pillar-load/pillar-load';
 
 interface ModuleConfig {
   title: string;
@@ -15,7 +15,7 @@ interface ModuleConfig {
 
 @Component({
   selector: 'app-numerology-detail',
-  imports: [IntroCard, ListsCardGrid, Infinity],
+  imports: [IntroCard, ListsCardGrid, PillarLoad],
   templateUrl: './numerology-detail.html',
   styleUrl: './numerology-detail.scss',
 })
@@ -26,9 +26,21 @@ export class NumerologyDetail implements OnInit {
   readonly userId = signal('');
   readonly moduleKey = signal('');
   readonly moduleTitle = signal('');
-  topics = signal<Topic[] | null>(null);
-  isLoading = signal(true);
-  error = signal<string | null>(null);
+  /** Módulo pedido na URL não existe (vira o estado vazio, sem requisição). */
+  private readonly unknownModule = signal(false);
+  private supplyModules: string[] = [];
+  /** Tópicos do supply: skeleton, erro com "Tentar novamente" ou vazio. */
+  readonly content = loadState(
+    () =>
+      fetchSupplyTopics(
+        this.supplyModules.map((m) => () => this.supplyService.getNumerologyModule(this.userId(), m)),
+      ),
+    { isEmpty: (topics) => topics.length === 0 },
+  );
+  readonly topics = computed(() => this.content.data());
+  readonly emptyMessage = computed(() =>
+    this.unknownModule() ? 'Módulo não encontrado.' : 'Conteúdo ainda não disponível.',
+  );
 
   private readonly MODULE_CONFIG: Record<string, ModuleConfig> = {
     'motivacao': { title: 'Motivação', supplyModules: ['motivacao'] },
@@ -73,35 +85,13 @@ export class NumerologyDetail implements OnInit {
 
     const config = this.MODULE_CONFIG[module];
     if (!config) {
-      this.error.set('Módulo não encontrado.');
-      this.isLoading.set(false);
+      this.unknownModule.set(true);
+      this.content.set([]);
       return;
     }
 
     this.moduleTitle.set(config.title);
-    await this.loadTopics(userId, config.supplyModules);
-  }
-
-  private async loadTopics(userId: string, supplyModules: string[]) {
-    const allTopics: Topic[] = [];
-
-    for (const supplyModule of supplyModules) {
-      try {
-        const supply = await firstValueFrom(
-          this.supplyService.getNumerologyModule(userId, supplyModule),
-        );
-        allTopics.push(...supply.topics);
-      } catch (e) {
-        console.error(`Erro ao carregar módulo ${supplyModule}:`, e);
-      }
-    }
-
-    if (allTopics.length > 0) {
-      this.topics.set(allTopics);
-    } else {
-      this.error.set('Conteúdo ainda não disponível.');
-    }
-
-    this.isLoading.set(false);
+    this.supplyModules = config.supplyModules;
+    await this.content.load();
   }
 }

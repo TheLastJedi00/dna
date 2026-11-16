@@ -67,17 +67,6 @@ export class UserService {
       );
   }
 
-  /** @deprecated Use `listUsers`. Mantido até o refactor da listagem (fase 6). */
-  getAllActiveUsers(
-    orderBy: string,
-    direction: string,
-    page?: number,
-  ): Observable<UserData[]> {
-    return this.listUsers({ orderBy, direction, page }).pipe(
-      map((res) => res.items),
-    );
-  }
-
   createMaestra(user: UserData) {
     return this.http.post<UserData>(`${this.api}/maestra`, user);
   }

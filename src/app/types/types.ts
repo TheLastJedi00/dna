@@ -9,7 +9,7 @@ export interface DecodedToken {
    * reload ou a uma URL digitada à mão.
    */
   mustChangePassword?: boolean;
-  name?: string;
+  // Sem `name`: a API não emite esse claim. O nome vem de `CurrentUserService`.
   exp?: number;
   iat?: number;
 }

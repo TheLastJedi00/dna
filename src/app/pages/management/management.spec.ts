@@ -69,7 +69,7 @@ describe('Management', () => {
 
     expect(component.selected()?.email).toBe('ana@dna.com');
     expect(component.selected()?.tempPassword).toBe('provisoria');
-    expect(component.isLoadingDetails()).toBeFalse();
+    expect(component.detail.isLoading()).toBeFalse();
   });
 
   it('gerar a senha temporária recarrega o detalhe e passa a exibi-la', async () => {

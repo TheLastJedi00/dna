@@ -11,7 +11,9 @@
     >
       <h1 class="text-primary font-merriweather break-words">{{ analyst().fullName }}</h1>
       <div class="text-black/70 py-3">
-        @if (analyst().email) {
+        @if (isLoadingDetails()) {
+          <app-skeleton width="80%" height="1.25rem" radius="0.375rem" />
+        } @else if (analyst().email) {
           <p class="break-all">{{ analyst().email }}</p>
         }
         <p class="text-sm">
@@ -20,7 +22,13 @@
       </div>
 
       @if (isLoadingDetails()) {
-        <app-infinity></app-infinity>
+        <div class="flex flex-col gap-2" role="status" aria-busy="true">
+          <span class="sr-only">Carregando credenciais…</span>
+          <app-skeleton width="50%" height="1rem" radius="0.375rem" />
+          <app-skeleton height="var(--control-min-height)" />
+        </div>
+      } @else if (detailsError()) {
+        <app-load-error [compact]="true" [message]="detailsError()!" (retry)="retryDetails.emit()" />
       } @else {
         <app-temp-password-form
           [mustChangePassword]="analyst().mustChangePassword ?? false"
@@ -35,7 +43,16 @@
       <section class="mt-3 border-t border-black/10 pt-3">
         <h2 class="text-sm font-semibold text-secondary">Maestras Vinculadas</h2>
         @if (isLoadingMaestras()) {
-          <app-infinity></app-infinity>
+          <div class="mt-2 flex flex-col gap-2" role="status" aria-busy="true">
+            <span class="sr-only">Carregando Maestras vinculadas…</span>
+            @for (i of [0, 1, 2]; track i) {
+              <app-skeleton height="2.25rem" radius="0.5rem" />
+            }
+          </div>
+        } @else if (maestrasError()) {
+          <div class="mt-2">
+            <app-load-error [compact]="true" [message]="maestrasError()!" (retry)="retryMaestras.emit()" />
+          </div>
         } @else if (maestras().length) {
           <ul class="mt-2 flex flex-col gap-2">
             @for (maestra of maestras(); track maestra.fullName) {
