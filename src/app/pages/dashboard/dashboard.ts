@@ -1,57 +1,23 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { PanelCard } from '../../shared/cards/panel-card/panel-card';
-import { LoginService } from '../../core/services/login.service';
-import { Router } from '@angular/router';
-import { UserRole } from '../../types/types';
-import { UserData } from '../../core/models/userdata.model';
-import { firstValueFrom } from 'rxjs';
-import { UserService } from '../../core/services/user.service';
-import { Infinity } from '../../shared/loading/infinity/infinity';
-import { HttpErrorResponse } from '@angular/common/http';
+import { CurrentUserService } from '../../core/services/current-user.service';
+import { Skeleton } from '../../shared/feedback/skeleton/skeleton';
+import { LoadError } from '../../shared/feedback/load-error/load-error';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [UserPanelHeader, UserPanelFooter, PanelCard, Infinity],
+  imports: [UserPanelHeader, UserPanelFooter, PanelCard, Skeleton, LoadError, NgTemplateOutlet],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-  private readonly loginService = inject(LoginService);
-  private readonly userService = inject(UserService);
-  private readonly router = inject(Router);
-  isLoading = signal(false);
-  userData = signal<UserData | null>(null);
-  roles = signal<UserRole[]>([]);
-  firstRole = computed(() => this.roles().find((r) => r === 'MANAGER' || r === 'ADMIN'));
+  /** Mesmo perfil do menu lateral — uma única chamada a `/users/me` por sessão. */
+  readonly currentUser = inject(CurrentUserService);
 
-  async ngOnInit() {
-    await this.getCurrentUserData();
-  }
-
-  isUser(): boolean {
-    return this.roles().includes('USER');
-  }
-
-  isAdminOrManager(): boolean {
-    return this.roles().includes('ADMIN') || this.roles().includes('MANAGER');
-  }
-
-  async getCurrentUserData() {
-    this.isLoading.set(true);
-    try {
-      const decoded = this.loginService.getDecodedToken();
-      if (!decoded) {
-        throw new HttpErrorResponse({ error: { message: 'Credenciais inválidas' } });
-      }
-      this.roles.set(decoded.roles);
-      const user = await firstValueFrom(this.userService.findMe(decoded.id));
-      this.userData.set(user);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
+  ngOnInit() {
+    this.currentUser.ensureLoaded();
   }
 }
