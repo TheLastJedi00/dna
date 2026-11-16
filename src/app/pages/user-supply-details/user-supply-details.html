@@ -9,15 +9,33 @@
         (click)="router.navigate(['dna-management'])"
       ></app-icon-text-button>
     </div>
-    <div>
-      <h2 class="text-primary text-xl">{{ userData()?.fullName }}</h2>
-      <p class="text-sm text-muted">
-        {{ maestraTerm() }} · {{ userData()?.birthPlace }}
-      </p>
-      @if (userData()?.businessArea) {
-        <p class="text-sm text-muted">{{ userData()?.businessArea }}</p>
+    @switch (user.status()) {
+      @case ('loading') {
+        <div class="flex flex-col gap-2" role="status" aria-busy="true">
+          <span class="sr-only">Carregando dados da Maestra…</span>
+          <app-skeleton width="min(18rem, 70%)" height="1.75rem" radius="0.375rem" />
+          <app-skeleton width="min(12rem, 50%)" height="1rem" radius="0.375rem" />
+        </div>
       }
-    </div>
+      @case ('error') {
+        <app-load-error
+          title="Não foi possível carregar os dados da Maestra"
+          [message]="user.error() ?? ''"
+          (retry)="user.load()"
+        />
+      }
+      @default {
+        <div>
+          <h2 class="text-primary text-xl">{{ userData()?.fullName }}</h2>
+          <p class="text-sm text-muted">
+            {{ maestraTerm() }} · {{ userData()?.birthPlace }}
+          </p>
+          @if (userData()?.businessArea) {
+            <p class="text-sm text-muted">{{ userData()?.businessArea }}</p>
+          }
+        </div>
+      }
+    }
   </section>
 
   <section
@@ -84,6 +102,3 @@
   <app-perfect-plain-trigger [maestraId]="maestraId()"></app-perfect-plain-trigger>
 </app-form-modal>
 
-@if (isLoading()) {
-  <app-infinity></app-infinity>
-}

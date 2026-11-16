@@ -4,10 +4,10 @@ import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-pan
 import { IconTextButton } from '../../shared/buttons/icon-text-button/icon-text-button';
 import { DashboardButton } from '../../shared/buttons/dashboard-button/dashboard-button';
 import { Router } from '@angular/router';
-import { Infinity } from '../../shared/loading/infinity/infinity';
 import { UserService } from '../../core/services/user.service';
-import { firstValueFrom } from 'rxjs';
-import { UserData } from '../../core/models/userdata.model';
+import { loadState } from '../../core/utils/load-state';
+import { Skeleton } from '../../shared/feedback/skeleton/skeleton';
+import { LoadError } from '../../shared/feedback/load-error/load-error';
 import { HumanDesignForm } from '../../shared/forms/human-design-form/human-design-form';
 import { NumerologyForm } from '../../shared/forms/numerology-form/numerology-form';
 import { AstrologyForm } from '../../shared/forms/astrology-form/astrology-form';
@@ -24,7 +24,8 @@ type PanelModal = 'human-design' | 'numerology' | 'astrology' | 'perfect-plain';
     UserPanelFooter,
     IconTextButton,
     DashboardButton,
-    Infinity,
+    Skeleton,
+    LoadError,
     FormModal,
     HumanDesignForm,
     NumerologyForm,
@@ -35,29 +36,20 @@ type PanelModal = 'human-design' | 'numerology' | 'astrology' | 'perfect-plain';
   styleUrl: './user-supply-details.scss',
 })
 export class UserSupplyDetails implements OnInit {
-  async ngOnInit() {
-    await this.getUserById(this.maestraId());
-  }
   maestraId = input.required<string>();
   router = inject(Router);
   service = inject(UserService);
-  userData = signal<UserData | null>(null);
-  isLoading = signal(false);
+
+  /** Cabeçalho da Maestra: skeleton enquanto carrega, erro inline se falhar. */
+  readonly user = loadState(() => this.service.findUserById(this.maestraId()));
+  readonly userData = computed(() => this.user.data());
 
   /** "Maestra"/"Maestro" conforme o pronome escolhido no cadastro. */
   readonly maestraTerm = computed(() => maestraLabel(this.userData()?.pronoun));
 
   readonly openModal = signal<PanelModal | null>(null);
 
-  async getUserById(id: string) {
-    this.isLoading.set(true);
-    try {
-      const user = await firstValueFrom(this.service.findUserById(id));
-      this.userData.set(user);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
+  ngOnInit() {
+    this.user.load();
   }
 }
