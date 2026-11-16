@@ -54,6 +54,10 @@ export class CurrentUserService {
     return !!name && name === this.tokenEmail() && !this.state.data()?.fullName?.trim();
   });
 
+  constructor() {
+    this.loginService.sessionCleared$.subscribe(() => this.clear());
+  }
+
   /**
    * Garante o perfil da sessão atual. Não repete a chamada se já carregou (ou
    * está carregando) para o mesmo usuário; recarrega se o usuário mudou ou se

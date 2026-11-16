@@ -74,6 +74,16 @@ describe('CurrentUserService', () => {
     expect(service.displayName()).toBe('Maria Silva');
   });
 
+  it('limpa o perfil ao encerrar a sessão', async () => {
+    loginAs('u1', 'maria@x.com');
+    const p = service.ensureLoaded();
+    http.expectOne(me('u1')).flush({ fullName: 'Maria Silva' });
+    await p;
+    login.clearSession();
+    expect(service.state.status()).toBe('idle');
+    expect(service.displayName()).toBeNull();
+  });
+
   it('recarrega quando outro usuário entra', async () => {
     loginAs('u1', 'maria@x.com');
     let p = service.ensureLoaded();

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, finalize, shareReplay, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { DecodedToken, UserRole } from '../../types/types';
@@ -29,6 +29,14 @@ export class LoginService {
   private readonly apiAuth = this.baseUrl + '/auth';
 
   private refreshing$: Observable<TokenPair> | null = null;
+
+  private readonly sessionClearedSubject = new Subject<void>();
+  /**
+   * Emite quando a sessão é encerrada (logout, refresh negado). Quem guarda
+   * dados do usuário em memória (ex.: `CurrentUserService`) escuta para não
+   * vazar o perfil para o próximo login no mesmo navegador.
+   */
+  readonly sessionCleared$ = this.sessionClearedSubject.asObservable();
 
   login(email: string, password: string): Observable<TokenPair> {
     return this.http
@@ -82,6 +90,7 @@ export class LoginService {
   clearSession(): void {
     this.removeItem(ACCESS_TOKEN_KEY);
     this.removeItem(REFRESH_TOKEN_KEY);
+    this.sessionClearedSubject.next();
   }
 
   getAccessToken(): string | null {
