@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom, Observable } from 'rxjs';
@@ -11,6 +11,9 @@ import {
   AnalystFormValue,
 } from '../../shared/forms/analyst-form/analyst-form';
 import { AnalystDetailsModal } from '../../shared/modal/analyst-details-modal/analyst-details-modal';
+import { loadState } from '../../core/utils/load-state';
+import { SkeletonList } from '../../shared/feedback/skeleton-list/skeleton-list';
+import { LoadError } from '../../shared/feedback/load-error/load-error';
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { AnalystService } from '../../core/services/analyst.service';
 import { AnalystData, LinkedMaestra } from '../../core/models/analyst.model';
@@ -32,6 +35,8 @@ import { UserStatusFilter } from '../../core/models/userdata.model';
     AnalystForm,
     AnalystDetailsModal,
     Infinity,
+    SkeletonList,
+    LoadError,
     FormsModule,
   ],
   templateUrl: './analysts-management.html',
@@ -40,12 +45,22 @@ export class AnalystsManagement implements OnInit {
   readonly router = inject(Router);
   private readonly analystService = inject(AnalystService);
 
-  analysts = signal<AnalystData[]>([]);
-  isLoading = signal(false);
-  total = signal(0);
+  /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */
+  readonly list = loadState(() =>
+    this.analystService.listAnalysts({
+      page: this.page(),
+      pageSize: this.pageSize(),
+      name: this.search().trim() || undefined,
+      status: this.status(),
+    }),
+  );
+  readonly analysts = computed(() => this.list.data()?.items ?? []);
+  readonly total = computed(() => this.list.data()?.total ?? 0);
+  readonly totalPages = computed(() => Math.max(1, this.list.data()?.totalPages ?? 1));
   page = signal(1);
   pageSize = signal(9);
-  totalPages = signal(1);
+  /** Ação em curso (criar/editar/desativar/reativar/senha): overlay de tela cheia. */
+  isActionRunning = signal(false);
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
@@ -65,24 +80,8 @@ export class AnalystsManagement implements OnInit {
     this.load();
   }
 
-  async load() {
-    this.isLoading.set(true);
-    try {
-      const res = await firstValueFrom(
-        this.analystService.listAnalysts({
-          page: this.page(),
-          pageSize: this.pageSize(),
-          name: this.search().trim() || undefined,
-          status: this.status(),
-        }),
-      );
-      this.analysts.set(res.items);
-      this.total.set(res.total);
-      this.totalPages.set(Math.max(1, res.totalPages));
-      this.page.set(res.page);
-    } finally {
-      this.isLoading.set(false);
-    }
+  load() {
+    return this.list.load();
   }
 
   onSearchChange(value: string) {
@@ -177,7 +176,7 @@ export class AnalystsManagement implements OnInit {
   /** Um único ponto de escrita: cria ou edita conforme o modo do form. */
   async onFormSaved(value: AnalystFormValue) {
     const editing = this.editing();
-    this.isLoading.set(true);
+    this.isActionRunning.set(true);
     try {
       if (editing) {
         await firstValueFrom(
@@ -191,8 +190,9 @@ export class AnalystsManagement implements OnInit {
       this.onFormClosed();
       await this.load();
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-      this.isLoading.set(false);
+      // erro de ação exibido pelo modal global (errorInterceptor)
+    } finally {
+      this.isActionRunning.set(false);
     }
   }
 
@@ -207,14 +207,15 @@ export class AnalystsManagement implements OnInit {
   private async runAction(action: (id: string) => Observable<unknown>) {
     const analyst = this.selected();
     if (!analyst?.id) return;
-    this.isLoading.set(true);
+    this.isActionRunning.set(true);
     try {
       await firstValueFrom(action(analyst.id));
       this.closeDetails();
       await this.load();
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-      this.isLoading.set(false);
+      // erro de ação exibido pelo modal global (errorInterceptor)
+    } finally {
+      this.isActionRunning.set(false);
     }
   }
 }

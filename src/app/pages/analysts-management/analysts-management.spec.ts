@@ -61,7 +61,26 @@ describe('AnalystsManagement', () => {
 
     expect(component.analysts().length).toBe(1);
     expect(component.total()).toBe(1);
-    expect(component.isLoading()).toBeFalse();
+    expect(component.list.status()).toBe('success');
+  });
+
+  it('falha na listagem mostra o erro inline com tentar novamente', async () => {
+    fixture.detectChanges();
+    http
+      .expectOne((r) => r.url === api && r.method === 'GET')
+      .flush(null, { status: 500, statusText: 'Server Error' });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('[role="alert"]')?.textContent).toContain('instabilidade');
+    const retry = [...el.querySelectorAll('button')].find((b) =>
+      b.textContent?.includes('Tentar novamente'),
+    )!;
+    retry.click();
+    flushList([{ id: 'a1', fullName: 'Ana', isActive: true }]);
+    await fixture.whenStable();
+    expect(component.analysts().length).toBe(1);
   });
 
   it('trocar o filtro de status volta para a página 1 e recarrega', async () => {
