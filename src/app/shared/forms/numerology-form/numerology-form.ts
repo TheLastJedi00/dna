@@ -118,7 +118,7 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    await this.getNumerologyData();
+    this.numerologyData.set(await firstValueFrom(this.numService.getByUserId(this.maestraId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -250,23 +250,9 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
         await firstValueFrom(this.numService.createNumerologyByUser(numData));
       }
       this.numForm.reset();
-      this.getDnaStatus();
-      this.getNumerologyData();
+      this.reload();
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async getNumerologyData() {
-    this.isLoading.set(true);
-    try {
-      this.numerologyData.set(
-        await firstValueFrom(this.numService.getByUserId(this.maestraId())),
-      );
-    } catch (e) {
-      console.error(e);
     } finally {
       this.isLoading.set(false);
     }

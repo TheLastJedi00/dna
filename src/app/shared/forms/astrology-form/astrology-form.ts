@@ -68,7 +68,7 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    await this.getAstrologyData();
+    this.astrologyData.set(await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -163,23 +163,9 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
         await firstValueFrom(this.astrologyService.createAstrologyByUser(astroData));
       }
       this.astroForm.reset();
-      this.getDnaStatus();
-      this.getAstrologyData();
+      this.reload();
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async getAstrologyData() {
-    this.isLoading.set(true);
-    try {
-      this.astrologyData.set(
-        await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())),
-      );
-    } catch (e) {
-      console.error(e);
     } finally {
       this.isLoading.set(false);
     }

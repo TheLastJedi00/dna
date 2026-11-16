@@ -129,7 +129,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    await this.getHumanDesignData();
+    this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -227,21 +227,9 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
         await firstValueFrom(this.hdService.createHumanDesignByUser(dhData));
       }
       this.dhForm.reset();
-      this.getDnaStatus();
-      this.getHumanDesignData();
+      this.reload();
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private async getHumanDesignData() {
-    this.isLoading.set(true);
-    try {
-      this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
-    } catch (e) {
-      console.error(e);
     } finally {
       this.isLoading.set(false);
     }

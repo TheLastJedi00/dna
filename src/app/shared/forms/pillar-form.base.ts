@@ -1,6 +1,8 @@
 import { inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { loadState } from '../../core/utils/load-state';
 import { DnaStatus } from '../../core/models/dna-status.model';
 import { DnaStatusService } from '../../core/services/dna-status.service';
 import { SupplyService } from '../../core/services/supply.service';
@@ -11,10 +13,16 @@ export type Pillar = 'astrology' | 'human-design' | 'numerology';
  * Lógica comum dos formulários de pilar (astrology/human-design/numerology):
  * carrega o status do DNA, checa/gera o supply e controla loading. Cada form
  * concreto informa o pilar, como checar o status e como carregar seus dados.
+ *
+ * Duas formas de "carregando", de propósito:
+ * - **leitura** (`initState`): skeleton no lugar do bloco e erro inline com
+ *   "Tentar novamente";
+ * - **ação** (`isLoading`: salvar, gerar análise): overlay de tela cheia.
  */
 export abstract class PillarFormBase {
   protected abstract readonly pillar: Pillar;
   protected abstract hasPillarData(status: DnaStatus | null): boolean;
+  /** Busca os dados do pilar. Deve **propagar** falhas (o `initState` as exibe). */
   protected abstract loadPillarData(): Promise<void>;
 
   protected readonly route = inject(ActivatedRoute);
@@ -23,6 +31,9 @@ export abstract class PillarFormBase {
   private readonly supplyService = inject(SupplyService);
 
   readonly maestraId = signal('');
+  /** Leitura inicial: status do DNA → (se cadastrado) dados do pilar + supply. */
+  readonly initState = loadState(() => this.fetchPillarState());
+  /** Ação em curso (salvar / gerar análise). */
   readonly isLoading = signal(false);
   readonly loadingMessage = signal<string | null>(null);
   readonly dnaStatus = signal<DnaStatus | null>(null);
@@ -53,41 +64,33 @@ export abstract class PillarFormBase {
 
   protected async initPillarForm(): Promise<void> {
     this.maestraId.set(this.route.snapshot.paramMap.get('maestraId') ?? '');
-    await this.getDnaStatus();
-    if (this.hasPillarData(this.dnaStatus())) {
-      await this.loadPillarData();
-      await this.checkSupplyByMaestraId();
-    }
+    await this.initState.load();
   }
 
-  async getDnaStatus(): Promise<void> {
-    this.isLoading.set(true);
-    try {
-      this.dnaStatus.set(
-        await firstValueFrom(
-          this.dnaStatusService.getStatusByUserId(this.maestraId()),
-        ),
-      );
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
-    }
+  /** Recarrega tudo (após salvar/gerar, ou no "Tentar novamente"). */
+  reload(): Promise<void> {
+    return this.initState.load();
   }
 
-  async checkSupplyByMaestraId(): Promise<void> {
-    this.isLoading.set(true);
-    try {
-      this.isSupplyCreated.set(
-        await firstValueFrom(
-          this.supplyService.isSupplyForThisUser(this.maestraId(), this.pillar),
-        ),
-      );
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading.set(false);
+  private async fetchPillarState(): Promise<true> {
+    const status = await firstValueFrom(
+      this.dnaStatusService.getStatusByUserId(this.maestraId()),
+    ).catch((e) => {
+      // Maestra recém-cadastrada ainda não tem status: nada preenchido.
+      if (e instanceof HttpErrorResponse && e.status === 404) return null;
+      throw e;
+    });
+    this.dnaStatus.set(status);
+    if (this.hasPillarData(status)) {
+      await Promise.all([this.loadPillarData(), this.fetchSupplyFlag()]);
     }
+    return true;
+  }
+
+  private async fetchSupplyFlag(): Promise<void> {
+    this.isSupplyCreated.set(
+      await firstValueFrom(this.supplyService.isSupplyForThisUser(this.maestraId(), this.pillar)),
+    );
   }
 
   async createAllSupply(): Promise<void> {
@@ -107,7 +110,7 @@ export abstract class PillarFormBase {
     } finally {
       this.isLoading.set(false);
       this.loadingMessage.set(null);
-      this.checkSupplyByMaestraId();
+      this.reload();
     }
   }
 }
