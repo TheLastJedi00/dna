@@ -1,50 +1,50 @@
 <section class="container mx-auto main-padding bg-white min-h-screen">
-  @defer (on viewport) {
-    @if (config(); as conf) {
-      <div animate.enter="slide-in">
-        <app-intro-card
-          [title]="conf.title"
-          [singleIntro]="conf.singleIntro ?? null"
-          [intro]="conf.arrayIntro ?? null"
-        ></app-intro-card>
-        
-        @if (conf.accordions) {
-          <div class="mt-4 flex flex-col gap-4">
-            @for (acc of conf.accordions; track acc.title) {
-              <app-vertical-accordion
-                [title]="acc.title"
-                contentClass="text-black/70"
-                [cardContent]="acc.content"
-                titleClass="text-title"
-              ></app-vertical-accordion>
-            }
-          </div>
-        }
+  @if (config(); as conf) {
+    <div animate.enter="slide-in">
+      <app-intro-card
+        [title]="conf.title"
+        [singleIntro]="conf.singleIntro ?? null"
+        [intro]="conf.arrayIntro ?? null"
+      ></app-intro-card>
 
-        @if (conf.paragraphsAfter) {
-          <div class="mt-4 grid gap-3 text-black/70">
-            @for (p of conf.paragraphsAfter; track $index) {
-              <p>{{ p }}</p>
-            }
-          </div>
-        }
-
-        <div class="mt-4">
-          <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
-        </div>
-      </div>
-    } @else {
-      @if (error()) {
-        <div class="p-8 text-center text-red-500 font-bold">
-          {{ error() }}
+      @if (conf.accordions) {
+        <div class="mt-4 flex flex-col gap-4">
+          @for (acc of conf.accordions; track acc.title) {
+            <app-vertical-accordion
+              [title]="acc.title"
+              contentClass="text-black/70"
+              [cardContent]="acc.content"
+              titleClass="text-title"
+            ></app-vertical-accordion>
+          }
         </div>
       }
-    }
-  } @placeholder {
-    <div class="h-[800px]"></div>
+
+      @if (conf.paragraphsAfter) {
+        <div class="mt-4 grid gap-3 text-black/70">
+          @for (p of conf.paragraphsAfter; track $index) {
+            <p>{{ p }}</p>
+          }
+        </div>
+      }
+    </div>
   }
 
-  @if (isLoading()) {
-    <app-infinity></app-infinity>
-  }
+  <!-- Só os tópicos dependem da API: o texto de introdução é fixo -->
+  <div class="mt-4">
+    <app-pillar-load
+      [status]="content.status()"
+      [error]="content.error()"
+      pillar="este conteúdo"
+      [emptyMessage]="emptyMessage()"
+      variant="detail"
+      [cards]="4"
+      cardHeight="10rem"
+      gridClass="grid-cols-1 md:grid-cols-2"
+      (retry)="content.load()"
+    />
+    @if (content.status() === 'success') {
+      <app-lists-card-grid [topics]="topics()"></app-lists-card-grid>
+    }
+  </div>
 </section>
