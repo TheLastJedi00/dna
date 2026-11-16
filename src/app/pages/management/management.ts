@@ -11,6 +11,9 @@ import { UserDetailsModal } from '../../shared/modal/user-details-modal/user-det
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { UserService } from '../../core/services/user.service';
 import { UserData, UserStatusFilter } from '../../core/models/userdata.model';
+import { loadState } from '../../core/utils/load-state';
+import { SkeletonList } from '../../shared/feedback/skeleton-list/skeleton-list';
+import { LoadError } from '../../shared/feedback/load-error/load-error';
 
 /**
  * Página smart de gestão de Maestras: dona do estado (lista, paginação, busca,
@@ -27,6 +30,8 @@ import { UserData, UserStatusFilter } from '../../core/models/userdata.model';
     NewUserForm,
     UserDetailsModal,
     Infinity,
+    SkeletonList,
+    LoadError,
     FormsModule,
   ],
   templateUrl: './management.html',
@@ -45,12 +50,21 @@ export class Management implements OnInit {
     this.type() === 'maestras' ? 'Gerir Maestras' : `Gerir de ${this.type()}`,
   );
 
-  users = signal<UserData[]>([]);
-  isLoading = signal(false);
-  total = signal(0);
+  /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */
+  readonly list = loadState(() =>
+    this.userService.listUsers({
+      page: this.page(),
+      pageSize: this.pageSize(),
+      name: this.search().trim() || undefined,
+      status: this.status(),
+    }),
+  );
+  readonly users = computed(() => this.list.data()?.items ?? []);
+  readonly totalPages = computed(() => Math.max(1, this.list.data()?.totalPages ?? 1));
   page = signal(1);
   pageSize = signal(9);
-  totalPages = signal(1);
+  /** Ação em curso (desativar/reativar/senha provisória): overlay de tela cheia. */
+  isActionRunning = signal(false);
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
@@ -65,24 +79,8 @@ export class Management implements OnInit {
     this.load();
   }
 
-  async load() {
-    this.isLoading.set(true);
-    try {
-      const res = await firstValueFrom(
-        this.userService.listUsers({
-          page: this.page(),
-          pageSize: this.pageSize(),
-          name: this.search().trim() || undefined,
-          status: this.status(),
-        }),
-      );
-      this.users.set(res.items);
-      this.total.set(res.total);
-      this.totalPages.set(Math.max(1, res.totalPages));
-      this.page.set(res.page);
-    } finally {
-      this.isLoading.set(false);
-    }
+  load() {
+    return this.list.load();
   }
 
   onSearchChange(value: string) {
@@ -177,14 +175,15 @@ export class Management implements OnInit {
   private async runAction(action: (id: string) => Observable<unknown>) {
     const user = this.selected();
     if (!user?.id) return;
-    this.isLoading.set(true);
+    this.isActionRunning.set(true);
     try {
       await firstValueFrom(action(user.id));
       this.closeDetails();
       await this.load();
     } catch {
-      // erro HTTP exibido pelo errorInterceptor global
-      this.isLoading.set(false);
+      // erro de ação exibido pelo modal global (errorInterceptor)
+    } finally {
+      this.isActionRunning.set(false);
     }
   }
 }
