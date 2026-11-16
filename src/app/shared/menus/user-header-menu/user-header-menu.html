@@ -20,8 +20,46 @@
           <span class="text-center font-merriweather text-sm w-full text-black/70"
             >DNA Empresária de:</span
           >
-          <h1 class="text-primary font-style-script text-6xl text-center mt-4 italic">Bárbara</h1>
-          <h2 class="font-style-script italic text-3xl text-secondary">Farias</h2>
+          @switch (currentUser.state.status()) {
+            @case ('error') {
+              <div class="mt-3">
+                <app-load-error
+                  [compact]="true"
+                  [message]="currentUser.state.error() ?? ''"
+                  (retry)="currentUser.reload()"
+                />
+              </div>
+            }
+            @case ('success') {
+              <ng-container *ngTemplateOutlet="name" />
+            }
+            @case ('empty') {
+              <ng-container *ngTemplateOutlet="name" />
+            }
+            @default {
+              <div class="flex flex-col items-center gap-2 mt-4" role="status" aria-busy="true">
+                <span class="sr-only">Carregando seu nome…</span>
+                <app-skeleton width="9rem" height="3.25rem" />
+                <app-skeleton width="6rem" height="1.75rem" />
+              </div>
+            }
+          }
+          <ng-template #name>
+            @if (currentUser.isEmailFallback()) {
+              <p class="text-primary font-merriweather text-base mt-4 break-all">
+                {{ currentUser.displayName() }}
+              </p>
+            } @else {
+              <h1 class="text-primary font-style-script text-6xl text-center mt-4 italic break-words">
+                {{ firstName() }}
+              </h1>
+              @if (restOfName()) {
+                <h2 class="font-style-script italic text-3xl text-secondary break-words">
+                  {{ restOfName() }}
+                </h2>
+              }
+            }
+          </ng-template>
         </div>
         @if (loginService.getUserRole()?.includes('USER')) {
           <div class="flex flex-col text-left">
