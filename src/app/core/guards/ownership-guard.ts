@@ -6,9 +6,10 @@ import { LoginService } from '../services/login.service';
  * Impede que um usuário acesse rotas de outro usuário. Compara o parâmetro
  * `:userId` (ou `:maestraId`) com o id do token. ADMIN/MANAGER passam sempre.
  */
-export const ownershipGuard: CanActivateFn = (route) => {
+export const ownershipGuard: CanActivateFn = async (route) => {
   const loginService = inject(LoginService);
   const router = inject(Router);
+  await loginService.whenReady();
 
   if (!loginService.isSessionValid()) {
     router.navigate(['/login']);

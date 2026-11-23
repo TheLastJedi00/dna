@@ -6,9 +6,10 @@ import { LoginService } from '../services/login.service';
  * Gestão de Analistas: só ADMIN e MANAGER. Espelha o `@Role(ADMIN, MANAGER)` do
  * AnalystsController — o Analista não alcança nenhuma rota de /analysts.
  */
-export const managerGuard: CanActivateFn = () => {
+export const managerGuard: CanActivateFn = async () => {
   const loginService = inject(LoginService);
   const router = inject(Router);
+  await loginService.whenReady();
   const roles = loginService.getUserRole();
 
   if (roles?.includes('ADMIN') || roles?.includes('MANAGER')) {
