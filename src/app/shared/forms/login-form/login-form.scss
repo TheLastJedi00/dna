@@ -29,3 +29,14 @@
 .loading-leave {
     animation: loading-out-animate 300ms ease-in forwards;
 }
+// Ação secundária em forma de link ("Esqueci minha senha", "Voltar para o login").
+// Alvo de toque de 36px mesmo parecendo texto.
+.link-button {
+  min-height: 2.25rem;
+  padding: 0 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

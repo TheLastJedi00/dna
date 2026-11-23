@@ -58,4 +58,47 @@ describe('LoginForm', () => {
     );
     expect(router.navigate).not.toHaveBeenCalled();
   });
+
+  describe('Esqueci minha senha', () => {
+    const openForgot = async () => {
+      fill('#login-email', 'ana@dna.com');
+      el().querySelector<HTMLButtonElement>('.link-button')!.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    };
+    const neutral = 'Se este e-mail estiver cadastrado';
+
+    it('abre com o e-mail do login e responde de forma neutra', async () => {
+      login.sendPasswordReset.and.resolveTo();
+      await openForgot();
+      expect(el().querySelector<HTMLInputElement>('#forgot-email')!.value).toBe('ana@dna.com');
+
+      await submit();
+
+      expect(login.sendPasswordReset).toHaveBeenCalledWith('ana@dna.com');
+      expect(el().querySelector('[role="status"]')?.textContent).toContain(neutral);
+    });
+
+    it('conta inexistente: mesma resposta neutra (não revela quem tem acesso)', async () => {
+      login.sendPasswordReset.and.rejectWith(
+        Object.assign(new Error('x'), { code: 'auth/user-not-found' }),
+      );
+      await openForgot();
+      await submit();
+
+      expect(el().querySelector('[role="status"]')?.textContent).toContain(neutral);
+      expect(el().querySelector('[role="alert"]')).toBeNull();
+    });
+
+    it('sem conexão: mostra o erro para a pessoa tentar de novo', async () => {
+      login.sendPasswordReset.and.rejectWith(
+        Object.assign(new Error('x'), { code: 'auth/network-request-failed' }),
+      );
+      await openForgot();
+      await submit();
+
+      expect(el().querySelector('[role="alert"]')?.textContent).toContain('Sem conexão');
+    });
+  });
 });
+
