@@ -84,10 +84,4 @@ export class UserService {
     return this.http.delete<UserData>(`${this.api}/${userId}`);
   }
 
-  /** Gera a senha provisória da Maestra (recuperação de acesso pelo painel). */
-  setTempPassword(userId: string, password: string) {
-    return this.http.patch<void>(`${this.api}/${userId}/temp-password`, {
-      password,
-    });
-  }
 }

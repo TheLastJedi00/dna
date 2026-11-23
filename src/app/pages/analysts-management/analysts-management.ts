@@ -63,6 +63,7 @@ export class AnalystsManagement implements OnInit {
   pageSize = signal(9);
   /** Ação em curso (criar/editar/desativar/reativar/senha): overlay de tela cheia. */
   isActionRunning = signal(false);
+  isResending = signal(false);
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
@@ -138,19 +139,16 @@ export class AnalystsManagement implements OnInit {
     }
   }
 
-  /** Gera a senha provisória e recarrega o detalhe para exibi-la. */
-  async generateTempPassword(password: string) {
-    const analyst = this.selected();
-    if (!analyst?.id) return;
-    this.isActionRunning.set(true);
+  /** Reenvia o convite "Defina sua senha" para o e-mail do detalhe (spec 010). */
+  async resendInvite() {
+    const email = this.selected()?.email;
+    if (!email) return;
+    this.isResending.set(true);
     try {
-      await firstValueFrom(this.analystService.setTempPassword(analyst.id, password));
-    } catch {
-      return; // erro de ação exibido pelo modal global (errorInterceptor)
+      await this.invite.send(email);
     } finally {
-      this.isActionRunning.set(false);
+      this.isResending.set(false);
     }
-    await this.loadDetail();
   }
 
   closeDetails() {

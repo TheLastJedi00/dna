@@ -114,7 +114,8 @@
     (disable)="disableUser()"
     (reactivate)="reactivateUser()"
     (openSupply)="openSupply()"
-    (generateTempPassword)="generateTempPassword($event)"
+    [isResending]="isResending()"
+    (resendInvite)="resendInvite()"
   ></app-user-details-modal>
 
   <!-- Edição: o mesmo form da criação, em modo prefill -->

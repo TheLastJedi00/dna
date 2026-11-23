@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
-import { TempPasswordForm } from '../../forms/temp-password-form/temp-password-form';
+import { AccessStatusCard } from '../../cards/access-status/access-status';
 import { Skeleton } from '../../feedback/skeleton/skeleton';
 import { LoadError } from '../../feedback/load-error/load-error';
 import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
@@ -16,7 +16,7 @@ import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
  */
 @Component({
   selector: 'app-analyst-details-modal',
-  imports: [IconTextButton, TempPasswordForm, Skeleton, LoadError],
+  imports: [IconTextButton, AccessStatusCard, Skeleton, LoadError],
   templateUrl: './analyst-details-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -34,7 +34,10 @@ export class AnalystDetailsModal {
   edit = output<void>();
   disable = output<void>();
   reactivate = output<void>();
-  generateTempPassword = output<string>();
+  /** Reenviar o convite "Defina sua senha" (spec 010). */
+  resendInvite = output<void>();
+  /** Reenvio em andamento. */
+  isResending = input<boolean>(false);
   retryDetails = output<void>();
   retryMaestras = output<void>();
 }
