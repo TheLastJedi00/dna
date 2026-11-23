@@ -4,7 +4,6 @@ import { Logo } from '../../logo/logo';
 import { LoginService } from '../../../core/services/login.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Infinity } from '../../loading/infinity/infinity';
 
@@ -31,7 +30,7 @@ export class LoginForm {
     this.isLoading.set(true);
     const form = this.loginForm.getRawValue()
     try {
-      await firstValueFrom(this.loginService.login(form.email, form.password));
+      await this.loginService.login(form.email, form.password);
       this.router.navigate(['/dashboard']);
     } catch (e) {
       if (e instanceof HttpErrorResponse) {

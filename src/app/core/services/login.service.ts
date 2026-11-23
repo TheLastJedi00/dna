@@ -1,162 +1,170 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { Observable, Subject, throwError } from 'rxjs';
-import { catchError, finalize, shareReplay, tap } from 'rxjs/operators';
-import { jwtDecode } from 'jwt-decode';
-import { DecodedToken, UserRole } from '../../types/types';
+import { inject, Injectable, signal } from '@angular/core';
+import { Subject } from 'rxjs';
+import type { User } from 'firebase/auth';
+import { FirebaseAuthClient } from '../firebase/firebase-auth.client';
+import { UserRole } from '../../types/types';
 
-interface TokenPair {
-  access_token: string;
-  refresh_token?: string;
-  /** Estado da senha no login; a fonte de verdade do bloqueio é o claim do token. */
-  mustChangePassword?: boolean;
+const KNOWN_ROLES: readonly UserRole[] = ['MANAGER', 'ADMIN', 'ANALYST', 'USER'];
+
+function toRoles(claim: unknown): UserRole[] {
+  if (!Array.isArray(claim)) return [];
+  return claim.filter((role): role is UserRole => KNOWN_ROLES.includes(role as UserRole));
 }
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
-
 /**
- * Dono único da sessão: guarda/limpa tokens, decodifica, valida expiração e
- * coordena o refresh (compartilhado entre requisições concorrentes).
+ * Dono único da sessão, agora sobre o **Firebase Auth** (spec 010). Mantém a
+ * API pública que o app já usava (`userId`, `getUserRole()`, `logout()`,
+ * `sessionCleared$`…) para limitar a mudança nos componentes.
+ *
+ * O Firebase guarda e renova os tokens sozinho; aqui ficam só os signals do
+ * usuário atual, das roles (custom claim `roles`) e do e-mail confirmado.
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class LoginService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiUrl;
-  private readonly apiAuth = this.baseUrl + '/auth';
+  private readonly firebase = inject(FirebaseAuthClient);
 
-  private refreshing$: Observable<TokenPair> | null = null;
+  private readonly userSignal = signal<User | null>(null);
+  private readonly rolesSignal = signal<UserRole[]>([]);
+  private readonly emailVerifiedSignal = signal(false);
+
+  readonly user = this.userSignal.asReadonly();
+  readonly roles = this.rolesSignal.asReadonly();
+  readonly emailVerified = this.emailVerifiedSignal.asReadonly();
 
   private readonly sessionClearedSubject = new Subject<void>();
   /**
-   * Emite quando a sessão é encerrada (logout, refresh negado). Quem guarda
+   * Emite quando a sessão é encerrada (logout, token recusado). Quem guarda
    * dados do usuário em memória (ex.: `CurrentUserService`) escuta para não
    * vazar o perfil para o próximo login no mesmo navegador.
    */
   readonly sessionCleared$ = this.sessionClearedSubject.asObservable();
 
-  login(email: string, password: string): Observable<TokenPair> {
-    return this.http
-      .post<TokenPair>(this.apiAuth, { email, password })
-      .pipe(tap((response) => this.storeTokens(response)));
+  /** Última aplicação de usuário em andamento (as claims chegam assíncronas). */
+  private applying: Promise<void> = Promise.resolve();
+  private readonly restored: Promise<void>;
+
+  constructor() {
+    this.firebase.onIdTokenChanged((user) => {
+      this.applying = this.applyUser(user);
+    });
+    this.restored = this.firebase.ready();
   }
 
-  /** Renova o par de tokens; compartilha a chamada em voo entre 401 concorrentes. */
-  refreshTokens(): Observable<TokenPair> {
-    if (this.refreshing$) {
-      return this.refreshing$;
-    }
-    const refresh_token = this.getRefreshToken();
-    if (!refresh_token) {
-      return throwError(() => new Error('Sem refresh token.'));
-    }
-    this.refreshing$ = this.http
-      .post<TokenPair>(this.apiAuth + '/refresh', { refresh_token })
-      .pipe(
-        tap((tokens) => this.storeTokens(tokens)),
-        catchError((err) => {
-          this.clearSession();
-          return throwError(() => err);
-        }),
-        finalize(() => (this.refreshing$ = null)),
-        shareReplay(1),
-      );
-    return this.refreshing$;
+  /**
+   * Resolve quando a sessão salva foi restaurada **e** as claims carregadas.
+   * Guards esperam por isto: no F5 o Firebase restaura a sessão de forma
+   * assíncrona, e decidir antes mandaria quem está logado para o login.
+   */
+  async whenReady(): Promise<void> {
+    await this.restored;
+    await this.applying;
   }
 
-  /** Revoga o refresh no backend (best-effort) e limpa a sessão local. */
-  logout(): void {
-    const refresh_token = this.getRefreshToken();
-    if (refresh_token) {
-      this.http
-        .post(this.apiAuth + '/logout', { refresh_token })
-        .subscribe({ error: () => undefined });
-    }
-    this.clearSession();
+  async login(email: string, password: string): Promise<void> {
+    const user = await this.firebase.signIn(email, password);
+    await this.applyUser(user);
   }
 
-  storeTokens(tokens: TokenPair): void {
-    if (tokens?.access_token) {
-      this.setItem(ACCESS_TOKEN_KEY, tokens.access_token);
-    }
-    if (tokens?.refresh_token) {
-      this.setItem(REFRESH_TOKEN_KEY, tokens.refresh_token);
-    }
+  /** Encerra a sessão no Firebase e limpa o estado local. */
+  async logout(): Promise<void> {
+    await this.firebase.signOut();
+    this.clearLocal();
   }
 
+  /** Versão síncrona do logout, para quando a API recusa o token. */
   clearSession(): void {
-    this.removeItem(ACCESS_TOKEN_KEY);
-    this.removeItem(REFRESH_TOKEN_KEY);
-    this.sessionClearedSubject.next();
+    void this.firebase.signOut();
+    this.clearLocal();
   }
 
-  getAccessToken(): string | null {
-    return this.getItem(ACCESS_TOKEN_KEY);
-  }
-
-  getRefreshToken(): string | null {
-    return this.getItem(REFRESH_TOKEN_KEY);
-  }
-
-  getDecodedToken(): DecodedToken | null {
-    const token = this.getAccessToken();
-    if (!token) return null;
-    try {
-      return jwtDecode<DecodedToken>(token);
-    } catch {
-      return null;
-    }
-  }
-
-  /** true se há token e ele ainda não expirou (claim `exp`). */
   isSessionValid(): boolean {
-    const decoded = this.getDecodedToken();
-    if (!decoded?.exp) return false;
-    return decoded.exp * 1000 > Date.now();
+    return this.userSignal() !== null;
   }
 
   getUserRole(): UserRole[] | null {
-    return this.getDecodedToken()?.roles ?? null;
+    return this.userSignal() ? this.rolesSignal() : null;
   }
 
-  /**
-   * true enquanto a senha em uso for provisória. Lido do **claim do token**, não
-   * de um estado em memória — é o que impede burlar a troca obrigatória com um
-   * F5 ou uma URL direta.
-   */
-  mustChangePassword(): boolean {
-    return this.getDecodedToken()?.mustChangePassword === true;
-  }
-
-  /**
-   * Define a senha definitiva. A API devolve um **par de tokens novo** (sem o
-   * claim de troca obrigatória) e ele é gravado aqui — sem isso o usuário
-   * continuaria preso na tela de troca com o token antigo.
-   */
-  changePassword(password: string): Observable<TokenPair> {
-    return this.http
-      .post<TokenPair>(this.apiAuth + '/change-password', { password })
-      .pipe(tap((tokens) => this.storeTokens(tokens)));
+  isEmailVerified(): boolean {
+    return this.emailVerifiedSignal();
   }
 
   get userId(): string {
-    return this.getDecodedToken()?.id ?? '';
+    return this.userSignal()?.uid ?? '';
   }
 
-  // --- storage SSR-safe ---
-  private getItem(key: string): string | null {
-    if (typeof localStorage === 'undefined') return null;
-    return localStorage.getItem(key);
+  get email(): string {
+    return this.userSignal()?.email ?? '';
   }
-  private setItem(key: string, value: string): void {
-    if (typeof localStorage === 'undefined') return;
-    localStorage.setItem(key, value);
+
+  /** ID token para o header Authorization. `forceRefresh` pede um novo ao Firebase. */
+  async getIdToken(forceRefresh = false): Promise<string | null> {
+    const user = this.firebase.currentUser;
+    return user ? this.firebase.getIdToken(user, forceRefresh) : null;
   }
-  private removeItem(key: string): void {
-    if (typeof localStorage === 'undefined') return;
-    localStorage.removeItem(key);
+
+  /** "Esqueci minha senha" e convite: o Firebase não revela se o e-mail existe. */
+  sendPasswordReset(email: string): Promise<void> {
+    return this.firebase.sendPasswordReset(email);
+  }
+
+  async sendEmailVerification(): Promise<void> {
+    await this.firebase.sendEmailVerification(this.requireUser());
+  }
+
+  /**
+   * "Já confirmei": recarrega o usuário e **renova o token** — o claim
+   * `email_verified` que a API lê só muda num token novo.
+   */
+  async refreshEmailVerification(): Promise<boolean> {
+    const user = this.requireUser();
+    await this.firebase.reload(user);
+    await this.firebase.getIdToken(user, true);
+    await this.applyUser(user);
+    return this.emailVerifiedSignal();
+  }
+
+  /** Pede a senha de novo (necessário para trocar senha/e-mail e excluir a conta). */
+  reauthenticate(password: string): Promise<void> {
+    return this.firebase.reauthenticate(this.requireUser(), password);
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const user = this.requireUser();
+    await this.firebase.reauthenticate(user, currentPassword);
+    await this.firebase.updatePassword(user, newPassword);
+  }
+
+  /** Envia o link para o novo e-mail; a troca só acontece quando ele for aberto. */
+  async changeEmail(currentPassword: string, newEmail: string): Promise<void> {
+    const user = this.requireUser();
+    await this.firebase.reauthenticate(user, currentPassword);
+    await this.firebase.verifyBeforeUpdateEmail(user, newEmail);
+  }
+
+  private async applyUser(user: User | null): Promise<void> {
+    if (!user) {
+      this.userSignal.set(null);
+      this.rolesSignal.set([]);
+      this.emailVerifiedSignal.set(false);
+      return;
+    }
+    const token = await this.firebase.getIdTokenResult(user);
+    this.rolesSignal.set(toRoles(token.claims['roles']));
+    this.emailVerifiedSignal.set(user.emailVerified);
+    this.userSignal.set(user);
+  }
+
+  private clearLocal(): void {
+    this.userSignal.set(null);
+    this.rolesSignal.set([]);
+    this.emailVerifiedSignal.set(false);
+    this.sessionClearedSubject.next();
+  }
+
+  private requireUser(): User {
+    const user = this.firebase.currentUser ?? this.userSignal();
+    if (!user) throw new Error('Nenhuma sessão ativa.');
+    return user;
   }
 }
