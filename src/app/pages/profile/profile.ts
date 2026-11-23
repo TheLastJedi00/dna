@@ -8,6 +8,7 @@ import { LoginService } from '../../core/services/login.service';
 import { SettingSection } from './setting-section/setting-section';
 import { ChangePasswordForm } from './change-password-form/change-password-form';
 import { ChangeEmailForm } from './change-email-form/change-email-form';
+import { DeleteAccount } from './delete-account/delete-account';
 
 /**
  * Meu Perfil (spec 010): dados da conta, alterar senha, alterar e-mail e
@@ -24,6 +25,7 @@ import { ChangeEmailForm } from './change-email-form/change-email-form';
     SettingSection,
     ChangePasswordForm,
     ChangeEmailForm,
+    DeleteAccount,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
@@ -35,6 +37,7 @@ export class Profile implements OnInit {
 
   readonly passwordOpen = signal(false);
   readonly emailOpen = signal(false);
+  readonly deleteOpen = signal(false);
 
   /** Se o perfil não carregar, o e-mail da sessão ocupa o lugar do nome. */
   readonly displayName = computed(() =>
