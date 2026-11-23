@@ -16,11 +16,11 @@ export interface AnalystData {
 }
 
 /**
- * Maestra vinculada como o Manager a vê na supervisão: apenas nome e status.
+ * Usuário vinculado como o Manager o vê na supervisão: apenas nome e status.
  * O backend omite de propósito o id e os dados pessoais — o Manager supervisiona
  * a carteira do Analista, mas não acessa os dados das clientes dele.
  */
-export interface LinkedMaestra {
+export interface LinkedUser {
   fullName: string;
   isActive: boolean;
 }

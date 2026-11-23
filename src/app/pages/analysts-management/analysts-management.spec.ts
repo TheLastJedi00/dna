@@ -104,7 +104,7 @@ describe('AnalystsManagement', () => {
     expect(component.status()).toBe('inactive');
   });
 
-  it('abrir o detalhe busca as credenciais e as Maestras vinculadas', async () => {
+  it('abrir o detalhe busca as credenciais e os usuários vinculados', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
@@ -129,13 +129,13 @@ describe('AnalystsManagement', () => {
 
     expect(component.selected()?.email).toBe('ana@dna.com');
     expect(component.selected()?.accessStatus).toBe('email_unverified');
-    expect(component.linkedMaestras()).toEqual([
+    expect(component.linkedUsers()).toEqual([
       { fullName: 'Maria', isActive: true },
     ]);
-    expect(component.maestrasState.isLoading()).toBeFalse();
+    expect(component.linkedUsersState.isLoading()).toBeFalse();
   });
 
-  it('falha nas Maestras vinculadas não impede o detalhe', async () => {
+  it('falha nos usuários vinculados não impede o detalhe', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
@@ -149,7 +149,7 @@ describe('AnalystsManagement', () => {
 
     expect(component.selected()?.email).toBe('ana@dna.com');
     expect(component.detail.error()).toBeNull();
-    expect(component.maestrasState.error()).toContain('permissão');
+    expect(component.linkedUsersState.error()).toContain('permissão');
   });
 
   it('reenviar convite manda o "Defina sua senha" para o e-mail do detalhe', async () => {

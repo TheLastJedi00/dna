@@ -70,7 +70,7 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    this.astrologyData.set(await firstValueFrom(this.astrologyService.getByUserId(this.maestraId())));
+    this.astrologyData.set(await firstValueFrom(this.astrologyService.getByUserId(this.userId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -115,7 +115,7 @@ export class AstrologyForm extends PillarFormBase implements OnInit {
     const form = this.astroForm.getRawValue();
     try {
       const astroData: LeituraAstrologica = {
-        userId: this.maestraId(),
+        userId: this.userId(),
         triadeAstrologica: {
           sol: {
             signo: form.triade_sol_signo!,

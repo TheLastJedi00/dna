@@ -2,7 +2,7 @@
   <app-icon-text-button
     (click)="open.set(true)"
     icon="plus"
-    [text]="newMaestraTerm()"
+    [text]="newUserTerm()"
     class="w-full text-white bg-secondary text-center"
     align="center"
   ></app-icon-text-button>
@@ -21,7 +21,7 @@
       (ngSubmit)="submit()"
     >
       <h3 class="font-merriweather text-center text-secondary text-xl">
-        {{ isEditing() ? 'Editar' : 'Adicionar' }} {{ maestraTerm() }}
+        {{ isEditing() ? 'Editar' : 'Adicionar' }} {{ userTerm() }}
       </h3>
       <input type="text" placeholder="Nome Completo" formControlName="fullName" />
 

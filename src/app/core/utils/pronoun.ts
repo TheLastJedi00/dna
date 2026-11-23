@@ -13,7 +13,7 @@ export const DEFAULT_PRONOUN: Pronoun = 'feminino';
 const isMale = (pronoun?: Pronoun | null): boolean =>
   (pronoun ?? DEFAULT_PRONOUN) === 'masculino';
 
-/** "Usuária" / "Usuário" — o cliente na tela (spec 010: substitui "Maestra"). */
+/** "Usuária" / "Usuário" — o cliente na tela (spec 010: substitui o termo antigo). */
 export const userLabel = (pronoun?: Pronoun | null): string =>
   isMale(pronoun) ? 'Usuário' : 'Usuária';
 

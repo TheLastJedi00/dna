@@ -30,7 +30,7 @@ export abstract class PillarFormBase {
   private readonly dnaStatusService = inject(DnaStatusService);
   private readonly supplyService = inject(SupplyService);
 
-  readonly maestraId = signal('');
+  readonly userId = signal('');
   /** Leitura inicial: status do DNA → (se cadastrado) dados do pilar + supply. */
   readonly initState = loadState(() => this.fetchPillarState());
   /** Ação em curso (salvar / gerar análise). */
@@ -63,7 +63,7 @@ export abstract class PillarFormBase {
   protected abstract prefillForm(): void;
 
   protected async initPillarForm(): Promise<void> {
-    this.maestraId.set(this.route.snapshot.paramMap.get('userId') ?? '');
+    this.userId.set(this.route.snapshot.paramMap.get('userId') ?? '');
     await this.initState.load();
   }
 
@@ -74,9 +74,9 @@ export abstract class PillarFormBase {
 
   private async fetchPillarState(): Promise<true> {
     const status = await firstValueFrom(
-      this.dnaStatusService.getStatusByUserId(this.maestraId()),
+      this.dnaStatusService.getStatusByUserId(this.userId()),
     ).catch((e) => {
-      // Maestra recém-cadastrada ainda não tem status: nada preenchido.
+      // Usuário recém-cadastrado ainda não tem status: nada preenchido.
       if (e instanceof HttpErrorResponse && e.status === 404) return null;
       throw e;
     });
@@ -89,7 +89,7 @@ export abstract class PillarFormBase {
 
   private async fetchSupplyFlag(): Promise<void> {
     this.isSupplyCreated.set(
-      await firstValueFrom(this.supplyService.isSupplyForThisUser(this.maestraId(), this.pillar)),
+      await firstValueFrom(this.supplyService.isSupplyForThisUser(this.userId(), this.pillar)),
     );
   }
 
@@ -100,7 +100,7 @@ export abstract class PillarFormBase {
     );
     try {
       await firstValueFrom(
-        this.supplyService.createFullPillar(this.pillar, this.maestraId()),
+        this.supplyService.createFullPillar(this.pillar, this.userId()),
       );
       // O conteúdo acabou de ser refeito com os dados atuais: o aviso caduca.
       this.outdatedPillar.set(false);

@@ -41,12 +41,12 @@ export class UserSupplyDetails implements OnInit {
   router = inject(Router);
   service = inject(UserService);
 
-  /** Cabeçalho da Maestra: skeleton enquanto carrega, erro inline se falhar. */
+  /** Cabeçalho do usuário: skeleton enquanto carrega, erro inline se falhar. */
   readonly user = loadState(() => this.service.findUserById(this.userId()));
   readonly userData = computed(() => this.user.data());
 
-  /** "Maestra"/"Maestro" conforme o pronome escolhido no cadastro. */
-  readonly maestraTerm = computed(() => userLabel(this.userData()?.pronoun));
+  /** "Usuária"/"Usuário" conforme o pronome escolhido no cadastro. */
+  readonly userTerm = computed(() => userLabel(this.userData()?.pronoun));
 
   readonly openModal = signal<PanelModal | null>(null);
 

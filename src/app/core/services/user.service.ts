@@ -34,7 +34,7 @@ export class UserService {
   }
 
   /**
-   * Lista Maestras com paginação, busca por nome e filtro de status. O corpo é
+   * Lista usuários com paginação, busca por nome e filtro de status. O corpo é
    * o array da página; os metadados vêm nos headers X-* (expostos no CORS) e
    * são montados no PagedResult.
    */
@@ -69,7 +69,7 @@ export class UserService {
   }
 
   /** Cadastro por convite (spec 010): `POST /users` devolve o id criado. */
-  createMaestra(user: UserData) {
+  createUser(user: UserData) {
     return this.http.post<{ id: string }>(this.api, user);
   }
 

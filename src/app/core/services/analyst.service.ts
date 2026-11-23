@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AnalystData, LinkedMaestra } from '../models/analyst.model';
+import { AnalystData, LinkedUser } from '../models/analyst.model';
 import { PagedResult, UserStatusFilter } from '../models/userdata.model';
 
 export interface ListAnalystsParams {
@@ -14,7 +14,7 @@ export interface ListAnalystsParams {
 
 /**
  * Acesso a /analysts (rotas exclusivas de ADMIN/MANAGER). Mesma convenção da
- * listagem de Maestras: itens no corpo, metadados de paginação nos headers X-*.
+ * listagem de usuários: itens no corpo, metadados de paginação nos headers X-*.
  */
 @Injectable({
   providedIn: 'root',
@@ -79,7 +79,7 @@ export class AnalystService {
   }
 
   /** Supervisão: carteira do Analista (só nome + status, sem dados pessoais). */
-  findLinkedMaestras(analystId: string): Observable<LinkedMaestra[]> {
-    return this.http.get<LinkedMaestra[]>(`${this.api}/${analystId}/users`);
+  findLinkedUsers(analystId: string): Observable<LinkedUser[]> {
+    return this.http.get<LinkedUser[]>(`${this.api}/${analystId}/users`);
   }
 }

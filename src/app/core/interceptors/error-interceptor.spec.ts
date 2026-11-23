@@ -67,8 +67,8 @@ describe('errorInterceptor', () => {
     http.patch('/api/x', {}).subscribe({ error: () => undefined });
     ctrl
       .expectOne('/api/x')
-      .flush({ message: 'Maestra já está ativa.' }, { status: 409, statusText: 'Conflict' });
-    expect(errorService.show).toHaveBeenCalledWith('Maestra já está ativa.');
+      .flush({ message: 'Usuário já está ativo.' }, { status: 409, statusText: 'Conflict' });
+    expect(errorService.show).toHaveBeenCalledWith('Usuário já está ativo.');
   });
 
   it('ação com 5xx mostra o modal com texto claro, sem o detalhe interno', () => {

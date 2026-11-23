@@ -5,7 +5,6 @@ describe('rotas (spec 010: "usuários" no lugar de "maestras")', () => {
 
   it('detalhe do usuário na gestão é user-supply/:userId', () => {
     expect(paths).toContain('user-supply/:userId');
-    expect(paths).not.toContain('user-supply/:maestraId');
   });
 
   it('o endereço antigo management/maestras redireciona para management/users', () => {

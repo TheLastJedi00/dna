@@ -41,7 +41,7 @@ describe('PerfectPlainTrigger', () => {
       set: { template: '', imports: [] },
     });
     const fixture = TestBed.createComponent(PerfectPlainTrigger);
-    fixture.componentRef.setInput('maestraId', 'u1');
+    fixture.componentRef.setInput('userId', 'u1');
     fixture.detectChanges();
     await fixture.whenStable();
     // A checagem encadeia status → supply; deixa as microtasks assentarem.

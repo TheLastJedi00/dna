@@ -13,7 +13,7 @@ import { Skeleton } from '../../feedback/skeleton/skeleton';
 import { LoadError } from '../../feedback/load-error/load-error';
 
 /**
- * Detalhe da Maestra: dados, quem a cadastrou, credenciais e as ações.
+ * Detalhe do usuário: dados, quem o cadastrou, credenciais e as ações.
  *
  * Dumb: não injeta `UserService` nem `Router` — só emite a intenção. Quem
  * busca o detalhe (`GET /users/:id`, único lugar com o status do acesso) e

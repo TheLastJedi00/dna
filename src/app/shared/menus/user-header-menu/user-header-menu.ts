@@ -34,7 +34,7 @@ export class UserHeaderMenu implements OnInit {
 
   private readonly roles = computed(() => this.loginService.roles());
   readonly isClient = computed(() => this.roles().includes('USER'));
-  readonly canManageMaestras = computed(() => this.roles().some((role) => role !== 'USER'));
+  readonly canManageUsers = computed(() => this.roles().some((role) => role !== 'USER'));
   readonly canManageAnalysts = computed(() =>
     this.roles().some((role) => role === 'ADMIN' || role === 'MANAGER'),
   );
