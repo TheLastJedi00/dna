@@ -18,8 +18,8 @@ import { InviteService } from '../../../core/services/invite.service';
 import {
   DEFAULT_PRONOUN,
   Pronoun,
-  maestraLabel,
-  newMaestraLabel,
+  userLabel,
+  newUserLabel,
 } from '../../../core/utils/pronoun';
 
 /**
@@ -58,8 +58,8 @@ export class NewUserForm {
    */
   readonly pronoun = signal<Pronoun>(DEFAULT_PRONOUN);
   /** Termos da UI que acompanham o toggle. */
-  readonly maestraTerm = computed(() => maestraLabel(this.pronoun()));
-  readonly newMaestraTerm = computed(() => newMaestraLabel(this.pronoun()));
+  readonly maestraTerm = computed(() => userLabel(this.pronoun()));
+  readonly newMaestraTerm = computed(() => newUserLabel(this.pronoun()));
 
   setPronoun(pronoun: Pronoun) {
     this.pronoun.set(pronoun);

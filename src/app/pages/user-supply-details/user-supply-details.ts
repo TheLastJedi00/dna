@@ -13,7 +13,7 @@ import { NumerologyForm } from '../../shared/forms/numerology-form/numerology-fo
 import { AstrologyForm } from '../../shared/forms/astrology-form/astrology-form';
 import { PerfectPlainTrigger } from '../../shared/perfect-plain-trigger/perfect-plain-trigger';
 import { FormModal } from '../../shared/modal/form-modal/form-modal';
-import { maestraLabel } from '../../core/utils/pronoun';
+import { userLabel } from '../../core/utils/pronoun';
 
 type PanelModal = 'human-design' | 'numerology' | 'astrology' | 'perfect-plain';
 
@@ -46,7 +46,7 @@ export class UserSupplyDetails implements OnInit {
   readonly userData = computed(() => this.user.data());
 
   /** "Maestra"/"Maestro" conforme o pronome escolhido no cadastro. */
-  readonly maestraTerm = computed(() => maestraLabel(this.userData()?.pronoun));
+  readonly maestraTerm = computed(() => userLabel(this.userData()?.pronoun));
 
   readonly openModal = signal<PanelModal | null>(null);
 
