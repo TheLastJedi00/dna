@@ -30,13 +30,11 @@
       } @else if (detailsError()) {
         <app-load-error [compact]="true" [message]="detailsError()!" (retry)="retryDetails.emit()" />
       } @else {
-        <app-temp-password-form
-          [mustChangePassword]="analyst().mustChangePassword ?? false"
-          [tempPassword]="analyst().tempPassword ?? null"
-          [expiresAt]="analyst().tempPasswordExpiresAt ?? null"
-          subject="o usuário"
-          (save)="generateTempPassword.emit($event)"
-        ></app-temp-password-form>
+        <app-access-status
+          [status]="analyst().accessStatus"
+          [resending]="isResending()"
+          (resend)="resendInvite.emit()"
+        />
       }
 
       <!-- Supervisão: só nome e status. Sem ações e sem link para o detalhe -->

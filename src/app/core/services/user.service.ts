@@ -67,8 +67,9 @@ export class UserService {
       );
   }
 
+  /** Cadastro por convite (spec 010): `POST /users` devolve o id criado. */
   createMaestra(user: UserData) {
-    return this.http.post<UserData>(`${this.api}/maestra`, user);
+    return this.http.post<{ id: string }>(this.api, user);
   }
 
   updateUser(userId: string, data: Partial<UserData>) {
@@ -83,10 +84,4 @@ export class UserService {
     return this.http.delete<UserData>(`${this.api}/${userId}`);
   }
 
-  /** Gera a senha provisória da Maestra (recuperação de acesso pelo painel). */
-  setTempPassword(userId: string, password: string) {
-    return this.http.patch<void>(`${this.api}/${userId}/temp-password`, {
-      password,
-    });
-  }
 }

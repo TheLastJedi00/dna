@@ -92,10 +92,10 @@ describe('AnalystService', () => {
     req.flush({});
   });
 
-  it('findLinkedMaestras chama GET /analysts/:id/maestras', () => {
+  it('findLinkedMaestras chama GET /analysts/:id/users', () => {
     let result: unknown;
     service.findLinkedMaestras('a1').subscribe((r) => (result = r));
-    const req = http.expectOne(`${api}/a1/maestras`);
+    const req = http.expectOne(`${api}/a1/users`);
     expect(req.request.method).toBe('GET');
     req.flush([{ fullName: 'Maria', isActive: true }]);
     expect(result).toEqual([{ fullName: 'Maria', isActive: true }]);

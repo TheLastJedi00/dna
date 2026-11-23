@@ -1,8 +1,9 @@
 import { UserRole } from '../../types/types';
+import { AccessStatus } from './userdata.model';
 
 /**
  * Analista: perfil sem mapa natal (não tem birthDate/birthTime/birthPlace) que
- * cadastra e acompanha as próprias Maestras. `login` só é enviado na criação.
+ * cadastra e acompanha os próprios usuários. Na criação vai só o `email` (convite).
  */
 export interface AnalystData {
   id?: string;
@@ -10,19 +11,8 @@ export interface AnalystData {
   email?: string | null;
   isActive?: boolean;
   roles?: UserRole[];
-  /** true enquanto a senha do Analista for provisória. Só vem no detalhe. */
-  mustChangePassword?: boolean;
-  /**
-   * Senha provisória em texto plano, para o gestor repassar. Só vem no detalhe,
-   * e some (`null`) assim que o Analista define a senha dele.
-   */
-  tempPassword?: string | null;
-  /** Até quando a senha provisória vale (ISO 8601). Vence em 72h. */
-  tempPasswordExpiresAt?: string | null;
-  login?: {
-    email?: string;
-    password?: string;
-  };
+  /** Status do acesso. Só vem no detalhe; `null` se não há conta de acesso. */
+  accessStatus?: AccessStatus | null;
 }
 
 /**

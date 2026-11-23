@@ -6,6 +6,7 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { InviteService } from '../../core/services/invite.service';
 
 import { Management } from './management';
 import { environment } from '../../../environments/environment';
@@ -24,7 +25,10 @@ describe('Management', () => {
   /** Esvazia a fila de microtasks entre uma mutação e a recarga que a segue. */
   const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
 
+  let invite: { send: jasmine.Spy };
+
   beforeEach(async () => {
+    invite = { send: jasmine.createSpy('send').and.resolveTo(true) };
     await TestBed.configureTestingModule({
       imports: [Management],
       providers: [
@@ -32,6 +36,7 @@ describe('Management', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        { provide: InviteService, useValue: invite },
       ],
     }).compileComponents();
 
@@ -57,50 +62,34 @@ describe('Management', () => {
       birthTime: '00:00',
       birthPlace: 'Floripa-SC',
     });
-    // E-mail e senha provisória só existem no detalhe — nunca na listagem.
+    // E-mail e status do acesso só existem no detalhe — nunca na listagem.
     http.expectOne(`${api}/u1`).flush({
       id: 'u1',
       fullName: 'Ana',
       email: 'ana@dna.com',
-      mustChangePassword: true,
-      tempPassword: 'provisoria',
+      accessStatus: 'invite_pending',
     });
     await promise;
 
     expect(component.selected()?.email).toBe('ana@dna.com');
-    expect(component.selected()?.tempPassword).toBe('provisoria');
+    expect(component.selected()?.accessStatus).toBe('invite_pending');
     expect(component.detail.isLoading()).toBeFalse();
   });
 
-  it('gerar a senha temporária recarrega o detalhe e passa a exibi-la', async () => {
-    fixture.detectChanges();
-    flushList();
-    await fixture.whenStable();
-
+  it('reenviar convite manda o "Defina sua senha" para o e-mail do detalhe', async () => {
     component.selected.set({
       id: 'u1',
       fullName: 'Ana',
       birthDate: '2000-01-01',
       birthTime: '00:00',
       birthPlace: 'Floripa-SC',
+      email: 'ana@dna.com',
     });
 
-    const promise = component.generateTempPassword('nova123');
-    const patch = http.expectOne(`${api}/u1/temp-password`);
-    expect(patch.request.method).toBe('PATCH');
-    expect(patch.request.body).toEqual({ password: 'nova123' });
-    patch.flush(null);
-    await tick();
+    await component.resendInvite();
 
-    http.expectOne(`${api}/u1`).flush({
-      id: 'u1',
-      fullName: 'Ana',
-      mustChangePassword: true,
-      tempPassword: 'nova123',
-    });
-    await promise;
-
-    expect(component.selected()?.tempPassword).toBe('nova123');
+    expect(invite.send).toHaveBeenCalledWith('ana@dna.com');
+    expect(component.isResending()).toBeFalse();
   });
 
   it('desativar a Maestra selecionada fecha o detalhe e recarrega', async () => {
