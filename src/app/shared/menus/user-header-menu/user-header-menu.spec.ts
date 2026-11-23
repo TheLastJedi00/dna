@@ -76,5 +76,13 @@ describe('UserHeaderMenu', () => {
     http.expectOne(me).flush({ fullName: 'Maria Silva' });
     expect(text()).toContain('Meu perfil');
   });
+
+  it('menu do usuário: pilares e Meu perfil, sem gestão', () => {
+    http.expectOne(me).flush({ fullName: 'Maria Silva' });
+    for (const item of ['Início', 'Desenho Humano', 'Plano Perfeito', 'Meu perfil']) {
+      expect(text()).toContain(item);
+    }
+    expect(text()).not.toContain('Análises do DNA');
+  });
 });
 
