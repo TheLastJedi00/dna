@@ -18,7 +18,7 @@
       <div class="">
         <div class="text-center shadow-lg rounded-xl p-2 mb-5 gradient-primary-to-secondary-85">
           <span class="text-center font-merriweather text-sm w-full text-black/70"
-            >DNA Empresária de:</span
+            >Matriz DNA de:</span
           >
           @switch (currentUser.state.status()) {
             @case ('error') {
@@ -71,8 +71,8 @@
             <app-button variant="text" classes="text-secondary" text="Astrologia" (action)="go('astrology/' + loginService.userId)"></app-button>
             <app-button variant="text" classes="text-secondary" text="Plano Perfeito" (action)="go('perfect-plain/' + loginService.userId)"></app-button>
           }
-          @if (canManageMaestras()) {
-            <app-button variant="text" classes="text-secondary" text="Usuários" (action)="go('management/maestras')"></app-button>
+          @if (canManageUsers()) {
+            <app-button variant="text" classes="text-secondary" text="Usuários" (action)="go('management/users')"></app-button>
             <app-button variant="text" classes="text-secondary" text="Análises do DNA" (action)="go('dna-management')"></app-button>
           }
           @if (canManageAnalysts()) {

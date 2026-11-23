@@ -4,7 +4,7 @@ import { LoginService } from '../services/login.service';
 
 /**
  * Impede que um usuário acesse rotas de outro usuário. Compara o parâmetro
- * `:userId` (ou `:maestraId`) com o id do token. ADMIN/MANAGER passam sempre.
+ * `:userId` com o id do token. ADMIN/MANAGER passam sempre.
  */
 export const ownershipGuard: CanActivateFn = async (route) => {
   const loginService = inject(LoginService);
@@ -21,7 +21,7 @@ export const ownershipGuard: CanActivateFn = async (route) => {
     return true;
   }
 
-  const routeUserId = route.paramMap.get('userId') ?? route.paramMap.get('maestraId');
+  const routeUserId = route.paramMap.get('userId');
   if (routeUserId && routeUserId === loginService.userId) {
     return true;
   }

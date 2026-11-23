@@ -17,7 +17,7 @@ import { SkeletonList } from '../../shared/feedback/skeleton-list/skeleton-list'
 import { LoadError } from '../../shared/feedback/load-error/load-error';
 
 /**
- * Página smart de gestão de Maestras: dona do estado (lista, paginação, busca,
+ * Página smart de gestão de usuários: dona do estado (lista, paginação, busca,
  * filtro de status e o detalhe aberto) e única a falar com o UserService. Os
  * componentes de apresentação recebem dados prontos e devolvem intenções.
  */
@@ -45,11 +45,11 @@ export class Management implements OnInit {
   type = input.required<string>();
 
   /**
-   * "Gerir Maestras" para a listagem de Maestras (o "de" era um artefato do
+   * "Gerenciar usuários" para a listagem de usuários (o "de" era um artefato do
    * template genérico); demais tipos mantêm o formato antigo.
    */
   readonly pageTitle = computed(() =>
-    this.type() === 'maestras' ? 'Gerir Maestras' : `Gerir de ${this.type()}`,
+    this.type() === 'users' ? 'Gerenciar usuários' : `Gerir de ${this.type()}`,
   );
 
   /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */
@@ -71,9 +71,9 @@ export class Management implements OnInit {
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
-  /** Maestra aberta no modal (com o detalhe já carregado); null = fechado. */
+  /** Usuário aberto no modal (com o detalhe já carregado); null = fechado. */
   selected = signal<UserData | null>(null);
-  /** Detalhe da Maestra aberta (e-mail e senha provisória só vêm daqui). */
+  /** Detalhe do usuário aberto (e-mail e status do acesso só vêm daqui). */
   readonly detail = loadState(() => this.userService.findUserById(this.selected()!.id!), {
     initial: 'idle',
   });
@@ -121,7 +121,7 @@ export class Management implements OnInit {
     await this.loadDetail();
   }
 
-  /** Busca o detalhe da Maestra aberta (também é o "Tentar novamente" do modal). */
+  /** Busca o detalhe do usuário aberto (também é o "Tentar novamente" do modal). */
   async loadDetail() {
     const id = this.selected()?.id;
     if (!id) return;

@@ -34,7 +34,7 @@ export class PanelCard {
   readonly isClient = computed(() => this.roles().includes('USER'));
 
   /** Gestão de usuários: Analista também cadastra e acompanha os seus. */
-  readonly canManageMaestras = computed(() => this.roles().some((role) => role !== 'USER'));
+  readonly canManageUsers = computed(() => this.roles().some((role) => role !== 'USER'));
 
   /** Gestão de Analistas: só ADMIN e MANAGER (espelha o managerGuard). */
   readonly canManageAnalysts = computed(() =>

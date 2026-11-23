@@ -32,23 +32,23 @@ describe('AnalystDetailsModal', () => {
     expect(component).toBeTruthy();
   });
 
-  it('lista as Maestras vinculadas com nome e status', () => {
-    fixture.componentRef.setInput('maestras', [
+  it('lista os usuários vinculados com nome e status', () => {
+    fixture.componentRef.setInput('linkedUsers', [
       { fullName: 'Maria', isActive: true },
       { fullName: 'Joana', isActive: false },
     ]);
     fixture.detectChanges();
 
     const text: string = fixture.nativeElement.textContent;
-    expect(text).toContain('Maestras Vinculadas');
+    expect(text).toContain('Usuários vinculados');
     expect(text).toContain('Maria');
     expect(text).toContain('Joana');
     expect(text).toContain('Ativa');
     expect(text).toContain('Inativa');
   });
 
-  it('não expõe ação nem link para o detalhe das Maestras vinculadas', () => {
-    fixture.componentRef.setInput('maestras', [
+  it('não expõe ação nem link para o detalhe dos usuários vinculados', () => {
+    fixture.componentRef.setInput('linkedUsers', [
       { fullName: 'Maria', isActive: true },
     ]);
     fixture.detectChanges();
@@ -58,11 +58,11 @@ describe('AnalystDetailsModal', () => {
     expect(item.querySelector('a')).toBeNull();
   });
 
-  it('avisa quando o Analista ainda não cadastrou Maestras', () => {
-    fixture.componentRef.setInput('maestras', []);
+  it('avisa quando o Analista ainda não cadastrou usuários', () => {
+    fixture.componentRef.setInput('linkedUsers', []);
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain(
-      'Nenhuma Maestra cadastrada por este Analista',
+      'Nenhum usuário cadastrado por este Analista',
     );
   });
 

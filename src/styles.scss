@@ -99,7 +99,7 @@ $secondary-color: #826a3c;
   }
 }
 
-// "Exibir Senha" do cadastro de Maestra e de Analista. Global porque o
+// "Exibir Senha" do cadastro de usuário e de Analista. Global porque o
 // analyst-form não tem folha própria e usa a mesma classe.
 .show-pass {
   min-height: 2.25rem; // era 24px de altura

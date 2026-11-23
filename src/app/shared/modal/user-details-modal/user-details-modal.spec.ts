@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 import { UserDetailsModal } from './user-details-modal';
 import { UserData } from '../../../core/models/userdata.model';
 
-const MAESTRA: UserData = {
+const SAMPLE_USER: UserData = {
   id: 'u1',
   fullName: 'Ana',
   birthDate: '2000-01-01',
@@ -33,7 +33,7 @@ describe('UserDetailsModal', () => {
 
     fixture = TestBed.createComponent(UserDetailsModal);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('userData', MAESTRA);
+    fixture.componentRef.setInput('userData', SAMPLE_USER);
     fixture.componentRef.setInput('isOpen', true);
   });
 
@@ -42,7 +42,7 @@ describe('UserDetailsModal', () => {
     expect(component).toBeTruthy();
   });
 
-  it('maestra ativa mostra Editar e Desativar', () => {
+  it('usuário ativo mostra Editar e Desativar', () => {
     fixture.detectChanges();
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('Editar');
@@ -50,8 +50,8 @@ describe('UserDetailsModal', () => {
     expect(text).not.toContain('Reativar');
   });
 
-  it('maestra inativa mostra Reativar', () => {
-    fixture.componentRef.setInput('userData', { ...MAESTRA, isActive: false });
+  it('usuário inativo mostra Reativar', () => {
+    fixture.componentRef.setInput('userData', { ...SAMPLE_USER, isActive: false });
     fixture.detectChanges();
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('Reativar');
@@ -60,7 +60,7 @@ describe('UserDetailsModal', () => {
 
   describe('quem cadastrou', () => {
     const creatorText = (data: Partial<UserData>) => {
-      fixture.componentRef.setInput('userData', { ...MAESTRA, ...data });
+      fixture.componentRef.setInput('userData', { ...SAMPLE_USER, ...data });
       fixture.detectChanges();
       return component.creatorText();
     };

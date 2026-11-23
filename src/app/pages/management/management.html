@@ -14,7 +14,7 @@
       ></app-icon-text-button>
     </div>
 
-    <!-- Controles: nova Maestra, busca e filtro de status (empilham no mobile) -->
+    <!-- Controles: novo usuário, busca e filtro de status (empilham no mobile) -->
     <div class="mt-4 grid gap-3 md:grid-cols-[1fr_1.5fr_auto] md:items-center">
       <app-new-user-form (saved)="load()"></app-new-user-form>
 
@@ -63,7 +63,7 @@
         }
         @case ('error') {
           <app-load-error
-            title="Não foi possível carregar as Maestras"
+            title="Não foi possível carregar os usuários"
             [message]="list.error() ?? ''"
             (retry)="load()"
           />

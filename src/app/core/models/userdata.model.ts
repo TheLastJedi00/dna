@@ -19,7 +19,7 @@ export interface UserData {
   pronoun?: Pronoun;
   isActive?: boolean;
   roles?: UserRole[];
-  /** Id de quem cadastrou a Maestra (Analista ou Manager). */
+  /** Id de quem cadastrou o usuário (Analista ou Manager). */
   createdBy?: string;
   /** Nome do criador, resolvido pelo backend — o "Analista Responsável". */
   createdByName?: string | null;
@@ -29,7 +29,7 @@ export interface UserData {
   accessStatus?: AccessStatus | null;
 }
 
-/** Filtro de situação usado na listagem de Maestras. */
+/** Filtro de situação usado na listagem de usuários. */
 export type UserStatusFilter = 'active' | 'inactive' | 'all';
 
 /** Resultado paginado: itens no corpo + metadados lidos dos headers X-*. */

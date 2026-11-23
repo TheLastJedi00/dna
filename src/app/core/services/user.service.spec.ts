@@ -86,7 +86,7 @@ describe('UserService', () => {
   it('cadastro por convite: POST /users devolve o id', () => {
     let created: { id: string } | undefined;
     service
-      .createMaestra({
+      .createUser({
         fullName: 'Ana',
         birthDate: '2000-01-01',
         birthTime: '10:00',

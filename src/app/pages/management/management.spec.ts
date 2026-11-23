@@ -43,14 +43,14 @@ describe('Management', () => {
     fixture = TestBed.createComponent(Management);
     component = fixture.componentInstance;
     http = TestBed.inject(HttpTestingController);
-    fixture.componentRef.setInput('type', 'maestras');
+    fixture.componentRef.setInput('type', 'users');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('abrir o detalhe busca as credenciais da Maestra', async () => {
+  it('abrir o detalhe busca as credenciais do usuário', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
@@ -92,7 +92,7 @@ describe('Management', () => {
     expect(component.isResending()).toBeFalse();
   });
 
-  it('desativar a Maestra selecionada fecha o detalhe e recarrega', async () => {
+  it('desativar o usuário selecionado fecha o detalhe e recarrega', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();

@@ -5,7 +5,7 @@
     }
     @case ('error') {
       <app-load-error
-        title="Não foi possível carregar as Maestras"
+        title="Não foi possível carregar os usuários"
         [message]="list.error() ?? ''"
         (retry)="list.load()"
       />
@@ -18,7 +18,7 @@
           [index]="$index + 1"
         ></app-user-supply-item>
       } @empty {
-        <p class="py-6 text-center text-muted">Nenhuma Maestra ativa encontrada.</p>
+        <p class="py-6 text-center text-muted">Nenhum usuário ativo encontrado.</p>
       }
     }
   }

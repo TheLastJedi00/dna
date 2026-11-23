@@ -12,14 +12,14 @@
     @switch (user.status()) {
       @case ('loading') {
         <div class="flex flex-col gap-2" role="status" aria-busy="true">
-          <span class="sr-only">Carregando dados da Maestra…</span>
+          <span class="sr-only">Carregando dados do usuário…</span>
           <app-skeleton width="min(18rem, 70%)" height="1.75rem" radius="0.375rem" />
           <app-skeleton width="min(12rem, 50%)" height="1rem" radius="0.375rem" />
         </div>
       }
       @case ('error') {
         <app-load-error
-          title="Não foi possível carregar os dados da Maestra"
+          title="Não foi possível carregar os dados do usuário"
           [message]="user.error() ?? ''"
           (retry)="user.load()"
         />
@@ -28,7 +28,7 @@
         <div>
           <h2 class="text-primary text-xl">{{ userData()?.fullName }}</h2>
           <p class="text-sm text-muted">
-            {{ maestraTerm() }} · {{ userData()?.birthPlace }}
+            {{ userTerm() }} · {{ userData()?.birthPlace }}
           </p>
           @if (userData()?.businessArea) {
             <p class="text-sm text-muted">{{ userData()?.businessArea }}</p>
@@ -99,6 +99,6 @@
   title="Plano Perfeito"
   (close)="openModal.set(null)"
 >
-  <app-perfect-plain-trigger [maestraId]="maestraId()"></app-perfect-plain-trigger>
+  <app-perfect-plain-trigger [userId]="userId()"></app-perfect-plain-trigger>
 </app-form-modal>
 

@@ -3,15 +3,15 @@ import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button'
 import { AccessStatusCard } from '../../cards/access-status/access-status';
 import { Skeleton } from '../../feedback/skeleton/skeleton';
 import { LoadError } from '../../feedback/load-error/load-error';
-import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
+import { AnalystData, LinkedUser } from '../../../core/models/analyst.model';
 
 /**
  * Detalhe do Analista: ações (editar/desativar/reativar) e supervisão da
- * carteira dele. A seção "Maestras Vinculadas" é só leitura — nome e status,
+ * carteira dele. A seção "Usuários vinculados" é só leitura — nome e status,
  * sem ação e sem link para o detalhe: o Manager supervisiona o trabalho do
  * Analista, mas não acessa os dados pessoais das clientes dele.
  *
- * Dumb: recebe as Maestras já carregadas e só emite a intenção das ações; a
+ * Dumb: recebe os usuários já carregados e só emite a intenção das ações; a
  * página smart chama o AnalystService.
  */
 @Component({
@@ -23,12 +23,12 @@ import { AnalystData, LinkedMaestra } from '../../../core/models/analyst.model';
 export class AnalystDetailsModal {
   analyst = input.required<AnalystData>();
   isOpen = input<boolean>(false);
-  maestras = input<LinkedMaestra[]>([]);
-  isLoadingMaestras = input<boolean>(false);
+  linkedUsers = input<LinkedUser[]>([]);
+  isLoadingLinkedUsers = input<boolean>(false);
   isLoadingDetails = input<boolean>(false);
   /** Falhas independentes: uma não esconde a outra parte do modal. */
   detailsError = input<string | null>(null);
-  maestrasError = input<string | null>(null);
+  linkedUsersError = input<string | null>(null);
 
   close = output<void>();
   edit = output<void>();
@@ -39,5 +39,5 @@ export class AnalystDetailsModal {
   /** Reenvio em andamento. */
   isResending = input<boolean>(false);
   retryDetails = output<void>();
-  retryMaestras = output<void>();
+  retryLinkedUsers = output<void>();
 }

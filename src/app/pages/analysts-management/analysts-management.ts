@@ -17,12 +17,12 @@ import { LoadError } from '../../shared/feedback/load-error/load-error';
 import { Infinity } from '../../shared/loading/infinity/infinity';
 import { InviteService } from '../../core/services/invite.service';
 import { AnalystService } from '../../core/services/analyst.service';
-import { AnalystData, LinkedMaestra } from '../../core/models/analyst.model';
+import { AnalystData, LinkedUser } from '../../core/models/analyst.model';
 import { UserStatusFilter } from '../../core/models/userdata.model';
 
 /**
  * Página smart de gestão de Analistas (ADMIN/MANAGER). Espelha a page de
- * Maestras: dona do estado (lista, busca, filtro de status e paginação) e única
+ * usuários: dona do estado (lista, busca, filtro de status e paginação) e única
  * a falar com o AnalystService — os componentes de apresentação recebem dados
  * prontos e devolvem intenções.
  */
@@ -74,11 +74,11 @@ export class AnalystsManagement implements OnInit {
     initial: 'idle',
   });
   /** Carteira do Analista aberto (supervisão), carregada sob demanda. */
-  readonly maestrasState = loadState(
-    () => this.analystService.findLinkedMaestras(this.selected()!.id!),
+  readonly linkedUsersState = loadState(
+    () => this.analystService.findLinkedUsers(this.selected()!.id!),
     { initial: 'idle' },
   );
-  readonly linkedMaestras = computed(() => this.maestrasState.data() ?? []);
+  readonly linkedUsers = computed(() => this.linkedUsersState.data() ?? []);
   /** Analista em edição; null = o form está em modo criação. */
   editing = signal<AnalystData | null>(null);
   isFormOpen = signal(false);
@@ -123,7 +123,7 @@ export class AnalystsManagement implements OnInit {
   async openDetails(analyst: AnalystData) {
     this.selected.set(analyst);
     if (!analyst.id) return;
-    await Promise.all([this.loadDetail(), this.maestrasState.load()]);
+    await Promise.all([this.loadDetail(), this.linkedUsersState.load()]);
   }
 
   /** Busca o detalhe do Analista aberto (também é o "Tentar novamente"). */
@@ -154,7 +154,7 @@ export class AnalystsManagement implements OnInit {
   closeDetails() {
     this.selected.set(null);
     this.detail.reset();
-    this.maestrasState.reset();
+    this.linkedUsersState.reset();
   }
 
   /** Detalhes → Editar: fecha o modal e reabre o form já preenchido. */

@@ -18,13 +18,13 @@ import { InviteService } from '../../../core/services/invite.service';
 import {
   DEFAULT_PRONOUN,
   Pronoun,
-  maestraLabel,
-  newMaestraLabel,
+  userLabel,
+  newUserLabel,
 } from '../../../core/utils/pronoun';
 
 /**
- * Form de Maestra reutilizado para **criar** e **editar**. Sem `user` é criação
- * (com o gatilho "Nova Maestra"); com `user` é edição (prefill + updateUser,
+ * Form de usuário reutilizado para **criar** e **editar**. Sem `user` é criação
+ * (com o gatilho "Nova usuária"); com `user` é edição (prefill + updateUser,
  * sem os campos de acesso). O estado de abertura é controlável via `open`.
  */
 @Component({
@@ -38,9 +38,9 @@ export class NewUserForm {
   private readonly userService = inject(UserService);
   private readonly invite = inject(InviteService);
 
-  /** Maestra em edição; ausente => modo criação. */
+  /** Usuário em edição; ausente => modo criação. */
   user = input<UserData | null>(null);
-  /** Exibe o botão-gatilho "Nova Maestra" (criação). */
+  /** Exibe o botão-gatilho "Nova usuária" (criação). */
   showTrigger = input<boolean>(true);
   /** Estado de abertura do modal (controlável pelo pai). */
   open = model<boolean>(false);
@@ -58,8 +58,8 @@ export class NewUserForm {
    */
   readonly pronoun = signal<Pronoun>(DEFAULT_PRONOUN);
   /** Termos da UI que acompanham o toggle. */
-  readonly maestraTerm = computed(() => maestraLabel(this.pronoun()));
-  readonly newMaestraTerm = computed(() => newMaestraLabel(this.pronoun()));
+  readonly userTerm = computed(() => userLabel(this.pronoun()));
+  readonly newUserTerm = computed(() => newUserLabel(this.pronoun()));
 
   setPronoun(pronoun: Pronoun) {
     this.pronoun.set(pronoun);
@@ -140,7 +140,7 @@ export class NewUserForm {
       } else {
         // Convite (spec 010): sem senha; a pessoa recebe "Defina sua senha".
         const email = form.email.trim();
-        await firstValueFrom(this.userService.createMaestra({ ...profile, email }));
+        await firstValueFrom(this.userService.createUser({ ...profile, email }));
         await this.invite.send(email, { justCreated: true });
       }
       this.reset();
