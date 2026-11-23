@@ -382,3 +382,14 @@ $secondary-color: #826a3c;
   color: rgba(0, 0, 0, 0.75);
   font-size: 0.875rem;
 }
+
+// Aviso do convite por e-mail nos cadastros de usuário e de Analista (spec 010).
+.invite-note {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.75rem;
+  background: var(--color-surface-linen);
+  color: var(--color-primary);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}

@@ -80,18 +80,18 @@
       @if (!isEditing()) {
         <div class="grid gap-3">
           <hr class="opacity-20" />
-          <label>Acessos</label>
-          <input type="text" placeholder="email@email.com" formControlName="email" />
-          <div class="grid w-full">
-            <button
-              class="text-left font-sm mb-2 show-pass text-primary"
-              type="button"
-              (click)="togglePassVisibility()"
-            >
-              Exibir Senha
-            </button>
-            <input [type]="passwordInputType()" placeholder="Senha" formControlName="password" />
-          </div>
+          <label for="new-user-email">E-mail de acesso</label>
+          <input
+            id="new-user-email"
+            type="email"
+            autocomplete="off"
+            placeholder="email@email.com"
+            formControlName="email"
+          />
+          <p class="invite-note">
+            Não é preciso definir senha. A pessoa vai receber um e-mail para criar a própria
+            senha e entrar.
+          </p>
         </div>
       }
       <div class="grid grid-cols-1 gap-3 mt-1 sm:grid-cols-2">
@@ -99,7 +99,7 @@
           [disabled]="createUserForm.invalid"
           type="submit"
           icon="plus"
-          text="Salvar"
+          [text]="isEditing() ? 'Salvar' : 'Cadastrar e enviar convite'"
           class="w-full text-white bg-primary rounded-xl"
           align="center"
         ></app-icon-text-button>

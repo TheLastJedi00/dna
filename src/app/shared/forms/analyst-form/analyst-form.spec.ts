@@ -31,7 +31,7 @@ describe('AnalystForm', () => {
     expect(component).toBeTruthy();
   });
 
-  it('na criação, emite nome e credenciais', () => {
+  it('na criação, emite nome e e-mail (sem senha: o acesso vai por convite)', () => {
     fixture.componentRef.setInput('open', true);
     fixture.detectChanges();
 
@@ -39,16 +39,13 @@ describe('AnalystForm', () => {
     component.save.subscribe((v) => (saved = v));
 
     setValue('fullName', 'Ana');
-    setValue('email', 'ana@dna.com');
-    setValue('password', 'segredo');
+    setValue('email', ' ana@dna.com ');
     fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[formControlName="password"]')).toBeNull();
 
     fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
 
-    expect(saved).toEqual({
-      fullName: 'Ana',
-      login: { email: 'ana@dna.com', password: 'segredo' },
-    });
+    expect(saved).toEqual({ fullName: 'Ana', email: 'ana@dna.com' });
   });
 
   it('na edição, não pede acessos e emite só o nome', () => {

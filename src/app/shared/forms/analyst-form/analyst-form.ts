@@ -7,26 +7,22 @@ import {
   input,
   model,
   output,
-  signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button';
 import { AnalystData } from '../../../core/models/analyst.model';
 
-/** O que o form devolve à página; `login` só existe na criação. */
+/** O que o form devolve à página; `email` só existe na criação (convite). */
 export interface AnalystFormValue {
   fullName: string;
-  login?: {
-    email: string;
-    password: string;
-  };
+  email?: string;
 }
 
 /**
  * Form de Analista, usado para **criar** e **editar**. Sem `analyst` é criação
- * (com o gatilho "Novo Analista") e pede as credenciais de acesso; com
- * `analyst` é edição e só o nome é editável — e-mail e senha vivem no documento
- * `auth` e não são alteráveis por aqui.
+ * (com o gatilho "Novo Analista") e pede o e-mail de acesso — sem senha: o
+ * acesso é definido pelo convite por e-mail (spec 010); com `analyst` é edição
+ * e só o nome é editável (o e-mail é do Firebase Auth).
  *
  * Dumb: emite `save` com o valor do formulário; quem chama o AnalystService é a
  * página smart (global-strategy §2.2).
@@ -51,12 +47,10 @@ export class AnalystForm {
   modalClosed = output<void>();
 
   isEditing = computed(() => !!this.analyst());
-  passwordInputType = signal<'password' | 'text'>('password');
 
   protected analystForm = this.fb.nonNullable.group({
     fullName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
   });
 
   constructor() {
@@ -70,22 +64,13 @@ export class AnalystForm {
 
   /** Na edição não há campos de acesso: os validadores deles saem do caminho. */
   private applyModeValidators() {
-    const { email, password } = this.analystForm.controls;
+    const { email } = this.analystForm.controls;
     if (this.isEditing()) {
       email.clearValidators();
-      password.clearValidators();
     } else {
       email.setValidators([Validators.required, Validators.email]);
-      password.setValidators([Validators.required]);
     }
     email.updateValueAndValidity({ emitEvent: false });
-    password.updateValueAndValidity({ emitEvent: false });
-  }
-
-  togglePassVisibility() {
-    this.passwordInputType.update((type) =>
-      type === 'password' ? 'text' : 'password',
-    );
   }
 
   submit() {
@@ -97,10 +82,7 @@ export class AnalystForm {
     this.save.emit(
       this.isEditing()
         ? { fullName: form.fullName }
-        : {
-            fullName: form.fullName,
-            login: { email: form.email, password: form.password },
-          },
+        : { fullName: form.fullName, email: form.email.trim() },
     );
     this.reset();
   }

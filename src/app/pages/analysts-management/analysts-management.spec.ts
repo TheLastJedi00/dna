@@ -6,6 +6,7 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { InviteService } from '../../core/services/invite.service';
 
 import { AnalystsManagement } from './analysts-management';
 import { environment } from '../../../environments/environment';
@@ -16,7 +17,10 @@ describe('AnalystsManagement', () => {
   let http: HttpTestingController;
   const api = `${environment.apiUrl}/analysts`;
 
+  let invite: { send: jasmine.Spy };
+
   beforeEach(async () => {
+    invite = { send: jasmine.createSpy('send').and.resolveTo(true) };
     await TestBed.configureTestingModule({
       imports: [AnalystsManagement],
       providers: [
@@ -24,6 +28,7 @@ describe('AnalystsManagement', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        { provide: InviteService, useValue: invite },
       ],
     }).compileComponents();
 
@@ -174,25 +179,20 @@ describe('AnalystsManagement', () => {
     expect(component.selected()?.tempPassword).toBe('nova123');
   });
 
-  it('salvar em modo criação chama POST e recarrega a lista', async () => {
+  it('salvar em modo criação chama POST, envia o convite e recarrega a lista', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
 
-    const promise = component.onFormSaved({
-      fullName: 'Ana',
-      login: { email: 'ana@dna.com', password: '123' },
-    });
+    const promise = component.onFormSaved({ fullName: 'Ana', email: 'ana@dna.com' });
     const post = http.expectOne((r) => r.url === api && r.method === 'POST');
-    expect(post.request.body).toEqual({
-      fullName: 'Ana',
-      login: { email: 'ana@dna.com', password: '123' },
-    });
-    post.flush({});
+    expect(post.request.body).toEqual({ fullName: 'Ana', email: 'ana@dna.com' });
+    post.flush({ id: 'a1' });
     await tick();
     flushList([{ id: 'a1', fullName: 'Ana', isActive: true }]);
     await promise;
 
+    expect(invite.send).toHaveBeenCalledWith('ana@dna.com', { justCreated: true });
     expect(component.isFormOpen()).toBeFalse();
     expect(component.analysts().length).toBe(1);
   });
