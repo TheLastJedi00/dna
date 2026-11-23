@@ -1,47 +1,19 @@
 <app-user-panel-header></app-user-panel-header>
-<main class="gradient-primary-to-secondary-85 pt-header min-h-[80vh]">
-  <section class="w-full flex flex-col items-center main-padding justify-center bg-white/50">
-    @switch (currentUser.state.status()) {
-      @case ('error') {
-        <div class="w-full max-w-md">
-          <app-load-error
-            title="Não foi possível carregar seu perfil"
-            [message]="currentUser.state.error() ?? ''"
-            (retry)="currentUser.reload()"
-          />
-        </div>
-      }
-      @case ('success') {
-        <ng-container [ngTemplateOutlet]="greeting" />
-      }
-      @case ('empty') {
-        <ng-container [ngTemplateOutlet]="greeting" />
-      }
-      @default {
-        <div class="flex items-end gap-3 h-[3.75rem]" role="status" aria-busy="true">
-          <span class="sr-only">Carregando seu perfil…</span>
-          <app-skeleton width="3rem" height="1.25rem" radius="0.375rem" />
-          <app-skeleton width="min(16rem, 60vw)" height="3rem" />
-        </div>
-      }
+<main class="pt-header">
+  <app-welcome-band greeting="Olá," [name]="displayName()" [nameIsEmail]="nameIsEmail()">
+    <p class="band-text">{{ subtitle() }}</p>
+    @if (roleBadge(); as role) {
+      <span class="role">{{ role }}</span>
     }
-    <span class="text-sm text-muted">BEM-VINDA DE VOLTA</span>
-  </section>
+    @if (loadFailed()) {
+      <button type="button" class="retry" (click)="currentUser.reload()">
+        Não foi possível carregar seu nome. Tentar novamente
+      </button>
+    }
+  </app-welcome-band>
   <app-panel-card></app-panel-card>
 </main>
 <app-user-panel-footer></app-user-panel-footer>
-
-<ng-template #greeting>
-  @if (currentUser.isEmailFallback()) {
-    <h1 class="text-primary font-merriweather text-2xl text-center break-all">
-      <span class="text-xl text-black/85">Olá,</span> {{ currentUser.displayName() }}
-    </h1>
-  } @else {
-    <h1 class="font-style-script italic text-6xl text-primary text-center">
-      <span class="text-xl text-black/85">Olá,</span> {{ currentUser.displayName() }}
-    </h1>
-  }
-</ng-template>
 
 @if (login.isSessionValid() && !login.emailVerified()) {
   <app-verify-email-modal />

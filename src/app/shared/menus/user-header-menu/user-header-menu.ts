@@ -32,7 +32,20 @@ export class UserHeaderMenu implements OnInit {
     this.currentUser.ensureLoaded();
   }
 
+  private readonly roles = computed(() => this.loginService.roles());
+  readonly isClient = computed(() => this.roles().includes('USER'));
+  readonly canManageMaestras = computed(() => this.roles().some((role) => role !== 'USER'));
+  readonly canManageAnalysts = computed(() =>
+    this.roles().some((role) => role === 'ADMIN' || role === 'MANAGER'),
+  );
+
   toggleMenu() {
     this.toggle = !this.toggle;
+  }
+
+  /** Navega e fecha o menu. */
+  go(path: string) {
+    this.toggle = false;
+    this.router.navigate([path]);
   }
 }
