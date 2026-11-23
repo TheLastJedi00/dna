@@ -393,3 +393,93 @@ $secondary-color: #826a3c;
   font-size: 0.86rem;
   line-height: 1.45;
 }
+
+// Formulários do Meu Perfil (spec 010): senha, e-mail e exclusão da conta.
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-width: 30rem;
+  padding: 0 1.25rem 1.35rem;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+}
+
+.settings-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.settings-msg {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.6rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  background: var(--color-surface-linen);
+  color: var(--color-primary);
+}
+
+.settings-msg-error {
+  background: rgba(179, 38, 30, 0.08);
+  color: var(--color-danger);
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-submit {
+  min-height: var(--control-min-height);
+  padding: var(--control-padding-y) 1.1rem;
+  border-radius: var(--control-radius);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #3d240f;
+  }
+
+  &:disabled {
+    background: var(--color-surface-disabled);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+}
+
+.settings-submit-danger {
+  background: var(--color-danger);
+
+  &:hover:not(:disabled) {
+    background: #921e18;
+  }
+
+  &:disabled {
+    background: rgba(179, 38, 30, 0.12);
+    color: rgba(179, 38, 30, 0.7);
+  }
+}
+
+.settings-cancel {
+  min-height: 2.25rem;
+  padding: 0 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

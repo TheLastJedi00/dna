@@ -1,4 +1,4 @@
-import { authErrorMessage, firebaseAuthCode } from './firebase-auth-error';
+import { authErrorMessage, firebaseAuthCode, reauthErrorMessage } from './firebase-auth-error';
 
 const err = (code: string) => Object.assign(new Error(code), { code });
 
@@ -26,5 +26,17 @@ describe('authErrorMessage', () => {
     expect(firebaseAuthCode(err('auth/x'))).toBe('auth/x');
     expect(firebaseAuthCode({ code: 42 })).toBeNull();
     expect(firebaseAuthCode('auth/x')).toBeNull();
+  });
+});
+
+describe('reauthErrorMessage (Meu Perfil)', () => {
+  it('senha atual errada é dita como tal', () => {
+    expect(reauthErrorMessage(err('auth/invalid-credential'), 'x')).toBe('Senha atual incorreta.');
+    expect(reauthErrorMessage(err('auth/wrong-password'), 'x')).toBe('Senha atual incorreta.');
+  });
+
+  it('demais erros seguem a tradução geral ou o texto informado', () => {
+    expect(reauthErrorMessage(err('auth/weak-password'), 'x')).toContain('6 caracteres');
+    expect(reauthErrorMessage(err('auth/desconhecido'), 'Falhou.')).toBe('Falhou.');
   });
 });

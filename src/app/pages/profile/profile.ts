@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserPanelHeader } from '../../shared/headers/user-panel-header/user-panel-header';
 import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-panel-footer';
 import { WelcomeBand } from '../../shared/headers/welcome-band/welcome-band';
 import { CurrentUserService } from '../../core/services/current-user.service';
 import { LoginService } from '../../core/services/login.service';
+import { SettingSection } from './setting-section/setting-section';
+import { ChangePasswordForm } from './change-password-form/change-password-form';
 
 /**
  * Meu Perfil (spec 010): dados da conta, alterar senha, alterar e-mail e
@@ -13,7 +15,14 @@ import { LoginService } from '../../core/services/login.service';
  */
 @Component({
   selector: 'app-profile',
-  imports: [UserPanelHeader, UserPanelFooter, WelcomeBand, RouterLink],
+  imports: [
+    UserPanelHeader,
+    UserPanelFooter,
+    WelcomeBand,
+    RouterLink,
+    SettingSection,
+    ChangePasswordForm,
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +30,8 @@ import { LoginService } from '../../core/services/login.service';
 export class Profile implements OnInit {
   readonly currentUser = inject(CurrentUserService);
   readonly login = inject(LoginService);
+
+  readonly passwordOpen = signal(false);
 
   /** Se o perfil não carregar, o e-mail da sessão ocupa o lugar do nome. */
   readonly displayName = computed(() =>

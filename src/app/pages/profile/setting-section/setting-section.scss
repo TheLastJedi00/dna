@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  border-top: 1px solid rgba(154, 139, 120, 0.3);
+}
+
+:host(:first-child) {
+  border-top: 0;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  padding: 1.15rem 1.25rem;
+
+  h3 {
+    margin: 0 0 0.2rem;
+    font-family: 'Merriweather', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+  }
+}
+
+:host(.danger) .head h3 {
+  color: var(--color-danger);
+}
+
+.toggle {
+  min-height: var(--control-min-height);
+  padding: var(--control-padding-y) var(--control-padding-x);
+  border: 1px solid var(--color-border);
+  border-radius: var(--control-radius);
+  background: #fff;
+  color: var(--color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-surface-disabled);
+  }
+}
+
+.toggle-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+
+  &:hover {
+    background: rgba(179, 38, 30, 0.06);
+  }
+}
+
+// Abre "no lugar": a altura cresce de 0 até o conteúdo.
+.body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+
+  &.is-open {
+    grid-template-rows: 1fr;
+  }
+}
+
+.body-inner {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body {
+    transition: none;
+  }
+}

@@ -31,3 +31,19 @@ export function authErrorMessage(e: unknown, fallback = 'Não foi possível entr
   const code = firebaseAuthCode(e);
   return (code && MESSAGES[code]) || fallback;
 }
+
+/** Erros de "senha atual" ao reautenticar no Meu Perfil. */
+const WRONG_CURRENT_PASSWORD = ['auth/invalid-credential', 'auth/wrong-password', 'auth/user-mismatch'];
+
+/**
+ * Mensagem para ações do Meu Perfil, que pedem a **senha atual**: aqui não há
+ * o que esconder (a pessoa já está logada), então a senha errada é dita como
+ * tal em vez de "E-mail ou senha incorretos".
+ */
+export function reauthErrorMessage(e: unknown, fallback: string): string {
+  const code = firebaseAuthCode(e);
+  if (code && WRONG_CURRENT_PASSWORD.includes(code)) {
+    return 'Senha atual incorreta.';
+  }
+  return authErrorMessage(e, fallback);
+}
