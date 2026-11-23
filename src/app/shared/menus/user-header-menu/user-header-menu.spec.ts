@@ -5,12 +5,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { UserHeaderMenu } from './user-header-menu';
 import { environment } from '../../../../environments/environment';
-
-function fakeJwt(payload: Record<string, unknown>): string {
-  const b64 = (o: unknown) =>
-    btoa(JSON.stringify(o)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  return `${b64({ alg: 'HS256' })}.${b64(payload)}.sig`;
-}
+import { LoginService } from '../../../core/services/login.service';
+import { FakeLoginService } from '../../../testing/fake-login-service';
 
 describe('UserHeaderMenu', () => {
   let fixture: ComponentFixture<UserHeaderMenu>;
@@ -18,11 +14,8 @@ describe('UserHeaderMenu', () => {
   const me = `${environment.apiUrl}/users/me/u1`;
 
   beforeEach(async () => {
-    localStorage.clear();
-    localStorage.setItem(
-      'access_token',
-      fakeJwt({ id: 'u1', email: 'maria@x.com', roles: ['USER'] }),
-    );
+    const login = new FakeLoginService();
+    login.loginAs('u1', 'maria@x.com');
     await TestBed.configureTestingModule({
       imports: [UserHeaderMenu],
       providers: [
@@ -30,6 +23,7 @@ describe('UserHeaderMenu', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        { provide: LoginService, useValue: login },
       ],
     }).compileComponents();
     http = TestBed.inject(HttpTestingController);
@@ -40,7 +34,6 @@ describe('UserHeaderMenu', () => {
 
   afterEach(() => {
     http.verify();
-    localStorage.clear();
   });
 
   const text = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
