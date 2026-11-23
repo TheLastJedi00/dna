@@ -124,6 +124,14 @@ export class LoginService {
     return this.emailVerifiedSignal();
   }
 
+  /**
+   * A API recusou com `EMAIL_NOT_VERIFIED` (403): o e-mail deixou de valer como
+   * confirmado (ex.: trocado). Reabre o popup de verificação no dashboard.
+   */
+  markEmailUnverified(): void {
+    this.emailVerifiedSignal.set(false);
+  }
+
   /** Pede a senha de novo (necessário para trocar senha/e-mail e excluir a conta). */
   reauthenticate(password: string): Promise<void> {
     return this.firebase.reauthenticate(this.requireUser(), password);

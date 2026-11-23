@@ -28,6 +28,9 @@ $secondary-color: #826a3c;
   --color-border: #9a8b78; //  3.3:1 sobre branco (não-texto)
   --color-surface-muted: #{color.scale($primary-color, $lightness: 85%)};
   --color-surface-disabled: #{color.scale($primary-color, $lightness: 95%)};
+  // "Linho": o creme do ouro velho (o mesmo tom do gradiente das telas). Fundo de
+  // avisos neutros e de ícones decorativos (spec 010).
+  --color-surface-linen: #{color.scale($secondary-color, $lightness: 85%)};
 
   // Espaçamento de controle: um único conjunto para input, select e botão, para
   // que os três tenham a mesma altura quando lado a lado. 2.75rem = 44px, o
