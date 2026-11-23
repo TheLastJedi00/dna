@@ -45,6 +45,21 @@ describe('PanelCard (corpo do dashboard)', () => {
     expect(router.navigate).toHaveBeenCalledWith(['numerology/u1']);
   });
 
+  it('Analista: usuários e análises, com descrição; sem Analistas', async () => {
+    await render(['ANALYST']);
+    expect(text()).toContain('Usuários');
+    expect(text()).toContain('Análises do DNA');
+    expect(text()).toContain('Cadastre, edite, envie convites');
+    expect(rowTitled('Analistas')).toBeUndefined();
+    expect(text()).not.toContain('Seus pilares');
+  });
+
+  it('Manager: também gerencia Analistas', async () => {
+    await render(['MANAGER']);
+    rowTitled('Analistas').click();
+    expect(router.navigate).toHaveBeenCalledWith(['analysts']);
+  });
+
   it('todas as roles chegam ao Meu perfil', async () => {
     await render(['ADMIN']);
     rowTitled('Meu perfil').click();

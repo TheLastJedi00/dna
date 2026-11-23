@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { Router } from '@angular/router';
 import { LoginService } from '../../../core/services/login.service';
 import { MapRow } from '../../list/map-row/map-row';
-import { DashboardButton } from '../../buttons/dashboard-button/dashboard-button';
 
 /** Imagens dos pilares (as mesmas das páginas de cada pilar). */
 export const PILLAR_IMAGES = {
@@ -20,7 +19,7 @@ export const PILLAR_IMAGES = {
  */
 @Component({
   selector: 'app-panel-card',
-  imports: [MapRow, DashboardButton],
+  imports: [MapRow],
   templateUrl: './panel-card.html',
   styleUrl: './panel-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

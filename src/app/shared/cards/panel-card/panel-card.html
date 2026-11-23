@@ -46,30 +46,37 @@
   }
 
   @if (canManageMaestras()) {
-    <section class="grid grid-cols-1 gap-3 md:grid-cols-3" [class.after-section]="isClient()">
-      <app-dashboard-button
-        (action)="go('management/maestras')"
-        icon="users"
-        title="Gerenciar Maestras"
-        subtitle=""
-        description=""
-      ></app-dashboard-button>
-      <app-dashboard-button
-        (action)="go('dna-management')"
-        icon="book"
-        title="Gerenciar Análises do DNA"
-        subtitle=""
-        description=""
-      ></app-dashboard-button>
-      @if (canManageAnalysts()) {
-        <app-dashboard-button
-          (action)="go('analysts')"
-          icon="user-circle"
-          title="Gerenciar Analistas do DNA"
-          subtitle=""
-          description=""
-        ></app-dashboard-button>
-      }
+    <section aria-labelledby="management-title" [class.after-section]="isClient()">
+      <h2 id="management-title" class="section-title">Gestão</h2>
+      <p class="section-lead">
+        @if (canManageAnalysts()) {
+          Usuários, análises do DNA e a equipe de Analistas.
+        } @else {
+          Os usuários que você cadastrou e as análises do DNA de cada um.
+        }
+      </p>
+      <div class="map">
+        <app-map-row
+          title="Usuários"
+          description="Cadastre, edite, envie convites e acompanhe o acesso de cada um."
+          icon="users"
+          (action)="go('management/maestras')"
+        />
+        <app-map-row
+          title="Análises do DNA"
+          description="Preencha os pilares e gere os conteúdos e o Plano Perfeito de cada usuário."
+          icon="book"
+          (action)="go('dna-management')"
+        />
+        @if (canManageAnalysts()) {
+          <app-map-row
+            title="Analistas"
+            description="Cadastre Analistas e veja quais usuários cada um acompanha."
+            icon="user-circle"
+            (action)="go('analysts')"
+          />
+        }
+      </div>
     </section>
   }
 
