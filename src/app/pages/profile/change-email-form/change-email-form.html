@@ -1,0 +1,44 @@
+<form class="settings-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  @if (sentTo(); as email) {
+    <p class="settings-msg" role="status">
+      Link enviado para <strong>{{ email }}</strong>. Abra o e-mail para confirmar a troca. Até lá,
+      continue entrando com {{ currentEmail }}.
+    </p>
+    <div class="settings-actions">
+      <button type="button" class="settings-cancel" (click)="cancel.emit()">Fechar</button>
+    </div>
+  } @else {
+    <div class="settings-field">
+      <label for="email-new">Novo e-mail</label>
+      <input id="email-new" type="email" autocomplete="email" formControlName="email" />
+    </div>
+    <div class="settings-field">
+      <label for="email-password">Senha atual</label>
+      <input
+        id="email-password"
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+        aria-describedby="email-password-hint"
+      />
+      <span id="email-password-hint" class="settings-hint">
+        Pedimos a senha para confirmar que é você.
+      </span>
+    </div>
+    <p class="settings-msg">
+      Vamos enviar um link para o novo endereço. O e-mail só muda quando você abrir esse link, e
+      então você entra de novo com o e-mail novo.
+    </p>
+
+    @if (error()) {
+      <p class="settings-msg settings-msg-error" role="alert">{{ error() }}</p>
+    }
+
+    <div class="settings-actions">
+      <button type="submit" class="settings-submit" [disabled]="saving()">
+        {{ saving() ? 'Enviando…' : 'Enviar link de confirmação' }}
+      </button>
+      <button type="button" class="settings-cancel" (click)="cancel.emit()">Cancelar</button>
+    </div>
+  }
+</form>

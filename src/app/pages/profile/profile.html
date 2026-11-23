@@ -32,6 +32,14 @@
       >
         <app-change-password-form (cancel)="passwordOpen.set(false)" />
       </app-setting-section>
+      <app-setting-section
+        heading="E-mail"
+        [description]="login.email"
+        actionLabel="Alterar e-mail"
+        [(open)]="emailOpen"
+      >
+        <app-change-email-form (cancel)="emailOpen.set(false)" />
+      </app-setting-section>
     </div>
   </div>
 </main>
