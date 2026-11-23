@@ -1,0 +1,71 @@
+<div class="scrim" (keydown.escape)="blockEscape($event)">
+  <section
+    class="dialog"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="verify-title"
+    aria-describedby="verify-desc"
+  >
+    <span class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+      </svg>
+    </span>
+    <h2 id="verify-title">Confirme seu e-mail para continuar</h2>
+    <p id="verify-desc">
+      Para proteger sua conta, precisamos confirmar que
+      <strong class="email">{{ email }}</strong> é seu. Envie o link, abra o e-mail e toque em
+      “Confirmar”. Depois, volte aqui.
+    </p>
+
+    @if (sent()) {
+      <p class="note" role="status">
+        Link enviado. Pode levar alguns minutos; confira também a caixa de spam.
+      </p>
+    }
+    @if (notYet()) {
+      <p class="note note-error" role="alert">
+        Ainda não encontramos a confirmação. Abra o link do e-mail e tente de novo.
+      </p>
+    }
+    @if (error()) {
+      <p class="note note-error" role="alert">{{ error() }}</p>
+    }
+
+    <div class="actions">
+      <button
+        #primary
+        type="button"
+        class="btn btn-primary"
+        data-test="send"
+        [disabled]="cooldown() > 0 || sending()"
+        (click)="send()"
+      >
+        @if (cooldown() > 0) {
+          Reenviar em {{ cooldown() }}s
+        } @else if (sent()) {
+          Reenviar e-mail
+        } @else {
+          Enviar e-mail de verificação
+        }
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost"
+        data-test="check"
+        [disabled]="checking()"
+        (click)="check()"
+      >
+        {{ checking() ? 'Verificando…' : 'Já confirmei' }}
+      </button>
+    </div>
+
+    <div class="foot">
+      <button type="button" class="link" data-test="fix-email" (click)="fixEmail()">
+        Corrigir e-mail
+      </button>
+      <button type="button" class="link" data-test="logout" (click)="logout()">Sair</button>
+    </div>
+  </section>
+</div>
