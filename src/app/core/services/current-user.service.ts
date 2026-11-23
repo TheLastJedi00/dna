@@ -91,6 +91,6 @@ export class CurrentUserService {
   }
 
   private tokenEmail(): string | null {
-    return this.loginService.getDecodedToken()?.email ?? null;
+    return this.loginService.email || null;
   }
 }

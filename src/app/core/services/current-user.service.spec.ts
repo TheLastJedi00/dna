@@ -5,36 +5,34 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { CurrentUserService } from './current-user.service';
 import { LoginService } from './login.service';
 import { environment } from '../../../environments/environment';
-
-function fakeJwt(payload: Record<string, unknown>): string {
-  const b64 = (o: unknown) =>
-    btoa(JSON.stringify(o)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  return `${b64({ alg: 'HS256' })}.${b64(payload)}.sig`;
-}
+import { FakeLoginService } from '../../testing/fake-login-service';
 
 describe('CurrentUserService', () => {
   let service: CurrentUserService;
-  let login: LoginService;
+  let login: FakeLoginService;
   let http: HttpTestingController;
   const me = (id: string) => `${environment.apiUrl}/users/me/${id}`;
 
   function loginAs(id: string, email: string) {
-    localStorage.setItem('access_token', fakeJwt({ id, email, roles: ['USER'] }));
+    login.loginAs(id, email);
   }
 
   beforeEach(() => {
-    localStorage.clear();
+    login = new FakeLoginService();
     TestBed.configureTestingModule({
-      providers: [provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: LoginService, useValue: login },
+      ],
     });
     service = TestBed.inject(CurrentUserService);
-    login = TestBed.inject(LoginService);
     http = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
     http.verify();
-    localStorage.clear();
   });
 
   it('busca o perfil uma vez e expõe o nome real', async () => {

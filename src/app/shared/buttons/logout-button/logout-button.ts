@@ -13,8 +13,8 @@ export class LogoutButton {
   private readonly router = inject(Router);
   private readonly loginService = inject(LoginService);
 
-  logout() {
-    this.loginService.logout();
-    this.router.navigate(['login']);
+  async logout() {
+    await this.loginService.logout();
+    await this.router.navigate(['login']);
   }
 }

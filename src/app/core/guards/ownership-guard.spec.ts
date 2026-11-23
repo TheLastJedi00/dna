@@ -15,6 +15,7 @@ describe('ownershipGuard', () => {
     isSessionValid: () => boolean;
     getUserRole: () => string[];
     userId: string;
+    whenReady: () => Promise<void>;
   };
 
   const run = (userId: string) => {
@@ -28,7 +29,12 @@ describe('ownershipGuard', () => {
 
   beforeEach(() => {
     router = jasmine.createSpyObj('Router', ['navigate']);
-    login = { isSessionValid: () => true, getUserRole: () => [], userId: '' };
+    login = {
+      isSessionValid: () => true,
+      getUserRole: () => [],
+      userId: '',
+      whenReady: () => Promise.resolve(),
+    };
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
@@ -38,26 +44,26 @@ describe('ownershipGuard', () => {
     });
   });
 
-  it('permite o próprio usuário', () => {
+  it('permite o próprio usuário', async () => {
     login.userId = 'u1';
-    expect(run('u1')).toBeTrue();
+    expect(await run('u1')).toBeTrue();
   });
 
-  it('bloqueia outro usuário e redireciona ao dashboard', () => {
+  it('bloqueia outro usuário e redireciona ao dashboard', async () => {
     login.userId = 'u1';
-    expect(run('u2')).toBeFalse();
+    expect(await run('u2')).toBeFalse();
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 
-  it('permite ADMIN em qualquer userId', () => {
+  it('permite ADMIN em qualquer userId', async () => {
     login.getUserRole = () => ['ADMIN'];
     login.userId = 'admin';
-    expect(run('outro')).toBeTrue();
+    expect(await run('outro')).toBeTrue();
   });
 
-  it('sessão inválida vai para login', () => {
+  it('sessão inválida vai para login', async () => {
     login.isSessionValid = () => false;
-    expect(run('u1')).toBeFalse();
+    expect(await run('u1')).toBeFalse();
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

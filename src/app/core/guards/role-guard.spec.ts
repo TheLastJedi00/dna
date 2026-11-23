@@ -6,14 +6,17 @@ import { LoginService } from '../services/login.service';
 
 describe('roleGuard', () => {
   let router: jasmine.SpyObj<Router>;
-  let login: { getUserRole: () => string[] | null };
+  let login: {
+    getUserRole: () => string[] | null;
+    whenReady: () => Promise<void>;
+  };
 
   const run = () =>
     TestBed.runInInjectionContext(() => roleGuard({} as any, {} as any));
 
   beforeEach(() => {
     router = jasmine.createSpyObj('Router', ['navigate']);
-    login = { getUserRole: () => [] };
+    login = { getUserRole: () => [], whenReady: () => Promise.resolve() };
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
@@ -23,24 +26,24 @@ describe('roleGuard', () => {
     });
   });
 
-  it('permite ADMIN', () => {
+  it('permite ADMIN', async () => {
     login.getUserRole = () => ['ADMIN'];
-    expect(run()).toBeTrue();
+    expect(await run()).toBeTrue();
   });
 
-  it('permite MANAGER', () => {
+  it('permite MANAGER', async () => {
     login.getUserRole = () => ['MANAGER'];
-    expect(run()).toBeTrue();
+    expect(await run()).toBeTrue();
   });
 
-  it('bloqueia USER e redireciona', () => {
+  it('bloqueia USER e redireciona', async () => {
     login.getUserRole = () => ['USER'];
-    expect(run()).toBeFalse();
+    expect(await run()).toBeFalse();
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  it('não quebra com roles null', () => {
+  it('não quebra com roles null', async () => {
     login.getUserRole = () => null;
-    expect(run()).toBeFalse();
+    expect(await run()).toBeFalse();
   });
 });
