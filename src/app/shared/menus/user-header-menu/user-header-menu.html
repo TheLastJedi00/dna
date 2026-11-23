@@ -72,7 +72,7 @@
             <app-button variant="text" classes="text-secondary" text="Plano Perfeito" (action)="go('perfect-plain/' + loginService.userId)"></app-button>
           }
           @if (canManageMaestras()) {
-            <app-button variant="text" classes="text-secondary" text="Usuários" (action)="go('management/maestras')"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Usuários" (action)="go('management/users')"></app-button>
             <app-button variant="text" classes="text-secondary" text="Análises do DNA" (action)="go('dna-management')"></app-button>
           }
           @if (canManageAnalysts()) {

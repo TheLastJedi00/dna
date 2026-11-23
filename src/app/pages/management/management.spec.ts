@@ -43,7 +43,7 @@ describe('Management', () => {
     fixture = TestBed.createComponent(Management);
     component = fixture.componentInstance;
     http = TestBed.inject(HttpTestingController);
-    fixture.componentRef.setInput('type', 'maestras');
+    fixture.componentRef.setInput('type', 'users');
   });
 
   it('should create', () => {

@@ -26,6 +26,8 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
     canActivate: [authGuard],
   },
+  // Endereço antigo (antes da spec 010), para favoritos e links salvos.
+  { path: 'management/maestras', redirectTo: 'management/users' },
   {
     path: 'management/:type',
     loadComponent: () =>
@@ -49,7 +51,7 @@ export const routes: Routes = [
     canActivate: [authGuard, emailVerifiedGuard, roleGuard],
   },
   {
-    path: 'user-supply/:maestraId',
+    path: 'user-supply/:userId',
     loadComponent: () =>
       import('./pages/user-supply-details/user-supply-details').then(
         (m) => m.UserSupplyDetails,

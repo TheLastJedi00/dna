@@ -45,11 +45,11 @@ export class Management implements OnInit {
   type = input.required<string>();
 
   /**
-   * "Gerir Maestras" para a listagem de Maestras (o "de" era um artefato do
+   * "Gerenciar usuários" para a listagem de usuários (o "de" era um artefato do
    * template genérico); demais tipos mantêm o formato antigo.
    */
   readonly pageTitle = computed(() =>
-    this.type() === 'maestras' ? 'Gerir Maestras' : `Gerir de ${this.type()}`,
+    this.type() === 'users' ? 'Gerenciar usuários' : `Gerir de ${this.type()}`,
   );
 
   /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */

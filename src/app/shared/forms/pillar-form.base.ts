@@ -63,7 +63,7 @@ export abstract class PillarFormBase {
   protected abstract prefillForm(): void;
 
   protected async initPillarForm(): Promise<void> {
-    this.maestraId.set(this.route.snapshot.paramMap.get('maestraId') ?? '');
+    this.maestraId.set(this.route.snapshot.paramMap.get('userId') ?? '');
     await this.initState.load();
   }
 

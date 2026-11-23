@@ -36,12 +36,13 @@ type PanelModal = 'human-design' | 'numerology' | 'astrology' | 'perfect-plain';
   styleUrl: './user-supply-details.scss',
 })
 export class UserSupplyDetails implements OnInit {
-  maestraId = input.required<string>();
+  /** Id do usuário (parâmetro `:userId` da rota). */
+  userId = input.required<string>();
   router = inject(Router);
   service = inject(UserService);
 
   /** Cabeçalho da Maestra: skeleton enquanto carrega, erro inline se falhar. */
-  readonly user = loadState(() => this.service.findUserById(this.maestraId()));
+  readonly user = loadState(() => this.service.findUserById(this.userId()));
   readonly userData = computed(() => this.user.data());
 
   /** "Maestra"/"Maestro" conforme o pronome escolhido no cadastro. */
