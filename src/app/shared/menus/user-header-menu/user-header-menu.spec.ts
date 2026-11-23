@@ -71,4 +71,10 @@ describe('UserHeaderMenu', () => {
     expect(fixture.nativeElement.querySelector('h1').textContent.trim()).toBe('Maria');
     expect(fixture.nativeElement.querySelector('h2')).toBeNull();
   });
+
+  it('oferece o Meu perfil no menu', () => {
+    http.expectOne(me).flush({ fullName: 'Maria Silva' });
+    expect(text()).toContain('Meu perfil');
+  });
 });
+

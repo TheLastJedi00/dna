@@ -1,4 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
+import { SHOW_ERROR_MODAL } from '../interceptors/error-interceptor';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
@@ -78,6 +79,17 @@ export class UserService {
 
   reactivateUser(userId: string) {
     return this.http.patch<UserData>(`${this.api}/${userId}/reactivate`, {});
+  }
+
+  /**
+   * Exclui a **própria** conta (LGPD, spec 010): `DELETE /users/me`. A API exige
+   * login recente — chame logo depois de `LoginService.reauthenticate`. O erro é
+   * mostrado na própria tela, não no modal global.
+   */
+  deleteMe() {
+    return this.http.delete<void>(`${this.api}/me`, {
+      context: new HttpContext().set(SHOW_ERROR_MODAL, false),
+    });
   }
 
   deleteUser(userId: string) {

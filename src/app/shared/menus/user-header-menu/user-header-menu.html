@@ -95,6 +95,15 @@
             }
           </div>
         }
+        <!-- Meu Perfil: para todas as roles (spec 010) -->
+        <div class="flex flex-col text-left">
+          <app-button
+            variant="text"
+            classes="text-secondary"
+            text="Meu perfil"
+            (action)="router.navigate(['profile'])"
+          ></app-button>
+        </div>
       </div>
       <div>
         <app-logout-button click></app-logout-button>

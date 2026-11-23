@@ -1,0 +1,29 @@
+<section class="band" [class.compact]="compact()">
+  <svg class="helix" viewBox="0 0 120 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="rungs">
+      @for (rung of helix.rungs; track rung.y) {
+        <line [attr.x1]="rung.x1" [attr.y1]="rung.y" [attr.x2]="rung.x2" [attr.y2]="rung.y" />
+      }
+    </g>
+    <path class="strand" [attr.d]="helix.a" />
+    <path class="strand strand-b" [attr.d]="helix.b" />
+  </svg>
+
+  <div class="content">
+    <ng-content select="[bandTop]" />
+    <p class="greeting">{{ greeting() }}</p>
+    @if (name(); as text) {
+      @if (nameIsEmail()) {
+        <p class="name name-email">{{ text }}</p>
+      } @else {
+        <p class="name">{{ text }}</p>
+      }
+    } @else {
+      <div class="name-skeleton" role="status" aria-busy="true">
+        <span class="sr-only">Carregando seu nome…</span>
+        <app-skeleton width="min(16rem, 60%)" height="3.25rem" />
+      </div>
+    }
+    <ng-content />
+  </div>
+</section>
