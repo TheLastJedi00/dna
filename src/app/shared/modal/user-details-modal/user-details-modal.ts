@@ -35,6 +35,15 @@ export class UserDetailsModal {
 
   /** "o usuário" / "a usuária" — sujeito das frases da senha provisória. */
   readonly subject = computed(() => userSubject(this.userData().pronoun));
+  /**
+   * Quem cadastrou. Com `createdBy` mas sem nome, a conta de quem cadastrou foi
+   * excluída (LGPD, spec 010); sem `createdBy`, é um cadastro antigo.
+   */
+  readonly creatorText = computed(() => {
+    const { createdBy, createdByName } = this.userData();
+    if (createdByName) return createdByName;
+    return createdBy ? 'Conta removida' : 'Não informado';
+  });
   /** "Masculino" / "Feminino" — o pronome como rótulo legível. */
   readonly pronounText = computed(() => pronounLabel(this.userData().pronoun));
 

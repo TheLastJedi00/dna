@@ -57,4 +57,25 @@ describe('UserDetailsModal', () => {
     expect(text).toContain('Reativar');
     expect(text).not.toContain('Desativar');
   });
+
+  describe('quem cadastrou', () => {
+    const creatorText = (data: Partial<UserData>) => {
+      fixture.componentRef.setInput('userData', { ...MAESTRA, ...data });
+      fixture.detectChanges();
+      return component.creatorText();
+    };
+
+    it('mostra o nome de quem cadastrou', () => {
+      expect(creatorText({ createdBy: 'a1', createdByName: 'Bia' })).toBe('Bia');
+    });
+
+    it('criador que excluiu a conta: "Conta removida"', () => {
+      expect(creatorText({ createdBy: 'a1', createdByName: null })).toBe('Conta removida');
+    });
+
+    it('cadastro antigo, sem vínculo: "Não informado"', () => {
+      expect(creatorText({ createdBy: undefined, createdByName: null })).toBe('Não informado');
+    });
+  });
 });
+

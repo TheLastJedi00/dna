@@ -32,7 +32,7 @@
         <!-- Quem cadastrou a Maestra: leitura, resolvido pelo backend -->
         <p class="text-sm">
           <span class="text-muted">Analista Responsável:</span>
-          {{ userData().createdByName || 'Não informado' }}
+          {{ creatorText() }}
         </p>
       </div>
 
