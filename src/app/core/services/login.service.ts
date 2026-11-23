@@ -99,6 +99,8 @@ export class LoginService {
 
   /** ID token para o header Authorization. `forceRefresh` pede um novo ao Firebase. */
   async getIdToken(forceRefresh = false): Promise<string | null> {
+    // O SDK carrega sob demanda: antes dele, não há usuário para dar o token.
+    await this.whenReady();
     const user = this.firebase.currentUser;
     return user ? this.firebase.getIdToken(user, forceRefresh) : null;
   }
