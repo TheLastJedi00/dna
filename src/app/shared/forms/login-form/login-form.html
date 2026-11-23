@@ -1,27 +1,31 @@
 <form
-  class="flex flex-col p-4 gap-4 shadow-xl rounded-xl bg-white/95 md:min-h-[420px] md:min-w-[350px]"
+  class="login-card flex flex-col gap-4 rounded-2xl bg-white/95 px-6 py-7 shadow-xl w-[min(100%,24rem)]"
   [formGroup]="loginForm"
   (ngSubmit)="onLogin()"
+  novalidate
 >
-  <app-logo></app-logo>
-  <input
-    formControlName="email"
-    required
-    name="email"
-    type="email"
-    placeholder="Email"
-  />
-  <input
-    formControlName="password"
-    required
-    name="password"
-    type="password"
-    placeholder="Senha"
-  />
+  <app-logo class="h-20 flex justify-center"></app-logo>
+
+  <div class="flex flex-col gap-1.5">
+    <label for="login-email" class="text-sm text-muted">E-mail</label>
+    <input id="login-email" formControlName="email" type="email" autocomplete="email" required />
+  </div>
+  <div class="flex flex-col gap-1.5">
+    <label for="login-password" class="text-sm text-muted">Senha</label>
+    <input
+      id="login-password"
+      formControlName="password"
+      type="password"
+      autocomplete="current-password"
+      required
+    />
+  </div>
+
   @if (error()) {
-    <span class="text-center text-danger">{{ error() }}</span>
+    <p class="rounded-lg bg-danger-soft px-3 py-2 text-sm text-danger" role="alert">{{ error() }}</p>
   }
-  <app-button variant="flat"
+  <app-button
+    variant="flat"
     [disabled]="!loginForm.valid"
     text="Entrar"
     classes="bg-primary w-full text-white"
