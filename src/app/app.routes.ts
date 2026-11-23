@@ -2,10 +2,6 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 import { managerGuard } from './core/guards/manager-guard';
 import { ownershipGuard } from './core/guards/ownership-guard';
-import {
-  passwordChangedGuard,
-  passwordGuard,
-} from './core/guards/password-guard';
 import { roleGuard } from './core/guards/role-guard';
 
 export const routes: Routes = [
@@ -17,27 +13,17 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
-  // Troca obrigatória: única rota autenticada SEM o passwordGuard (seria um
-  // laço). O passwordChangedGuard faz o inverso — quem já trocou não fica preso.
-  {
-    path: 'change-password',
-    loadComponent: () =>
-      import('./pages/change-password/change-password').then(
-        (m) => m.ChangePassword,
-      ),
-    canActivate: [authGuard, passwordChangedGuard],
-  },
   {
     path: 'dashboard',
     loadComponent: () =>
       import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
-    canActivate: [authGuard, passwordGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'management/:type',
     loadComponent: () =>
       import('./pages/management/management').then((m) => m.Management),
-    canActivate: [authGuard, passwordGuard, roleGuard],
+    canActivate: [authGuard, roleGuard],
   },
   {
     path: 'analysts',
@@ -45,7 +31,7 @@ export const routes: Routes = [
       import('./pages/analysts-management/analysts-management').then(
         (m) => m.AnalystsManagement,
       ),
-    canActivate: [authGuard, passwordGuard, managerGuard],
+    canActivate: [authGuard, managerGuard],
   },
   {
     path: 'dna-management',
@@ -53,7 +39,7 @@ export const routes: Routes = [
       import('./pages/dna-management/dna-management').then(
         (m) => m.DnaManagement,
       ),
-    canActivate: [authGuard, passwordGuard, roleGuard],
+    canActivate: [authGuard, roleGuard],
   },
   {
     path: 'user-supply/:maestraId',
@@ -61,13 +47,13 @@ export const routes: Routes = [
       import('./pages/user-supply-details/user-supply-details').then(
         (m) => m.UserSupplyDetails,
       ),
-    canActivate: [authGuard, passwordGuard, roleGuard],
+    canActivate: [authGuard, roleGuard],
   },
   {
     path: 'human-design/:userId',
     loadComponent: () =>
       import('./pages/human-design/human-design').then((m) => m.HumanDesign),
-    canActivate: [authGuard, passwordGuard, ownershipGuard],
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
       {
@@ -90,7 +76,7 @@ export const routes: Routes = [
     path: 'numerology/:userId',
     loadComponent: () =>
       import('./pages/numerology/numerology').then((m) => m.Numerology),
-    canActivate: [authGuard, passwordGuard, ownershipGuard],
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
       {
@@ -111,7 +97,7 @@ export const routes: Routes = [
     path: 'astrology/:userId',
     loadComponent: () =>
       import('./pages/astrology/astrology').then((m) => m.Astrology),
-    canActivate: [authGuard, passwordGuard, ownershipGuard],
+    canActivate: [authGuard, ownershipGuard],
     canActivateChild: [authGuard],
     children: [
       {
@@ -134,7 +120,7 @@ export const routes: Routes = [
     path: 'perfect-plain/:userId',
     loadComponent: () =>
       import('./pages/perfect-plain/perfect-plain').then((m) => m.PerfectPlain),
-    canActivate: [authGuard, passwordGuard, ownershipGuard],
+    canActivate: [authGuard, ownershipGuard],
   },
   { path: '**', redirectTo: '' },
 ];
