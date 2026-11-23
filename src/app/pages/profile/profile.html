@@ -1,0 +1,29 @@
+<app-user-panel-header></app-user-panel-header>
+<main class="pt-header">
+  <app-welcome-band
+    greeting="Meu perfil"
+    [name]="displayName()"
+    [nameIsEmail]="nameIsEmail()"
+    [compact]="true"
+  >
+    <a bandTop routerLink="/dashboard" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="m15 5-7 7 7 7" />
+      </svg>
+      Início
+    </a>
+    <div class="mail-line">
+      <span class="mail">{{ login.email }}</span>
+      @if (login.emailVerified()) {
+        <span class="badge badge-ok">E-mail confirmado</span>
+      } @else {
+        <span class="badge badge-warn">E-mail não confirmado</span>
+      }
+    </div>
+  </app-welcome-band>
+
+  <div class="profile-body">
+    <!-- Seções: senha e e-mail (T8.3/T8.4) e exclusão da conta (T8.5) -->
+  </div>
+</main>
+<app-user-panel-footer></app-user-panel-footer>

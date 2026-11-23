@@ -20,6 +20,12 @@ export const routes: Routes = [
       import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
     canActivate: [authGuard],
   },
+  // Meu Perfil (spec 010): sem o emailVerifiedGuard — é onde se corrige o e-mail.
+  {
+    path: 'profile',
+    loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
+    canActivate: [authGuard],
+  },
   {
     path: 'management/:type',
     loadComponent: () =>
