@@ -42,3 +42,7 @@
     </h1>
   }
 </ng-template>
+
+@if (login.isSessionValid() && !login.emailVerified()) {
+  <app-verify-email-modal />
+}

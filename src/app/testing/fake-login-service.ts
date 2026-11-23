@@ -42,6 +42,10 @@ export class FakeLoginService {
   getIdToken(): Promise<string | null> {
     return Promise.resolve(this.session() ? 'token' : null);
   }
+  markEmailUnverified(): void {
+    const current = this.session();
+    if (current) this.session.set({ ...current, emailVerified: false });
+  }
   clearSession(): void {
     this.session.set(null);
     this.cleared.next();
