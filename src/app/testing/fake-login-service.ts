@@ -33,6 +33,7 @@ export class FakeLoginService {
     return this.session()?.emailVerified ?? false;
   }
   emailVerified = () => this.isEmailVerified();
+  roles = () => this.getUserRole() ?? [];
   get userId(): string {
     return this.session()?.id ?? '';
   }

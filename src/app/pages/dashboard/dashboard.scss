@@ -1,1 +1,23 @@
+// Selo do papel na faixa de boas-vindas (gestão).
+.role {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(243, 223, 205, 0.35);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--color-surface-muted);
+}
 
+// Perfil não carregou: o nome cai para o e-mail e dá para tentar de novo.
+.retry {
+  display: block;
+  min-height: 2.25rem;
+  margin-top: 0.75rem;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--color-surface-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
