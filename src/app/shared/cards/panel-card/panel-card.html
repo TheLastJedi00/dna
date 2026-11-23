@@ -58,4 +58,14 @@
       }
     </section>
   }
+  <!-- Meu Perfil: para todas as roles (spec 010) -->
+  <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-2">
+    <app-dashboard-button
+      (action)="router.navigate(['profile'])"
+      icon="user-circle"
+      title="Meu perfil"
+      subtitle="Sua conta"
+      description="Senha, e-mail e exclusão da conta."
+    ></app-dashboard-button>
+  </section>
 }
