@@ -89,4 +89,23 @@ describe('UserService', () => {
     expect(req.request.method).toBe('DELETE');
     req.flush({});
   });
+
+  it('cadastro por convite: POST /users devolve o id', () => {
+    let created: { id: string } | undefined;
+    service
+      .createMaestra({
+        fullName: 'Ana',
+        birthDate: '2000-01-01',
+        birthTime: '10:00',
+        birthPlace: 'Recife',
+        email: 'ana@dna.com',
+      })
+      .subscribe((r) => (created = r));
+    const req = http.expectOne(api);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body.email).toBe('ana@dna.com');
+    req.flush({ id: 'uid-ana' });
+    expect(created).toEqual({ id: 'uid-ana' });
+  });
 });
+

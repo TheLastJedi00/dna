@@ -67,8 +67,9 @@ export class UserService {
       );
   }
 
+  /** Cadastro por convite (spec 010): `POST /users` devolve o id criado. */
   createMaestra(user: UserData) {
-    return this.http.post<UserData>(`${this.api}/maestra`, user);
+    return this.http.post<{ id: string }>(this.api, user);
   }
 
   updateUser(userId: string, data: Partial<UserData>) {

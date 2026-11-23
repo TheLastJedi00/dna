@@ -87,6 +87,6 @@ export class AnalystService {
 
   /** Supervisão: carteira do Analista (só nome + status, sem dados pessoais). */
   findLinkedMaestras(analystId: string): Observable<LinkedMaestra[]> {
-    return this.http.get<LinkedMaestra[]>(`${this.api}/${analystId}/maestras`);
+    return this.http.get<LinkedMaestra[]>(`${this.api}/${analystId}/users`);
   }
 }

@@ -118,7 +118,7 @@ describe('AnalystsManagement', () => {
       mustChangePassword: true,
       tempPassword: 'provisoria',
     });
-    http.expectOne(`${api}/a1/maestras`).flush([
+    http.expectOne(`${api}/a1/users`).flush([
       { fullName: 'Maria', isActive: true },
     ]);
     await promise;
@@ -139,7 +139,7 @@ describe('AnalystsManagement', () => {
     const promise = component.openDetails({ id: 'a1', fullName: 'Ana', isActive: true });
     http.expectOne(`${api}/a1`).flush({ id: 'a1', fullName: 'Ana', email: 'ana@dna.com' });
     http
-      .expectOne(`${api}/a1/maestras`)
+      .expectOne(`${api}/a1/users`)
       .flush(null, { status: 403, statusText: 'Forbidden' });
     await promise;
 
