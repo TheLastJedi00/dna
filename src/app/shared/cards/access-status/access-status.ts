@@ -17,7 +17,7 @@ const VIEWS: Record<AccessStatus | 'none', StatusView> = {
   },
   email_unverified: {
     label: 'E-mail não confirmado',
-    text: 'Já entrou, mas ainda não confirmou o e-mail. Até confirmar, vê o aviso de verificação.',
+    text: 'Já tem senha, mas ainda não confirmou o e-mail. Ao entrar, vê o aviso de verificação.',
     tone: 'warn',
     canResend: true,
   },
