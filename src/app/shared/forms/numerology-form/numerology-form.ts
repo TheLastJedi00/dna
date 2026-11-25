@@ -120,7 +120,7 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    this.numerologyData.set(await firstValueFrom(this.numService.getByUserId(this.maestraId())));
+    this.numerologyData.set(await firstValueFrom(this.numService.getByUserId(this.userId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -185,7 +185,7 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
       respostas_subconscientes: data.extras?.respostas_subconscientes,
     });
 
-    // FormArrays reconstruídos: a quantidade de itens varia por Maestra.
+    // FormArrays reconstruídos: a quantidade de itens varia por usuário.
     this.fillNumberArray(this.tendenciasOcultas, data.extras?.tendencias_ocultas);
     this.fillNumberArray(this.numerosFavoraveis, data.extras?.numeros_favoraveis);
   }
@@ -205,7 +205,7 @@ export class NumerologyForm extends PillarFormBase implements OnInit {
     const form = this.numForm.getRawValue();
     try {
       const numData: NumerologyData = {
-        userId: this.maestraId(),
+        userId: this.userId(),
         perfil: {
           motivacao: form.motivacao!,
           impressao: form.impressao!,

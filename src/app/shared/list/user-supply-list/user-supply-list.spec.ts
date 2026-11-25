@@ -28,7 +28,7 @@ describe('UserSupplyList', () => {
 
   const listReq = () => http.expectOne((r) => r.url.includes('/users/active/fullName/asc'));
 
-  it('mostra skeleton e depois as Maestras ativas', async () => {
+  it('mostra skeleton e depois os usuários ativos', async () => {
     expect(fixture.nativeElement.querySelector('[aria-busy="true"]')).toBeTruthy();
     const req = listReq();
     expect(req.request.params.get('status')).toBe('active');

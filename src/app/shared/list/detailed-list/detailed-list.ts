@@ -3,7 +3,7 @@ import { DetailedItem } from '../detailed-item/detailed-item';
 import { UserData } from '../../../core/models/userdata.model';
 
 /**
- * Componente dumb: recebe a lista pronta (`users`) e repassa a Maestra escolhida
+ * Componente dumb: recebe a lista pronta (`users`) e repassa o usuário escolhido
  * para a página smart, que busca o detalhe e executa as ações.
  */
 @Component({

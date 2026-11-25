@@ -6,6 +6,7 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { UserService } from './user.service';
+import { SHOW_ERROR_MODAL } from '../interceptors/error-interceptor';
 import { environment } from '../../../environments/environment';
 
 describe('UserService', () => {
@@ -75,18 +76,37 @@ describe('UserService', () => {
     req.flush({});
   });
 
-  it('setTempPassword chama PATCH /users/:id/temp-password', () => {
-    service.setTempPassword('u1', 'nova123').subscribe();
-    const req = http.expectOne(`${api}/u1/temp-password`);
-    expect(req.request.method).toBe('PATCH');
-    expect(req.request.body).toEqual({ password: 'nova123' });
-    req.flush(null);
-  });
-
   it('deleteUser chama DELETE /users/:id', () => {
     service.deleteUser('u1').subscribe();
     const req = http.expectOne(`${api}/u1`);
     expect(req.request.method).toBe('DELETE');
     req.flush({});
   });
+
+  it('cadastro por convite: POST /users devolve o id', () => {
+    let created: { id: string } | undefined;
+    service
+      .createUser({
+        fullName: 'Ana',
+        birthDate: '2000-01-01',
+        birthTime: '10:00',
+        birthPlace: 'Recife',
+        email: 'ana@dna.com',
+      })
+      .subscribe((r) => (created = r));
+    const req = http.expectOne(api);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body.email).toBe('ana@dna.com');
+    req.flush({ id: 'uid-ana' });
+    expect(created).toEqual({ id: 'uid-ana' });
+  });
+
+  it('deleteMe: DELETE /users/me, com o erro na tela (sem modal global)', () => {
+    service.deleteMe().subscribe();
+    const req = http.expectOne(`${api}/me`);
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.context.get(SHOW_ERROR_MODAL)).toBeFalse();
+    req.flush(null);
+  });
 });
+

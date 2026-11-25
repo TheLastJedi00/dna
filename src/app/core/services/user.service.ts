@@ -1,4 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
+import { SHOW_ERROR_MODAL } from '../interceptors/error-interceptor';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
@@ -33,7 +34,7 @@ export class UserService {
   }
 
   /**
-   * Lista Maestras com paginação, busca por nome e filtro de status. O corpo é
+   * Lista usuários com paginação, busca por nome e filtro de status. O corpo é
    * o array da página; os metadados vêm nos headers X-* (expostos no CORS) e
    * são montados no PagedResult.
    */
@@ -67,8 +68,9 @@ export class UserService {
       );
   }
 
-  createMaestra(user: UserData) {
-    return this.http.post<UserData>(`${this.api}/maestra`, user);
+  /** Cadastro por convite (spec 010): `POST /users` devolve o id criado. */
+  createUser(user: UserData) {
+    return this.http.post<{ id: string }>(this.api, user);
   }
 
   updateUser(userId: string, data: Partial<UserData>) {
@@ -79,14 +81,19 @@ export class UserService {
     return this.http.patch<UserData>(`${this.api}/${userId}/reactivate`, {});
   }
 
+  /**
+   * Exclui a **própria** conta (LGPD, spec 010): `DELETE /users/me`. A API exige
+   * login recente — chame logo depois de `LoginService.reauthenticate`. O erro é
+   * mostrado na própria tela, não no modal global.
+   */
+  deleteMe() {
+    return this.http.delete<void>(`${this.api}/me`, {
+      context: new HttpContext().set(SHOW_ERROR_MODAL, false),
+    });
+  }
+
   deleteUser(userId: string) {
     return this.http.delete<UserData>(`${this.api}/${userId}`);
   }
 
-  /** Gera a senha provisória da Maestra (recuperação de acesso pelo painel). */
-  setTempPassword(userId: string, password: string) {
-    return this.http.patch<void>(`${this.api}/${userId}/temp-password`, {
-      password,
-    });
-  }
 }

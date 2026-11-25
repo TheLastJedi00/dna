@@ -9,6 +9,7 @@ import { UserPanelFooter } from '../../shared/footers/user-panel-footer/user-pan
 import { NewUserForm } from '../../shared/forms/new-user-form/new-user-form';
 import { UserDetailsModal } from '../../shared/modal/user-details-modal/user-details-modal';
 import { Infinity } from '../../shared/loading/infinity/infinity';
+import { InviteService } from '../../core/services/invite.service';
 import { UserService } from '../../core/services/user.service';
 import { UserData, UserStatusFilter } from '../../core/models/userdata.model';
 import { loadState } from '../../core/utils/load-state';
@@ -16,7 +17,7 @@ import { SkeletonList } from '../../shared/feedback/skeleton-list/skeleton-list'
 import { LoadError } from '../../shared/feedback/load-error/load-error';
 
 /**
- * Página smart de gestão de Maestras: dona do estado (lista, paginação, busca,
+ * Página smart de gestão de usuários: dona do estado (lista, paginação, busca,
  * filtro de status e o detalhe aberto) e única a falar com o UserService. Os
  * componentes de apresentação recebem dados prontos e devolvem intenções.
  */
@@ -40,14 +41,15 @@ import { LoadError } from '../../shared/feedback/load-error/load-error';
 export class Management implements OnInit {
   router = inject(Router);
   private readonly userService = inject(UserService);
+  private readonly invite = inject(InviteService);
   type = input.required<string>();
 
   /**
-   * "Gerir Maestras" para a listagem de Maestras (o "de" era um artefato do
+   * "Gerenciar usuários" para a listagem de usuários (o "de" era um artefato do
    * template genérico); demais tipos mantêm o formato antigo.
    */
   readonly pageTitle = computed(() =>
-    this.type() === 'maestras' ? 'Gerir Maestras' : `Gerir de ${this.type()}`,
+    this.type() === 'users' ? 'Gerenciar usuários' : `Gerir de ${this.type()}`,
   );
 
   /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */
@@ -65,12 +67,13 @@ export class Management implements OnInit {
   pageSize = signal(9);
   /** Ação em curso (desativar/reativar/senha provisória): overlay de tela cheia. */
   isActionRunning = signal(false);
+  isResending = signal(false);
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
-  /** Maestra aberta no modal (com o detalhe já carregado); null = fechado. */
+  /** Usuário aberto no modal (com o detalhe já carregado); null = fechado. */
   selected = signal<UserData | null>(null);
-  /** Detalhe da Maestra aberta (e-mail e senha provisória só vêm daqui). */
+  /** Detalhe do usuário aberto (e-mail e status do acesso só vêm daqui). */
   readonly detail = loadState(() => this.userService.findUserById(this.selected()!.id!), {
     initial: 'idle',
   });
@@ -118,7 +121,7 @@ export class Management implements OnInit {
     await this.loadDetail();
   }
 
-  /** Busca o detalhe da Maestra aberta (também é o "Tentar novamente" do modal). */
+  /** Busca o detalhe do usuário aberto (também é o "Tentar novamente" do modal). */
   async loadDetail() {
     const id = this.selected()?.id;
     if (!id) return;
@@ -153,19 +156,16 @@ export class Management implements OnInit {
     this.router.navigate([`user-supply/${this.selected()?.id}`]);
   }
 
-  async generateTempPassword(password: string) {
-    const user = this.selected();
-    if (!user?.id) return;
-    this.isActionRunning.set(true);
+  /** Reenvia o convite "Defina sua senha" para o e-mail do detalhe (spec 010). */
+  async resendInvite() {
+    const email = this.selected()?.email;
+    if (!email) return;
+    this.isResending.set(true);
     try {
-      await firstValueFrom(this.userService.setTempPassword(user.id, password));
-    } catch {
-      return; // erro de ação exibido pelo modal global (errorInterceptor)
+      await this.invite.send(email);
     } finally {
-      this.isActionRunning.set(false);
+      this.isResending.set(false);
     }
-    // Recarrega o detalhe: a senha provisória agora aparece no lugar do botão.
-    await this.loadDetail();
   }
 
   async disableUser() {

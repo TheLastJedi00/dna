@@ -29,14 +29,14 @@
             <span class="text-muted">E-mail:</span> {{ userData().email }}
           </p>
         }
-        <!-- Quem cadastrou a Maestra: leitura, resolvido pelo backend -->
+        <!-- Quem cadastrou o usuário: leitura, resolvido pelo backend -->
         <p class="text-sm">
           <span class="text-muted">Analista Responsável:</span>
-          {{ userData().createdByName || 'Não informado' }}
+          {{ creatorText() }}
         </p>
       </div>
 
-      <!-- E-mail e senha provisória só vêm no detalhe (GET /users/:id) -->
+      <!-- E-mail e status do acesso só vêm no detalhe (GET /users/:id) -->
       @if (isLoading()) {
         <div class="flex flex-col gap-2" role="status" aria-busy="true">
           <span class="sr-only">Carregando credenciais…</span>
@@ -50,13 +50,11 @@
           (retry)="retry.emit()"
         />
       } @else {
-        <app-temp-password-form
-          [mustChangePassword]="userData().mustChangePassword ?? false"
-          [tempPassword]="userData().tempPassword ?? null"
-          [expiresAt]="userData().tempPasswordExpiresAt ?? null"
-          [subject]="subject()"
-          (save)="generateTempPassword.emit($event)"
-        ></app-temp-password-form>
+        <app-access-status
+          [status]="userData().accessStatus"
+          [resending]="isResending()"
+          (resend)="resendInvite.emit()"
+        />
       }
 
       <app-icon-text-button

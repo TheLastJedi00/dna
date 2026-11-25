@@ -16,7 +16,7 @@ export class UserSupplyList implements OnInit {
   private readonly service = inject(UserService);
   router = inject(Router);
 
-  /** Maestras ativas, em ordem alfabética (mesma consulta da antiga `getAllActiveUsers`). */
+  /** Usuários ativos, em ordem alfabética (mesma consulta da antiga `getAllActiveUsers`). */
   readonly list = loadState(() =>
     this.service.listUsers({ orderBy: 'fullName', direction: 'asc', status: 'active' }),
   );

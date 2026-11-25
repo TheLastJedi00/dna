@@ -10,20 +10,28 @@ import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
 import { errorInterceptor, SHOW_ERROR_MODAL } from './error-interceptor';
 import { ErrorService } from '../services/error.service';
+import { LoginService } from '../services/login.service';
 
 describe('errorInterceptor', () => {
   let http: HttpClient;
   let ctrl: HttpTestingController;
   let errorService: ErrorService;
+  let login: jasmine.SpyObj<Pick<LoginService, 'markEmailUnverified'>>;
+  let router: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
+    login = jasmine.createSpyObj('LoginService', ['markEmailUnverified']);
+    router = jasmine.createSpyObj('Router', ['navigate']);
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
         provideHttpClient(withInterceptors([errorInterceptor])),
         provideHttpClientTesting(),
+        { provide: LoginService, useValue: login },
+        { provide: Router, useValue: router },
       ],
     });
     http = TestBed.inject(HttpClient);
@@ -34,12 +42,33 @@ describe('errorInterceptor', () => {
 
   afterEach(() => ctrl.verify());
 
+  it('403 EMAIL_NOT_VERIFIED: reabre o popup no dashboard, sem modal de erro', () => {
+    http.post('/api/x', {}).subscribe({ error: () => undefined });
+    ctrl.expectOne('/api/x').flush(
+      { code: 'EMAIL_NOT_VERIFIED', message: 'Verifique seu e-mail para continuar.' },
+      { status: 403, statusText: 'Forbidden' },
+    );
+    expect(login.markEmailUnverified).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+    expect(errorService.show).not.toHaveBeenCalled();
+  });
+
+  it('outro 403 segue a regra normal (ação abre o modal)', () => {
+    http.post('/api/x', {}).subscribe({ error: () => undefined });
+    ctrl.expectOne('/api/x').flush(
+      { message: 'Sem permissão.' },
+      { status: 403, statusText: 'Forbidden' },
+    );
+    expect(login.markEmailUnverified).not.toHaveBeenCalled();
+    expect(errorService.show).toHaveBeenCalled();
+  });
+
   it('ação com 4xx mostra o modal com a mensagem do servidor', () => {
     http.patch('/api/x', {}).subscribe({ error: () => undefined });
     ctrl
       .expectOne('/api/x')
-      .flush({ message: 'Maestra já está ativa.' }, { status: 409, statusText: 'Conflict' });
-    expect(errorService.show).toHaveBeenCalledWith('Maestra já está ativa.');
+      .flush({ message: 'Usuário já está ativo.' }, { status: 409, statusText: 'Conflict' });
+    expect(errorService.show).toHaveBeenCalledWith('Usuário já está ativo.');
   });
 
   it('ação com 5xx mostra o modal com texto claro, sem o detalhe interno', () => {

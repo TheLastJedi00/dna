@@ -3,9 +3,9 @@ import { IconTextButton } from '../../buttons/icon-text-button/icon-text-button'
 import { UserData } from '../../../core/models/userdata.model';
 
 /**
- * Cartão da Maestra na listagem. Dumb: o modal de detalhe deixou de morar aqui
+ * Cartão do usuário na listagem. Dumb: o modal de detalhe deixou de morar aqui
  * (spec 005) — o detalhe precisa de um `GET /users/:id` ao abrir, e isso é da
- * página smart. Aqui só se avisa qual Maestra foi escolhida.
+ * página smart. Aqui só se avisa qual usuário foi escolhido.
  */
 @Component({
   selector: 'app-detailed-item',

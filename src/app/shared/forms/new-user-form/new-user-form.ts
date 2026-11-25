@@ -14,16 +14,17 @@ import { UserData } from '../../../core/models/userdata.model';
 import { UserService } from '../../../core/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { Infinity } from '../../loading/infinity/infinity';
+import { InviteService } from '../../../core/services/invite.service';
 import {
   DEFAULT_PRONOUN,
   Pronoun,
-  maestraLabel,
-  newMaestraLabel,
+  userLabel,
+  newUserLabel,
 } from '../../../core/utils/pronoun';
 
 /**
- * Form de Maestra reutilizado para **criar** e **editar**. Sem `user` é criação
- * (com o gatilho "Nova Maestra"); com `user` é edição (prefill + updateUser,
+ * Form de usuário reutilizado para **criar** e **editar**. Sem `user` é criação
+ * (com o gatilho "Nova usuária"); com `user` é edição (prefill + updateUser,
  * sem os campos de acesso). O estado de abertura é controlável via `open`.
  */
 @Component({
@@ -35,10 +36,11 @@ import {
 export class NewUserForm {
   private fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
+  private readonly invite = inject(InviteService);
 
-  /** Maestra em edição; ausente => modo criação. */
+  /** Usuário em edição; ausente => modo criação. */
   user = input<UserData | null>(null);
-  /** Exibe o botão-gatilho "Nova Maestra" (criação). */
+  /** Exibe o botão-gatilho "Nova usuária" (criação). */
   showTrigger = input<boolean>(true);
   /** Estado de abertura do modal (controlável pelo pai). */
   open = model<boolean>(false);
@@ -47,8 +49,6 @@ export class NewUserForm {
   saved = output<void>();
 
   isEditing = computed(() => !!this.user());
-  isPassVisible = signal<boolean>(false);
-  passwordInputType = signal<string>('password');
   isLoading = signal(false);
 
   /**
@@ -58,8 +58,8 @@ export class NewUserForm {
    */
   readonly pronoun = signal<Pronoun>(DEFAULT_PRONOUN);
   /** Termos da UI que acompanham o toggle. */
-  readonly maestraTerm = computed(() => maestraLabel(this.pronoun()));
-  readonly newMaestraTerm = computed(() => newMaestraLabel(this.pronoun()));
+  readonly userTerm = computed(() => userLabel(this.pronoun()));
+  readonly newUserTerm = computed(() => newUserLabel(this.pronoun()));
 
   setPronoun(pronoun: Pronoun) {
     this.pronoun.set(pronoun);
@@ -73,7 +73,6 @@ export class NewUserForm {
     birthCity: ['', [Validators.required]],
     birthUf: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
   });
 
   constructor() {
@@ -85,17 +84,15 @@ export class NewUserForm {
     });
   }
 
+  /** Na edição o e-mail não é editável por aqui (é do Firebase Auth). */
   private applyModeValidators() {
-    const { email, password } = this.createUserForm.controls;
+    const { email } = this.createUserForm.controls;
     if (this.isEditing()) {
       email.clearValidators();
-      password.clearValidators();
     } else {
       email.setValidators([Validators.required, Validators.email]);
-      password.setValidators([Validators.required]);
     }
     email.updateValueAndValidity({ emitEvent: false });
-    password.updateValueAndValidity({ emitEvent: false });
   }
 
   private patchFromUser() {
@@ -120,13 +117,6 @@ export class NewUserForm {
     this.modalClosed.emit();
   }
 
-  togglePassVisibility() {
-    this.isPassVisible.update((v) => !v);
-    this.passwordInputType.set(
-      this.passwordInputType() === 'password' ? 'text' : 'password',
-    );
-  }
-
   async submit() {
     if (this.createUserForm.invalid) {
       this.createUserForm.markAllAsTouched();
@@ -148,12 +138,10 @@ export class NewUserForm {
           this.userService.updateUser(this.user()!.id!, profile),
         );
       } else {
-        await firstValueFrom(
-          this.userService.createMaestra({
-            ...profile,
-            login: { email: form.email, password: form.password },
-          }),
-        );
+        // Convite (spec 010): sem senha; a pessoa recebe "Defina sua senha".
+        const email = form.email.trim();
+        await firstValueFrom(this.userService.createUser({ ...profile, email }));
+        await this.invite.send(email, { justCreated: true });
       }
       this.reset();
       this.saved.emit();
