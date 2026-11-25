@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 import { DetailedItem } from './detailed-item';
 import { UserData } from '../../../core/models/userdata.model';
 
-const MAESTRA: UserData = {
+const SAMPLE_USER: UserData = {
   id: 'u1',
   fullName: 'Ana',
   birthDate: '2000-01-01',
@@ -33,7 +33,7 @@ describe('DetailedItem', () => {
 
     fixture = TestBed.createComponent(DetailedItem);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('data', MAESTRA);
+    fixture.componentRef.setInput('data', SAMPLE_USER);
   });
 
   it('should create', () => {
@@ -41,13 +41,13 @@ describe('DetailedItem', () => {
     expect(component).toBeTruthy();
   });
 
-  it('exibe selo "Ativa" para maestra ativa', () => {
+  it('exibe selo "Ativa" para usuária ativa', () => {
     fixture.detectChanges();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Ativa');
   });
 
   it('exibe selo "Inativa" quando isActive é false', () => {
-    fixture.componentRef.setInput('data', { ...MAESTRA, isActive: false });
+    fixture.componentRef.setInput('data', { ...SAMPLE_USER, isActive: false });
     fixture.detectChanges();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
       'Inativa',

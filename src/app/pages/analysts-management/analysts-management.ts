@@ -15,13 +15,14 @@ import { loadState } from '../../core/utils/load-state';
 import { SkeletonList } from '../../shared/feedback/skeleton-list/skeleton-list';
 import { LoadError } from '../../shared/feedback/load-error/load-error';
 import { Infinity } from '../../shared/loading/infinity/infinity';
+import { InviteService } from '../../core/services/invite.service';
 import { AnalystService } from '../../core/services/analyst.service';
-import { AnalystData, LinkedMaestra } from '../../core/models/analyst.model';
+import { AnalystData, LinkedUser } from '../../core/models/analyst.model';
 import { UserStatusFilter } from '../../core/models/userdata.model';
 
 /**
  * Página smart de gestão de Analistas (ADMIN/MANAGER). Espelha a page de
- * Maestras: dona do estado (lista, busca, filtro de status e paginação) e única
+ * usuários: dona do estado (lista, busca, filtro de status e paginação) e única
  * a falar com o AnalystService — os componentes de apresentação recebem dados
  * prontos e devolvem intenções.
  */
@@ -44,6 +45,7 @@ import { UserStatusFilter } from '../../core/models/userdata.model';
 export class AnalystsManagement implements OnInit {
   readonly router = inject(Router);
   private readonly analystService = inject(AnalystService);
+  private readonly invite = inject(InviteService);
 
   /** Leitura da página atual: skeleton enquanto carrega, erro inline se falhar. */
   readonly list = loadState(() =>
@@ -61,6 +63,7 @@ export class AnalystsManagement implements OnInit {
   pageSize = signal(9);
   /** Ação em curso (criar/editar/desativar/reativar/senha): overlay de tela cheia. */
   isActionRunning = signal(false);
+  isResending = signal(false);
   search = signal('');
   status = signal<UserStatusFilter>('active');
 
@@ -71,11 +74,11 @@ export class AnalystsManagement implements OnInit {
     initial: 'idle',
   });
   /** Carteira do Analista aberto (supervisão), carregada sob demanda. */
-  readonly maestrasState = loadState(
-    () => this.analystService.findLinkedMaestras(this.selected()!.id!),
+  readonly linkedUsersState = loadState(
+    () => this.analystService.findLinkedUsers(this.selected()!.id!),
     { initial: 'idle' },
   );
-  readonly linkedMaestras = computed(() => this.maestrasState.data() ?? []);
+  readonly linkedUsers = computed(() => this.linkedUsersState.data() ?? []);
   /** Analista em edição; null = o form está em modo criação. */
   editing = signal<AnalystData | null>(null);
   isFormOpen = signal(false);
@@ -120,7 +123,7 @@ export class AnalystsManagement implements OnInit {
   async openDetails(analyst: AnalystData) {
     this.selected.set(analyst);
     if (!analyst.id) return;
-    await Promise.all([this.loadDetail(), this.maestrasState.load()]);
+    await Promise.all([this.loadDetail(), this.linkedUsersState.load()]);
   }
 
   /** Busca o detalhe do Analista aberto (também é o "Tentar novamente"). */
@@ -136,25 +139,22 @@ export class AnalystsManagement implements OnInit {
     }
   }
 
-  /** Gera a senha provisória e recarrega o detalhe para exibi-la. */
-  async generateTempPassword(password: string) {
-    const analyst = this.selected();
-    if (!analyst?.id) return;
-    this.isActionRunning.set(true);
+  /** Reenvia o convite "Defina sua senha" para o e-mail do detalhe (spec 010). */
+  async resendInvite() {
+    const email = this.selected()?.email;
+    if (!email) return;
+    this.isResending.set(true);
     try {
-      await firstValueFrom(this.analystService.setTempPassword(analyst.id, password));
-    } catch {
-      return; // erro de ação exibido pelo modal global (errorInterceptor)
+      await this.invite.send(email);
     } finally {
-      this.isActionRunning.set(false);
+      this.isResending.set(false);
     }
-    await this.loadDetail();
   }
 
   closeDetails() {
     this.selected.set(null);
     this.detail.reset();
-    this.maestrasState.reset();
+    this.linkedUsersState.reset();
   }
 
   /** Detalhes → Editar: fecha o modal e reabre o form já preenchido. */
@@ -181,7 +181,11 @@ export class AnalystsManagement implements OnInit {
           }),
         );
       } else {
+        // Convite (spec 010): sem senha; o Analista recebe "Defina sua senha".
         await firstValueFrom(this.analystService.createAnalyst(value));
+        if (value.email) {
+          await this.invite.send(value.email, { justCreated: true });
+        }
       }
       this.onFormClosed();
       await this.load();

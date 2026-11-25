@@ -26,6 +26,6 @@ describe('DetailedList', () => {
     fixture.componentRef.setInput('users', []);
     fixture.detectChanges();
     const el: HTMLElement = fixture.nativeElement;
-    expect(el.textContent).toContain('Nenhuma maestra encontrada');
+    expect(el.textContent).toContain('Nenhum usuário encontrado');
   });
 });

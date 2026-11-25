@@ -30,37 +30,35 @@
       } @else if (detailsError()) {
         <app-load-error [compact]="true" [message]="detailsError()!" (retry)="retryDetails.emit()" />
       } @else {
-        <app-temp-password-form
-          [mustChangePassword]="analyst().mustChangePassword ?? false"
-          [tempPassword]="analyst().tempPassword ?? null"
-          [expiresAt]="analyst().tempPasswordExpiresAt ?? null"
-          subject="o usuário"
-          (save)="generateTempPassword.emit($event)"
-        ></app-temp-password-form>
+        <app-access-status
+          [status]="analyst().accessStatus"
+          [resending]="isResending()"
+          (resend)="resendInvite.emit()"
+        />
       }
 
       <!-- Supervisão: só nome e status. Sem ações e sem link para o detalhe -->
       <section class="mt-3 border-t border-black/10 pt-3">
-        <h2 class="text-sm font-semibold text-secondary">Maestras Vinculadas</h2>
-        @if (isLoadingMaestras()) {
+        <h2 class="text-sm font-semibold text-secondary">Usuários vinculados</h2>
+        @if (isLoadingLinkedUsers()) {
           <div class="mt-2 flex flex-col gap-2" role="status" aria-busy="true">
-            <span class="sr-only">Carregando Maestras vinculadas…</span>
+            <span class="sr-only">Carregando usuários vinculados…</span>
             @for (i of [0, 1, 2]; track i) {
               <app-skeleton height="2.25rem" radius="0.5rem" />
             }
           </div>
-        } @else if (maestrasError()) {
+        } @else if (linkedUsersError()) {
           <div class="mt-2">
-            <app-load-error [compact]="true" [message]="maestrasError()!" (retry)="retryMaestras.emit()" />
+            <app-load-error [compact]="true" [message]="linkedUsersError()!" (retry)="retryLinkedUsers.emit()" />
           </div>
-        } @else if (maestras().length) {
+        } @else if (linkedUsers().length) {
           <ul class="mt-2 flex flex-col gap-2">
-            @for (maestra of maestras(); track maestra.fullName) {
+            @for (linked of linkedUsers(); track linked.fullName) {
               <li
                 class="flex flex-col gap-1 rounded-lg bg-primary/5 px-2 py-1.5 sm:flex-row sm:items-center sm:justify-between"
               >
-                <span class="text-sm text-black/70 break-words">{{ maestra.fullName }}</span>
-                @if (maestra.isActive) {
+                <span class="text-sm text-black/70 break-words">{{ linked.fullName }}</span>
+                @if (linked.isActive) {
                   <span class="text-xs rounded-full bg-primary/10 text-primary px-2 py-0.5 w-fit">
                     Ativa
                   </span>
@@ -73,7 +71,7 @@
             }
           </ul>
         } @else {
-          <p class="mt-2 text-sm text-muted">Nenhuma Maestra cadastrada por este Analista.</p>
+          <p class="mt-2 text-sm text-muted">Nenhum usuário cadastrado por este Analista.</p>
         }
       </section>
 

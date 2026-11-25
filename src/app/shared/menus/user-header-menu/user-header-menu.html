@@ -18,7 +18,7 @@
       <div class="">
         <div class="text-center shadow-lg rounded-xl p-2 mb-5 gradient-primary-to-secondary-85">
           <span class="text-center font-merriweather text-sm w-full text-black/70"
-            >DNA Empresária de:</span
+            >Matriz DNA de:</span
           >
           @switch (currentUser.state.status()) {
             @case ('error') {
@@ -61,40 +61,25 @@
             }
           </ng-template>
         </div>
-        @if (loginService.getUserRole()?.includes('USER')) {
-          <div class="flex flex-col text-left">
-            <app-button variant="text" classes="text-secondary" text="Home" (action)="router.navigate(['dashboard'])"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Desenho Humano" (action)="router.navigate(['human-design/' + loginService.userId])"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Numerologia" (action)="router.navigate(['numerology/' + loginService.userId])"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Astrologia" (action)="router.navigate(['astrology/' + loginService.userId])"></app-button>
-            <app-button variant="text" classes="text-secondary" text="Plano Perfeito" (action)="router.navigate(['perfect-plain/' + loginService.userId])"></app-button>
-          </div>
-        }
-        @if (loginService.getUserRole()?.includes('ADMIN')) {
-          <div class="flex flex-col text-left">
-            <app-button variant="text"
-              classes="text-secondary"
-              text="Home"
-              (action)="router.navigate(['dashboard'])"
-            ></app-button>
-            <app-button variant="text"
-              classes="text-secondary"
-              text="Gerenciar Maestras"
-              (action)="router.navigate(['management/maestras'])"
-            ></app-button>
-            <app-button variant="text"
-              classes="text-secondary"
-              text="Gerenciar Análises do DNA"
-              (action)="router.navigate(['dna-management'])"
-            ></app-button>
-            @if (loginService.getUserRole()?.includes('MANAGER')) {
-              <app-button variant="text"
-                classes="text-secondary"
-                text="Gerenciar Analistas do DNA"
-              ></app-button>
-            }
-          </div>
-        }
+        <!-- Mesma hierarquia para todas as roles (spec 010): Início, o que a role
+             acessa, e Meu perfil. Espelha o painel do dashboard. -->
+        <nav class="flex flex-col text-left" aria-label="Menu">
+          <app-button variant="text" classes="text-secondary" text="Início" (action)="go('dashboard')"></app-button>
+          @if (isClient()) {
+            <app-button variant="text" classes="text-secondary" text="Desenho Humano" (action)="go('human-design/' + loginService.userId)"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Numerologia" (action)="go('numerology/' + loginService.userId)"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Astrologia" (action)="go('astrology/' + loginService.userId)"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Plano Perfeito" (action)="go('perfect-plain/' + loginService.userId)"></app-button>
+          }
+          @if (canManageUsers()) {
+            <app-button variant="text" classes="text-secondary" text="Usuários" (action)="go('management/users')"></app-button>
+            <app-button variant="text" classes="text-secondary" text="Análises do DNA" (action)="go('dna-management')"></app-button>
+          }
+          @if (canManageAnalysts()) {
+            <app-button variant="text" classes="text-secondary" text="Analistas" (action)="go('analysts')"></app-button>
+          }
+          <app-button variant="text" classes="text-secondary" text="Meu perfil" (action)="go('profile')"></app-button>
+        </nav>
       </div>
       <div>
         <app-logout-button click></app-logout-button>

@@ -1,61 +1,95 @@
-@if (roles()) {
-  @if (roles().includes('USER')) {
-    <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-2">
-      <app-dashboard-button
-        (action)="this.router.navigate([`human-design/${loginService.userId}`])"
-        imgSrc="https://i.imgur.com/U4xU7Hj.png"
-        title="Desenho Humano"
-        subtitle="Sua Estratégia Natural"
-        description="Descubra como sua energia opera e como tomar decisões alinhadas com sua essência."
-      ></app-dashboard-button>
-      <app-dashboard-button
-        (action)="this.router.navigate([`numerology/${loginService.userId}`])"
-        imgSrc="https://i.imgur.com/hYZJdpD.png"
-        title="Numerologia"
-        subtitle="A vibração do seu destino"
-        description="Entenda os ciclos numéricos que regem sua vida e os propósitos por trás do seu nome."
-      ></app-dashboard-button>
-      <app-dashboard-button
-        (action)="this.router.navigate([`astrology/${loginService.userId}`])"
-        imgSrc="https://i.imgur.com/Wh3IKVb.png"
-        title="Astrologia"
-        subtitle="O mapa do seu sucesso"
-        description="Explore a influência dos astros em sua jornada empreendedora e talentos inatos."
-      ></app-dashboard-button>
-      <app-dashboard-button
-        (action)="this.router.navigate([`perfect-plain/${loginService.userId}`])"
-        imgSrc="https://i.imgur.com/ji8gc9V.png"
-        title="Plano Perfeito"
-        subtitle="Sua rota de mentoria"
-        description="A união de todos os conceitos em um guia prático para escalar seu negócio com alma."
-      ></app-dashboard-button>
+<div class="panel-body">
+  @if (isClient()) {
+    <section aria-labelledby="pillars-title">
+      <h2 id="pillars-title" class="section-title">Seus pilares</h2>
+      <p class="section-lead">Cada pilar mostra uma parte de como você funciona e decide.</p>
+      <div class="map map-pillars">
+        <app-map-row
+          title="Desenho Humano"
+          kicker="Sua estratégia natural"
+          description="Como sua energia opera e como tomar decisões alinhadas com sua essência."
+          [imgSrc]="images.humanDesign"
+          (action)="goToPillar('human-design')"
+        />
+        <app-map-row
+          title="Numerologia"
+          kicker="A vibração do seu destino"
+          description="Os ciclos numéricos que regem sua vida e o propósito por trás do seu nome."
+          [imgSrc]="images.numerology"
+          (action)="goToPillar('numerology')"
+        />
+        <app-map-row
+          title="Astrologia"
+          kicker="O mapa do seu sucesso"
+          description="A influência dos astros na sua jornada empreendedora e nos seus talentos."
+          [imgSrc]="images.astrology"
+          (action)="goToPillar('astrology')"
+        />
+      </div>
+
+      <!-- O Plano Perfeito vem depois dos três: é a união deles -->
+      <button type="button" class="plan" (click)="goToPillar('perfect-plain')">
+        <span class="joins" aria-hidden="true">
+          <img [src]="images.humanDesign" alt="" />
+          <img [src]="images.numerology" alt="" />
+          <img [src]="images.astrology" alt="" />
+        </span>
+        <span class="plan-text">
+          <span class="plan-title">Plano Perfeito</span>
+          <span class="plan-description">
+            A união dos três pilares em um guia prático para escalar o seu negócio.
+          </span>
+          <span class="plan-go">Abrir meu plano</span>
+        </span>
+      </button>
     </section>
   }
-  @if (canManageMaestras()) {
-    <section class="grid grid-cols-1 gap-3 container main-padding mx-auto md:grid-cols-3">
-      <app-dashboard-button
-        (action)="this.router.navigate(['management/maestras'])"
-        icon="users"
-        title="Gerenciar Maestras"
-        subtitle=""
-        description=""
-      ></app-dashboard-button>
-      <app-dashboard-button
-        (action)="router.navigate(['dna-management'])"
-        icon="book"
-        title="Gerenciar Análises do DNA"
-        subtitle=""
-        description=""
-      ></app-dashboard-button>
-      @if (canManageAnalysts()) {
-        <app-dashboard-button
-          (action)="router.navigate(['analysts'])"
-          icon="user-circle"
-          title="Gerenciar Analistas do DNA"
-          subtitle=""
-          description=""
-        ></app-dashboard-button>
-      }
+
+  @if (canManageUsers()) {
+    <section aria-labelledby="management-title" [class.after-section]="isClient()">
+      <h2 id="management-title" class="section-title">Gestão</h2>
+      <p class="section-lead">
+        @if (canManageAnalysts()) {
+          Usuários, análises do DNA e a equipe de Analistas.
+        } @else {
+          Os usuários que você cadastrou e as análises do DNA de cada um.
+        }
+      </p>
+      <div class="map">
+        <app-map-row
+          title="Usuários"
+          description="Cadastre, edite, envie convites e acompanhe o acesso de cada um."
+          icon="users"
+          (action)="go('management/users')"
+        />
+        <app-map-row
+          title="Análises do DNA"
+          description="Preencha os pilares e gere os conteúdos e o Plano Perfeito de cada usuário."
+          icon="book"
+          (action)="go('dna-management')"
+        />
+        @if (canManageAnalysts()) {
+          <app-map-row
+            title="Analistas"
+            description="Cadastre Analistas e veja quais usuários cada um acompanha."
+            icon="user-circle"
+            (action)="go('analysts')"
+          />
+        }
+      </div>
     </section>
   }
-}
+
+  <section class="after-section" aria-labelledby="account-title">
+    <h2 id="account-title" class="section-title">Sua conta</h2>
+    <div class="map">
+      <app-map-row
+        title="Meu perfil"
+        description="Senha, e-mail e exclusão da conta"
+        icon="user-circle"
+        [compact]="true"
+        (action)="go('profile')"
+      />
+    </div>
+  </section>
+</div>

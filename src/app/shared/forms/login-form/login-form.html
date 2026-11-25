@@ -1,32 +1,77 @@
-<form
-  class="flex flex-col p-4 gap-4 shadow-xl rounded-xl bg-white/95 md:min-h-[420px] md:min-w-[350px]"
-  [formGroup]="loginForm"
-  (ngSubmit)="onLogin()"
->
-  <app-logo></app-logo>
-  <input
-    formControlName="email"
-    required
-    name="email"
-    type="email"
-    placeholder="Email"
-  />
-  <input
-    formControlName="password"
-    required
-    name="password"
-    type="password"
-    placeholder="Senha"
-  />
-  @if (error()) {
-    <span class="text-center text-danger">{{ error() }}</span>
-  }
-  <app-button variant="flat"
-    [disabled]="!loginForm.valid"
-    text="Entrar"
-    classes="bg-primary w-full text-white"
-  ></app-button>
-</form>
+@if (mode() === 'login') {
+  <form
+    class="login-card flex flex-col gap-4 rounded-2xl bg-white/95 px-6 py-7 shadow-xl w-[min(100%,24rem)]"
+    [formGroup]="loginForm"
+    (ngSubmit)="onLogin()"
+    novalidate
+  >
+    <app-logo class="h-20 flex justify-center"></app-logo>
+
+    <div class="flex flex-col gap-1.5">
+      <label for="login-email" class="text-sm text-muted">E-mail</label>
+      <input id="login-email" formControlName="email" type="email" autocomplete="email" required />
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="login-password" class="text-sm text-muted">Senha</label>
+      <input
+        id="login-password"
+        formControlName="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      />
+    </div>
+    <div class="-mt-2 flex justify-end">
+      <button type="button" class="link-button" (click)="showForgot()">Esqueci minha senha</button>
+    </div>
+
+    @if (error()) {
+      <p class="rounded-lg bg-danger-soft px-3 py-2 text-sm text-danger" role="alert">{{ error() }}</p>
+    }
+    <app-button
+      variant="flat"
+      [disabled]="!loginForm.valid"
+      text="Entrar"
+      classes="bg-primary w-full text-white"
+    ></app-button>
+  </form>
+} @else {
+  <form
+    class="login-card flex flex-col gap-4 rounded-2xl bg-white/95 px-6 py-7 shadow-xl w-[min(100%,24rem)]"
+    [formGroup]="forgotForm"
+    (ngSubmit)="onForgot()"
+    novalidate
+  >
+    <app-logo class="h-20 flex justify-center"></app-logo>
+    <h2 class="font-merriweather text-xl font-bold text-primary">Redefinir senha</h2>
+    <p class="-mt-2 text-sm leading-relaxed text-muted">
+      Informe o e-mail da sua conta. Vamos enviar um link para você criar uma senha nova.
+    </p>
+    <div class="flex flex-col gap-1.5">
+      <label for="forgot-email" class="text-sm text-muted">E-mail</label>
+      <input id="forgot-email" formControlName="email" type="email" autocomplete="email" required />
+    </div>
+
+    @if (resetSent()) {
+      <p class="rounded-lg bg-[var(--color-surface-muted)] px-3 py-2 text-sm text-primary" role="status">
+        Se este e-mail estiver cadastrado, você vai receber um link para redefinir a senha.
+        Confira também a caixa de spam.
+      </p>
+    }
+    @if (error()) {
+      <p class="rounded-lg bg-danger-soft px-3 py-2 text-sm text-danger" role="alert">{{ error() }}</p>
+    }
+    <app-button
+      variant="flat"
+      [disabled]="!forgotForm.valid"
+      [text]="resetSent() ? 'Enviar de novo' : 'Enviar link'"
+      classes="bg-primary w-full text-white"
+    ></app-button>
+    <button type="button" class="link-button self-center" (click)="showLogin()">
+      Voltar para o login
+    </button>
+  </form>
+}
 
 @if (isLoading()) {
   <app-infinity></app-infinity>

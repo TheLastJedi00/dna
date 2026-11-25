@@ -1,6 +1,6 @@
-# DnaProject
+# Matriz DNA (front)
 
-Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
+Frontend Angular 20 (standalone, zoneless, SSR) da Matriz DNA. Consome a
 [DNA API](https://github.com/TheLastJedi00/dna-api).
 
 ## Arquitetura
@@ -8,11 +8,14 @@ Frontend Angular 20 (standalone, zoneless, SSR) da plataforma DNA. Consome a
 - **Smart pages / dumb components:** páginas (`pages/*`) concentram estado e
   chamadas HTTP; componentes de `shared/` recebem dados prontos por `input()` e
   emitem por `output()`. Convenções em `.specs/global-strategy.md`.
-- **Sessão:** `LoginService` é o dono único da sessão — guarda o par
-  **access/refresh token**, valida expiração e coordena o refresh. O
-  `authInterceptor` renova o token em 401 (fila compartilhada) e desloga se o
-  refresh falhar. `authGuard`/`roleGuard`/`managerGuard`/`passwordGuard`/
-  `ownershipGuard` protegem as rotas.
+- **Sessão (Firebase Auth, spec 010):** o login é feito pelo SDK web do Firebase.
+  `FirebaseAuthClient` é o único ponto que fala com o SDK (carregado **sob demanda**,
+  fora do bundle inicial; não roda no SSR). `LoginService` é o dono da sessão: signals
+  do usuário, das roles (custom claim `roles`) e do e-mail confirmado. O
+  `authInterceptor` manda o **ID token** do Firebase e, num 401, tenta uma vez com o
+  token renovado antes de deslogar. `authGuard`/`roleGuard`/`managerGuard`/
+  `ownershipGuard`/`emailVerifiedGuard` esperam a sessão ser restaurada
+  (`whenReady()`) antes de decidir.
 - **Rotas:** lazy loading via `loadComponent`, com rota `**` (404 → home).
 
 ## Sistema visual
@@ -63,7 +66,7 @@ Duas formas de "carregando", cada uma com seu papel:
 | Situação | O que aparece | Onde |
 |---|---|---|
 | **Leitura** (listas, detalhes, perfil, pilares) | Skeleton no formato do conteúdo | `shared/feedback/skeleton*`, `pillar-load` |
-| **Ação** (salvar, login, gerar com IA, senha provisória, desativar/reativar) | Overlay de tela cheia | `shared/loading/infinity` |
+| **Ação** (salvar, login, gerar com IA, desativar/reativar) | Overlay de tela cheia | `shared/loading/infinity` |
 
 **Estado de leitura** — `core/utils/load-state.ts`: `loadState(() => service.x())` devolve
 signals `status` (`idle`/`loading`/`success`/`empty`/`error`), `data`, `error` e `load()`.
@@ -123,80 +126,64 @@ Página `perfect-plain/:userId` (síntese dos 3 pilares, módulo único). O gati
 "Gerar/Ver Plano Perfeito" fica no painel admin (`user-supply-details`), onde cada
 pilar é um botão no padrão do dashboard que abre o respectivo form/gatilho em modal.
 
-## Gestão de Maestras (CRUD)
+## Gestão de usuários (CRUD)
 
-Rota `management/:type` (painel de gestora). A página é **smart**: mantém o estado
-(lista, paginação, busca e filtro de status) e é a única a chamar o `UserService`;
-`detailed-list`/`detailed-item` são **dumb** (recebem os dados prontos).
+Rota `management/users` (o endereço antigo `management/maestras` redireciona). A página
+é **smart**: mantém o estado (lista, paginação, busca e filtro de status) e é a única a
+chamar o `UserService`; `detailed-list`/`detailed-item` são **dumb**.
 
 - **Busca** por nome (com debounce) e **filtro** Ativas / Inativas / Todas.
 - **Paginação** via `UserService.listUsers` (metadados lidos dos headers `X-*`).
-- Ações por Maestra no `user-details-modal`, condicionais ao status: **Editar** +
-  **Desativar** (ativas) e **Reativar** (inativas). Desativar é soft delete.
-- **Edição** reutiliza o `new-user-form` (modo edição: prefill + `updateUser`, sem
-  os campos de acesso).
+- Ações por usuário no `user-details-modal`, condicionais ao status: **Editar** +
+  **Desativar** (ativos) e **Reativar** (inativos). Desativar é soft delete.
+- **Cadastro por convite:** o form pede o **e-mail de acesso, sem senha**. Depois do
+  `POST /users`, o `InviteService` dispara o e-mail "Defina sua senha" do Firebase e
+  confirma num toast. O detalhe mostra o **status do acesso** (Convite pendente / E-mail
+  não confirmado / Acesso ativo) e o botão **"Reenviar convite"**.
 - **Área de atuação** (texto livre) e **pronome de tratamento** (toggle
-  Feminino/Masculino) no cadastro. O pronome flexiona os termos referentes à
-  Maestra na interface — "Maestra/Maestro", "Nova Maestra/Novo Maestro",
-  "a usuária/o usuário" — via os helpers de `core/utils/pronoun.ts`, e vai para a
-  API, que o usa para orientar o material gerado. Cadastros anteriores não têm o
-  campo e assumem feminino. Os termos referentes ao **analista logado**
-  (ex.: "BEM-VINDA DE VOLTA") seguem fixos: dependem de um pronome no perfil do
-  Analista, que ainda não existe.
-- `dashboard-button` aceita `icon` (SVG via `IconsSwitch`) além de `imgSrc`,
-  mantendo retrocompatibilidade; no painel, Maestras usa o ícone `users` e as
-  Análises do DNA o ícone `book`.
+  Feminino/Masculino). O pronome flexiona os termos da interface — "Usuária/Usuário",
+  "Nova usuária/Novo usuário", "a usuária/o usuário" — via `core/utils/pronoun.ts`, e
+  vai para a API, que o usa no material gerado. Sem pronome, assume feminino.
+- Quem cadastrou aparece como **Analista Responsável**; se essa conta foi excluída,
+  aparece **"Conta removida"**.
 
 Layout **mobile-first**: listagem e modais empilham em coluna em telas pequenas.
-
-Cada Maestra fica vinculada a quem a cadastrou, e o `user-details-modal` mostra
-esse **Analista Responsável** (campo de leitura, resolvido pelo backend).
 
 ## Papéis e visibilidade
 
 | Papel | Vê no painel | Alcance |
 | --- | --- | --- |
-| `ADMIN` | Maestras, Análises do DNA, Analistas | Super-usuário: vê **todas** as Maestras |
-| `MANAGER` | Maestras, Análises do DNA, Analistas | Só as Maestras que **ele** cadastrou |
-| `ANALYST` | Maestras, Análises do DNA | Só as Maestras que **ele** cadastrou; não acessa `/analysts` |
-| `USER` | Seus 3 pilares + Plano Perfeito | Só os próprios dados |
+| `ADMIN` | Usuários, Análises do DNA, Analistas, Meu perfil | Super-usuário: vê **todos** os usuários |
+| `MANAGER` | Usuários, Análises do DNA, Analistas, Meu perfil | Só os usuários que **ele** cadastrou |
+| `ANALYST` | Usuários, Análises do DNA, Meu perfil | Só os usuários que **ele** cadastrou; não acessa `/analysts` |
+| `USER` | Seus 3 pilares + Plano Perfeito, Meu perfil | Só os próprios dados |
 
-O `roleGuard` libera a gestão de Maestras para ADMIN, MANAGER e ANALYST; o
+O `roleGuard` libera a gestão de usuários para ADMIN, MANAGER e ANALYST; o
 `managerGuard` restringe `/analysts` a ADMIN e MANAGER (espelha o
 `@Role(ADMIN, MANAGER)` do backend). Os guards são conveniência de navegação — a
-visibilidade e a posse de cada Maestra são impostas pela API.
+visibilidade e a posse de cada usuário são impostas pela API.
 
-## Senha temporária e primeiro acesso
+## Acesso: convite, verificação de e-mail e Meu perfil (spec 010)
 
-A senha definida no cadastro (Maestra ou Analista) **já nasce provisória**. No primeiro
-login o usuário é obrigado a trocá-la; até lá, ela fica visível para quem o cadastrou.
-
-**Visão do gestor** — no modal de detalhe (`user-details-modal`, `analyst-details-modal`),
-o bloco `temp-password-form` tem dois estados:
-
-- **senha provisória pendente:** exibe a senha em texto plano, o aviso *"Esta senha é
-  temporária até … redefinir sua nova senha"* e **até quando ela vale** (a senha expira em
-  **72h**). Sem botão de gerar.
-- **senha já definida pelo usuário (ou provisória vencida):** exibe o botão **"Gerar senha
-  temporária"**, que abre o input para o gestor devolver o acesso a quem o perdeu. Senha
-  vencida some do detalhe — o backend não a devolve mais — e deixa de logar.
-
-E-mail e senha provisória **só vêm no detalhe** (`GET /users/:id`, `GET /analysts/:id`) —
-nunca na listagem. Por isso as pages `management` e `analysts-management` buscam o detalhe
-**ao abrir o modal**, e não reaproveitam o item da lista.
-
-**Visão do usuário** — rota `/change-password`, um **modal estático**: sem backdrop de
-fechar e sem "Voltar". A única saída sem trocar a senha é o logout.
-
-O bloqueio vive no `passwordGuard`, que lê o claim `mustChangePassword` **do JWT** (não de
-um estado em memória): enquanto ele for `true`, qualquer rota protegida devolve o usuário
-para `/change-password` — nem um F5 nem uma URL digitada à mão escapam. Ao salvar a senha,
-a API devolve um **par de tokens novo** (sem o claim) e o `LoginService` o regrava; sem
-isso o token antigo continuaria prendendo o usuário na tela de troca.
+- **Login** pelo Firebase, com mensagens em PT-BR por código de erro
+  (`core/utils/firebase-auth-error.ts`). Credencial errada é sempre "E-mail ou senha
+  incorretos." **"Esqueci minha senha"** envia o link do Firebase e responde igual para
+  qualquer e-mail (não revela quem tem conta).
+- **Verificação de e-mail:** enquanto o e-mail não for confirmado, o dashboard mostra
+  um **popup que não fecha** (`verify-email-modal`): enviar/reenviar (60s entre envios),
+  "Já confirmei" (recarrega o usuário e renova o token), "Corrigir e-mail" e "Sair". O
+  `emailVerifiedGuard` devolve ao dashboard qualquer outra rota, menos `/profile`. Um 403
+  `EMAIL_NOT_VERIFIED` da API reabre o popup.
+- **Meu perfil** (`/profile`, todas as roles, aberto mesmo sem e-mail confirmado):
+  alterar senha (senha atual + nova), alterar e-mail (o Firebase só troca depois do link
+  no novo endereço) e **excluir a conta** (LGPD: senha + "EXCLUIR" → `DELETE /users/me`,
+  logout e aviso na entrada).
+- A senha provisória da spec 005 (`/change-password`, `passwordGuard`,
+  `temp-password-form`) **não existe mais**.
 
 ## Gestão de Analistas (CRUD)
 
-Rota `/analysts` (ADMIN e MANAGER). Mesma anatomia do CRUD de Maestras: a page
+Rota `/analysts` (ADMIN e MANAGER). Mesma anatomia do CRUD de usuários: a page
 `analysts-management` é **smart** (estado em signals e única a chamar o
 `AnalystService`); `analyst-list`/`analyst-item`, `analyst-form` e
 `analyst-details-modal` são **dumb** — o form emite o valor e a page é quem faz o
@@ -204,17 +191,27 @@ POST/PATCH.
 
 - **Busca** por nome (com debounce), **filtro** Ativos / Inativos / Todos e
   **paginação** (metadados nos headers `X-*`).
-- **Criar** pede nome + credenciais; **editar** altera só o nome (e-mail e senha
-  vivem no documento `auth`). **Desativar** é soft delete; **Reativar** restaura.
-- **Supervisão:** o detalhe do Analista lista as **Maestras Vinculadas** — apenas
+- **Criar** pede nome + e-mail (convite, sem senha); **editar** altera só o nome
+  (e-mail e senha vivem no Firebase Auth). **Desativar** é soft delete; **Reativar**
+  restaura. O detalhe tem o mesmo bloco de status do acesso e "Reenviar convite".
+- **Supervisão:** o detalhe do Analista lista os **usuários vinculados** — apenas
   nome e status, **sem ação e sem link** para o detalhe. O Manager acompanha a
-  carteira do Analista, mas não acessa os dados pessoais das clientes dele (a API
-  nem devolve o `id` dessas Maestras).
+  carteira do Analista, mas não acessa os dados pessoais dos clientes dele (a API
+  nem devolve o `id` desses usuários).
 
 ## Ambientes
 
-`src/environments/`: `environment.ts` (prod), `environment.development.ts` (dev)
-e `environment.local.ts` (localhost). Cada um define `apiUrl`.
+`src/environments/`: cada um define `apiUrl` e a config do **app Web do Firebase**
+(não é segredo: vai no bundle do navegador).
+
+| Arquivo | API | Projeto Firebase |
+| --- | --- | --- |
+| `environment.ts` (produção) | `dna-api-iota.vercel.app` | `dna-empresaria-6c142` |
+| `environment.development.ts` | `dev-dna-api.vercel.app` | `dna-empresaria-dev` |
+| `environment.local.ts` (`ng serve -c local`) | `localhost:3000` | `dna-empresaria-dev` |
+
+No console do Firebase de cada projeto: provedor E-mail/senha ativo, domínios
+autorizados (`localhost` e o domínio do front) e templates de e-mail em português.
 
 ## Development server
 

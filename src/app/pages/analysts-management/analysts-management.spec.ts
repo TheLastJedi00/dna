@@ -6,6 +6,7 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { InviteService } from '../../core/services/invite.service';
 
 import { AnalystsManagement } from './analysts-management';
 import { environment } from '../../../environments/environment';
@@ -16,7 +17,10 @@ describe('AnalystsManagement', () => {
   let http: HttpTestingController;
   const api = `${environment.apiUrl}/analysts`;
 
+  let invite: { send: jasmine.Spy };
+
   beforeEach(async () => {
+    invite = { send: jasmine.createSpy('send').and.resolveTo(true) };
     await TestBed.configureTestingModule({
       imports: [AnalystsManagement],
       providers: [
@@ -24,6 +28,7 @@ describe('AnalystsManagement', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        { provide: InviteService, useValue: invite },
       ],
     }).compileComponents();
 
@@ -99,7 +104,7 @@ describe('AnalystsManagement', () => {
     expect(component.status()).toBe('inactive');
   });
 
-  it('abrir o detalhe busca as credenciais e as Maestras vinculadas', async () => {
+  it('abrir o detalhe busca as credenciais e os usuários vinculados', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
@@ -115,23 +120,22 @@ describe('AnalystsManagement', () => {
       fullName: 'Ana',
       isActive: true,
       email: 'ana@dna.com',
-      mustChangePassword: true,
-      tempPassword: 'provisoria',
+      accessStatus: 'email_unverified',
     });
-    http.expectOne(`${api}/a1/maestras`).flush([
+    http.expectOne(`${api}/a1/users`).flush([
       { fullName: 'Maria', isActive: true },
     ]);
     await promise;
 
     expect(component.selected()?.email).toBe('ana@dna.com');
-    expect(component.selected()?.tempPassword).toBe('provisoria');
-    expect(component.linkedMaestras()).toEqual([
+    expect(component.selected()?.accessStatus).toBe('email_unverified');
+    expect(component.linkedUsers()).toEqual([
       { fullName: 'Maria', isActive: true },
     ]);
-    expect(component.maestrasState.isLoading()).toBeFalse();
+    expect(component.linkedUsersState.isLoading()).toBeFalse();
   });
 
-  it('falha nas Maestras vinculadas não impede o detalhe', async () => {
+  it('falha nos usuários vinculados não impede o detalhe', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
@@ -139,60 +143,37 @@ describe('AnalystsManagement', () => {
     const promise = component.openDetails({ id: 'a1', fullName: 'Ana', isActive: true });
     http.expectOne(`${api}/a1`).flush({ id: 'a1', fullName: 'Ana', email: 'ana@dna.com' });
     http
-      .expectOne(`${api}/a1/maestras`)
+      .expectOne(`${api}/a1/users`)
       .flush(null, { status: 403, statusText: 'Forbidden' });
     await promise;
 
     expect(component.selected()?.email).toBe('ana@dna.com');
     expect(component.detail.error()).toBeNull();
-    expect(component.maestrasState.error()).toContain('permissão');
+    expect(component.linkedUsersState.error()).toContain('permissão');
   });
 
-  it('gerar a senha temporária recarrega o detalhe e passa a exibi-la', async () => {
+  it('reenviar convite manda o "Defina sua senha" para o e-mail do detalhe', async () => {
+    component.selected.set({ id: 'a1', fullName: 'Ana', isActive: true, email: 'ana@dna.com' });
+
+    await component.resendInvite();
+
+    expect(invite.send).toHaveBeenCalledWith('ana@dna.com');
+  });
+
+  it('salvar em modo criação chama POST, envia o convite e recarrega a lista', async () => {
     fixture.detectChanges();
     flushList();
     await fixture.whenStable();
 
-    component.selected.set({ id: 'a1', fullName: 'Ana', isActive: true });
-    const promise = component.generateTempPassword('nova123');
-
-    const patch = http.expectOne(`${api}/a1/temp-password`);
-    expect(patch.request.method).toBe('PATCH');
-    expect(patch.request.body).toEqual({ password: 'nova123' });
-    patch.flush(null);
-    await tick();
-
-    http.expectOne(`${api}/a1`).flush({
-      id: 'a1',
-      fullName: 'Ana',
-      isActive: true,
-      mustChangePassword: true,
-      tempPassword: 'nova123',
-    });
-    await promise;
-
-    expect(component.selected()?.tempPassword).toBe('nova123');
-  });
-
-  it('salvar em modo criação chama POST e recarrega a lista', async () => {
-    fixture.detectChanges();
-    flushList();
-    await fixture.whenStable();
-
-    const promise = component.onFormSaved({
-      fullName: 'Ana',
-      login: { email: 'ana@dna.com', password: '123' },
-    });
+    const promise = component.onFormSaved({ fullName: 'Ana', email: 'ana@dna.com' });
     const post = http.expectOne((r) => r.url === api && r.method === 'POST');
-    expect(post.request.body).toEqual({
-      fullName: 'Ana',
-      login: { email: 'ana@dna.com', password: '123' },
-    });
-    post.flush({});
+    expect(post.request.body).toEqual({ fullName: 'Ana', email: 'ana@dna.com' });
+    post.flush({ id: 'a1' });
     await tick();
     flushList([{ id: 'a1', fullName: 'Ana', isActive: true }]);
     await promise;
 
+    expect(invite.send).toHaveBeenCalledWith('ana@dna.com', { justCreated: true });
     expect(component.isFormOpen()).toBeFalse();
     expect(component.analysts().length).toBe(1);
   });

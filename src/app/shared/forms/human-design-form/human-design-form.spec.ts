@@ -48,7 +48,7 @@ describe('HumanDesignForm', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: convertToParamMap({ maestraId: 'm1' }) },
+            snapshot: { paramMap: convertToParamMap({ userId: 'm1' }) },
           },
         },
         {

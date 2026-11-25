@@ -131,7 +131,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
   }
 
   protected async loadPillarData(): Promise<void> {
-    this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.maestraId())));
+    this.humanDesignData.set(await firstValueFrom(this.hdService.getByUserId(this.userId())));
   }
 
   /** Repõe no formulário os dados já cadastrados, para a reedição. */
@@ -139,7 +139,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
     const data = this.humanDesignData();
     if (!data) return;
 
-    // O FormArray de canais é reconstruído: a quantidade varia por Maestra.
+    // O FormArray de canais é reconstruído: a quantidade varia por usuário.
     this.canais.clear();
     for (const canal of data.canais ?? []) {
       this.canais.push(
@@ -183,7 +183,7 @@ export class HumanDesignForm extends PillarFormBase implements OnInit {
     const form = this.dhForm.getRawValue();
     try {
       const dhData: HumanDesignData = {
-        userId: this.maestraId(),
+        userId: this.userId(),
         tipo_aurico: form.tipo_aurico!,
         aura: form.aura!,
         energia: form.energia!,

@@ -1,0 +1,21 @@
+<button type="button" class="row" [class.compact]="compact()" (click)="action.emit()">
+  @if (imgSrc()) {
+    <img class="media" [src]="imgSrc()" alt="" />
+  } @else {
+    <span class="media media-icon" aria-hidden="true">
+      <app-icons-switch [icon]="icon()" customClass="size-7!"></app-icons-switch>
+    </span>
+  }
+  <span class="text">
+    <span class="title">{{ title() }}</span>
+    @if (kicker()) {
+      <span class="kicker">{{ kicker() }}</span>
+    }
+    @if (description()) {
+      <span class="description">{{ description() }}</span>
+    }
+  </span>
+  <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+    <path d="m9 5 7 7-7 7" />
+  </svg>
+</button>

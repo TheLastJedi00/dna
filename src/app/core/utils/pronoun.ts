@@ -1,5 +1,5 @@
 /**
- * Flexão de gênero dos termos que se referem à **Maestra** (o cliente), a partir
+ * Flexão de gênero dos termos que se referem ao **usuário** (o cliente), a partir
  * do pronome escolhido no cadastro (spec 007). Fonte única das variações — os
  * templates chamam estes helpers em vez de repetir ternários.
  *
@@ -13,13 +13,13 @@ export const DEFAULT_PRONOUN: Pronoun = 'feminino';
 const isMale = (pronoun?: Pronoun | null): boolean =>
   (pronoun ?? DEFAULT_PRONOUN) === 'masculino';
 
-/** "Maestra" / "Maestro" — o papel do cliente na tela. */
-export const maestraLabel = (pronoun?: Pronoun | null): string =>
-  isMale(pronoun) ? 'Maestro' : 'Maestra';
+/** "Usuária" / "Usuário" — o cliente na tela (spec 010: substitui o termo antigo). */
+export const userLabel = (pronoun?: Pronoun | null): string =>
+  isMale(pronoun) ? 'Usuário' : 'Usuária';
 
-/** "Nova Maestra" / "Novo Maestro" — gatilho de criação. */
-export const newMaestraLabel = (pronoun?: Pronoun | null): string =>
-  isMale(pronoun) ? 'Novo Maestro' : 'Nova Maestra';
+/** "Nova usuária" / "Novo usuário" — gatilho de criação. */
+export const newUserLabel = (pronoun?: Pronoun | null): string =>
+  isMale(pronoun) ? 'Novo usuário' : 'Nova usuária';
 
 /** "a usuária" / "o usuário" — sujeito usado em frases dos modais. */
 export const userSubject = (pronoun?: Pronoun | null): string =>

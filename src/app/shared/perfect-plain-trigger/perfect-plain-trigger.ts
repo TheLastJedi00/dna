@@ -29,7 +29,7 @@ interface TriggerState {
   styleUrl: './perfect-plain-trigger.scss',
 })
 export class PerfectPlainTrigger implements OnInit {
-  readonly maestraId = input.required<string>();
+  readonly userId = input.required<string>();
 
   private readonly supply = inject(SupplyService);
   private readonly dnaStatusService = inject(DnaStatusService);
@@ -50,7 +50,7 @@ export class PerfectPlainTrigger implements OnInit {
 
   private async fetchState(): Promise<TriggerState> {
     const status = await firstValueFrom(
-      this.dnaStatusService.getStatusByUserId(this.maestraId()),
+      this.dnaStatusService.getStatusByUserId(this.userId()),
     ).catch((e) => {
       // Sem status ainda = nenhum pilar preenchido.
       if (e instanceof HttpErrorResponse && e.status === 404) return null;
@@ -58,7 +58,7 @@ export class PerfectPlainTrigger implements OnInit {
     });
     const ready = !!(status?.human_design && status?.numerology && status?.astrology);
     const isCreated = ready
-      ? await firstValueFrom(this.supply.isSupplyForThisUser(this.maestraId(), 'perfect-plain'))
+      ? await firstValueFrom(this.supply.isSupplyForThisUser(this.userId(), 'perfect-plain'))
       : false;
     return { ready, isCreated };
   }
@@ -67,7 +67,7 @@ export class PerfectPlainTrigger implements OnInit {
     this.isLoading.set(true);
     this.loadingMessage.set('Isso pode levar alguns minutos, não feche a página.');
     try {
-      await firstValueFrom(this.supply.createFullPillar('perfect-plain', this.maestraId()));
+      await firstValueFrom(this.supply.createFullPillar('perfect-plain', this.userId()));
     } catch {
       // erro de ação exibido pelo modal global (errorInterceptor)
     } finally {
@@ -78,6 +78,6 @@ export class PerfectPlainTrigger implements OnInit {
   }
 
   view() {
-    this.router.navigate(['perfect-plain', this.maestraId()]);
+    this.router.navigate(['perfect-plain', this.userId()]);
   }
 }

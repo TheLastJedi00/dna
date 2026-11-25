@@ -1,0 +1,45 @@
+<form class="settings-form" (ngSubmit)="submit()" novalidate>
+  <p class="text-sm text-[var(--color-text)]">Serão apagados de forma definitiva:</p>
+  <ul class="-mt-2 list-disc pl-5 text-sm leading-relaxed text-muted">
+    <li>seu acesso (e-mail e senha)</li>
+    <li>seus dados pessoais e de nascimento</li>
+    <li>Desenho Humano, Numerologia e Astrologia</li>
+    <li>os conteúdos gerados e o Plano Perfeito</li>
+  </ul>
+
+  <div class="settings-field">
+    <label for="delete-password">Sua senha</label>
+    <input
+      id="delete-password"
+      name="password"
+      type="password"
+      autocomplete="current-password"
+      [ngModel]="password()"
+      (ngModelChange)="password.set($event)"
+    />
+  </div>
+  <div class="settings-field">
+    <label for="delete-confirm">Digite {{ confirmWord }} para confirmar</label>
+    <input
+      id="delete-confirm"
+      name="confirm"
+      type="text"
+      autocomplete="off"
+      autocapitalize="characters"
+      spellcheck="false"
+      [ngModel]="typed()"
+      (ngModelChange)="typed.set($event)"
+    />
+  </div>
+
+  @if (error()) {
+    <p class="settings-msg settings-msg-error" role="alert">{{ error() }}</p>
+  }
+
+  <div class="settings-actions">
+    <button type="submit" class="settings-submit settings-submit-danger" [disabled]="!canDelete()">
+      {{ deleting() ? 'Excluindo…' : 'Excluir minha conta' }}
+    </button>
+    <button type="button" class="settings-cancel" (click)="cancel.emit()">Cancelar</button>
+  </div>
+</form>
